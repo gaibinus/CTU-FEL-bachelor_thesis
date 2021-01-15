@@ -1,0 +1,1 @@
+$pdflatex = 'pdfcsplain %O %S';

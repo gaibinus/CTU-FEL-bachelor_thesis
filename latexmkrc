@@ -1,1 +1,1 @@
-$lualatex = 'TEXINPUTS=./optex//:$TEXINPUTS luatex -fmt=optex %O %S';
+$lualatex = 'TEXINPUTS=./optex//:$TEXINPUTS OPENTYPEFONTS=./fonts// luatex -fmt=optex %O %S';

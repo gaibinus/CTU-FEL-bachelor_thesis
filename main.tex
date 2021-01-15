@@ -1,0 +1,82 @@
+% On-board computer for PC104 format CubeSats
+% ---------------------------------------------------------------------
+% Filip Geib Jan. 2021
+
+% export in Long-term Archiving (PDF/A)
+% conversion needed: https://pdfrecover.herokuapp.com/pdfaconvert/
+\input glyphtounicode.tex
+\input glyphtounicode-cmr.tex
+\input glyphtounicode-ntx.tex
+\pdfgentounicode=1
+
+\input ctustyle3  % The template (in version 3, for OpTeX) is included here.
+
+\worktype [B/EN]
+
+\faculty    {F3}
+\department {Department of Measurement}
+\title      {On-board computer for PC104 format CubeSats}
+\subtitle   {}
+
+\author     {Filip  Geib}
+\date       {January 2021}
+\supervisor {Ing. Vojtěch Petrucha, Ph.D.}
+\studyinfo  {Cybernetics and Robotics}
+\workname   {}
+
+\workinfo   {\url{https://github.com/visionspacetec/VST104}}
+\titleSK    {Palubný počítač pre CubeSaty formátu PC104}
+\subtitleSK {}
+
+\pagetwo    {}
+
+\abstractEN {
+   \lorem[1-2]
+}
+\abstractSK {
+   \lorem[3-4]
+}
+
+\keywordsEN {
+   CubeSat; PC104; OBC; hardware; PCB design; schematics.
+}
+\keywordsSK {
+   CubeSat; PC104; OBC; hardvér; PCB dizajn; schémy.
+}
+\thanks {
+   \lorem[5]
+}
+\declaration {
+  I hereby declare that the presented thesis is my own work and that I have
+  cited all sources of information in accordance with the Guideline for
+  adhering to ethical principles when elaborating an academic final thesis.
+                
+  I acknowledge that my thesis is subject to the rights and obligations
+  stipulated by the Act No.\,121/2000~Coll., the Copyright Act, as amended. In
+  accordance with Article~46~(6) of the Act, I hereby grant a nonexclusive
+  authorization (license) to utilize this thesis, including any and all
+  computer programs incorporated therein or attached thereto and all
+  corresponding documentation (hereinafter collectively referred to as the
+  “Work”), to any and all persons that wish to utilize the Work. Such
+  persons are entitled to use the Work for non-profit purposes only, in any
+  way that does not detract from its value. This authorization is not limited
+  in terms of time, location and quantity.
+
+  In Prague on January 13, 2013 % !! Attention, you have to change this item.
+  \signature % makes dots
+}
+
+%%%%% <--   % The place for your own macros is here.
+
+\draft     % Uncomment this if the version of your document is working only.
+%\linespacing=1.7  % uncomment this if you need more spaces between lines
+                   % Warning: this works only when \draft is activated!
+%\savetoner        % Turns off the lightBlue backround of tables and
+                   % verbatims, only for \draft version.
+%\blackwhite       % Use this if you need really Black+White thesis.
+%\onesideprinting  % Use this if you really don't use duplex printing. 
+
+\makefront  % Mandatory command. Makes title page, acknowledgment, contents etc.
+
+
+\bye

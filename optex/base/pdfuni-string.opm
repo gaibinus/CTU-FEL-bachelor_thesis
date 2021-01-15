@@ -1,0 +1,112 @@
+%% This is part of the OpTeX project, see http://petr.olsak.net/optex
+
+\_codedecl \pdfunidef {PDFunicode strings for outlines <2020-03-12>} % preloaded in format
+
+   \_doc -----------------------------
+   The \`\_octalprint` is a Lua script that prints the character code in the
+   octal notation.
+   \_cod -----------------------------
+
+\_edef\_octalprint#1#2{\_noexpand\_directlua{% #1=character-code #2=character
+    if ('#2'>='A' and '#2'<='Z') or ('#2'>='a' and '#2'<='z') then
+      tex.print(string.format('000\_pcent s',"#2"))
+    else
+      local num=#1\_pcent256
+      tex.print(string.format('\_pcent 03o\_nbb\_pcent03o',(#1-num)/256,num))
+    end
+}}
+
+   \_doc -----------------------------
+   \`\pdfunidef``\macro{<text>}` does more things than only converting to octal notation.
+   The <text> can be scanned in verbatim mode (it is true becuase \^`\_Xtoc`
+   reads the <text> in verbatim mode). First `\edef` do
+   `\_scantextokens\unexpanded` and second `\edef` expands the parameter
+   according to current values on selected macros from `\_regoul`. Then
+   \`\_removeoutmath` converts `..$x^2$..` to `..x^2..`, i.e removes dollars.
+   Then \`\_removeoutbraces` converts `..{x}..` to `..x..`.
+   Finally, the <text> is detokenized, spaces are preprocessed using \^`\replstring`
+   and then the \`\_pdfunidefB` is repeated on each character. It calls the
+   `\directlua` chunk to print octal numbers in the macro \^`\_octalprint`.
+   \_cod -----------------------------
+
+\_def\_pdfunidef#1#2{%
+   \_begingroup
+      \_the\_regoul \_relax % \_regmacro alternatives of logos etc.
+      \_ifx\_savedttchar\_undefined \_def#1{\_scantextokens{\_unexpanded{#2}}}%
+      \_else \_lccode`\;=\_savedttchar \_lowercase{\_prepinverb#1;}{#2}\fi
+      \_edef#1{#1}%
+      \_escapechar=-1
+      \_edef#1{#1\_empty}%
+      \_escapechar=`\\
+      \_ea\_edef \_ea#1\_ea{\_ea\_removeoutmath   #1$\_end$}%  $x$ -> x
+      \_ea\_edef \_ea#1\_ea{\_ea\_removeoutbraces #1{\_end}}%  {x} -> x
+      \_edef#1{\_detokenize\_ea{#1}}%
+      \_replstring#1{ }{{ }}%  text text -> text{ }text
+      \_catcode`\\=12 \_let\\=\_bslash
+      \_edef\_out{\\376\\377}%
+      \_ea\_pdfunidefB#1^%  text -> \_out in octal
+      \_ea
+   \_endgroup
+   \_ea\_def\_ea#1\_ea{\_out}
+}
+\_def\_pdfunidefB#1{%
+   \_ifx^#1\_else
+      \_tmpnum=`#1
+      \_pdfunidefC{\_luaescapestring{#1}}%
+   \_ea\_pdfunidefB \_fi
+}
+\_def\_pdfunidefC #1{\_edef\_out{\_out \\\_ea\_octalprint\_ea{\_the\_tmpnum}{#1}}}
+
+\_def\_removeoutbraces #1#{#1\_removeoutbracesA}
+\_def\_removeoutbracesA #1{\_ifx\_end#1\_else #1\_ea\_removeoutbraces\_fi}
+\_def\_removeoutmath #1$#2${#1\_ifx\_end#2\_else #2\_ea\_removeoutmath\_fi}
+
+   \_doc -----------------------------
+   The \`\_prepinverb``<macro><separator>{<text>}`,
+   e.g.\ `\_prepinverb\tmpb|{aaa |bbb| cccc |dd| ee}`
+   does `\def\tmpb{<su>{aaa }bbb<su>{ cccc }dd<su>{ ee}}` where
+   <su> is `\scantextokens\unexpanded`. It means that in-line verbatim
+   are not argument of `\scantextoken`. First `\edef\tmpb` tokenizes again
+   the <text> but not the parts which were in the the in-line verbatim.
+   \_cod -----------------------------
+
+\_def\_prepinverb#1#2#3{\_def#1{}%
+   \_def\_dotmpb ##1#2##2{\_addto#1{\_scantextokens{\_unexpanded{##1}}}%
+      \_ifx\_end##2\_else\_ea\_dotmpbA\_ea##2\_fi}%
+   \_def\_dotmpbA ##1#2{\_addto#1{##1}\_dotmpb}%
+   \_dotmpb#3#2\_end
+}
+
+   \_doc -----------------------------
+   The \^`\regmacro` is used in order to sed the values of macros
+   `\em`, `\rm`, `\bf`, `\it`, `\bi`, `\tt`, `\/` and `~` to values usable in
+   PDF outlines.
+   \_cod -----------------------------
+
+\_regmacro {}{}{\_let\em=\_empty \_let\rm=\_empty \_let\bf=\_empty
+    \_let\it=\_empty \_let\bi=\_empty \_let\tt=\_empty \_let\/=\_empty
+    \_let~=\_space
+}
+\public \pdfunidef ;
+
+\_endcode % --------------------------------
+
+There are only two encodings for PDF strings (used in PDFoutlines, PDFinfo
+, etc.). The first one is PDFDocEncoding which is one-byte encoding, but most
+Czech or Slovak characters are missing here.
+
+The second encoding is PDFunicode encoding which is implemented in this file.
+This encoding is \TeX/-discomfortable because it looks like
+
+\begtt
+\376\377\000C\000v\000i\001\015\000e\000n\000\355\000\040\000j\000e\000\040
+\000z\000\341\000t\001\033\001\176
+\endtt
+
+This example is the real encoding of the string "Cvičení je zátěž". You can see
+that this is UTF-16 encoding (two bytes per character) with two starting
+bytes FEFF. Moreover, each byte is encoded by three octal digits preceded by
+a backslash. The only exception is the visible ASCII character encoding: such
+a character is encoded by its real byte preceded by `\000`.
+
+

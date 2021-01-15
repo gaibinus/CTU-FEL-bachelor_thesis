@@ -1,14 +1,17 @@
-% The documentation of the usage of CTUstyle -- the template for
-% typessetting thesis by plain\TeX at CTU in Prague
+% On-board computer for PC104 format CubeSats
 % ---------------------------------------------------------------------
-% Petr Olsak  Jan. 2013
+% Filip Geib Jan. 2021
 
-% You can copy this file to your own file and do some changes.
-% Then you can run:  optex your-file
+% export in Long-term Archiving (PDF/A)
+% conversion needed: https://pdfrecover.herokuapp.com/pdfaconvert/
+\input glyphtounicode.tex
+\input glyphtounicode-cmr.tex
+\input glyphtounicode-ntx.tex
+\pdfgentounicode=1
 
 \input ctustyle3  % The template (in version 3, for OpTeX) is included here.
 
-\worktype [O/CZ] % Type: B = bachelor, M = master, D = Ph.D., O = other
+\worktype [B/EN] % Type: B = bachelor, M = master, D = Ph.D., O = other
                  % / the language: CZ = Czech, SK = Slovak, EN = English
 
 \faculty    {F3}  % Type your faculty F1, F2, F3, etc. or MUVS
@@ -82,7 +85,7 @@
 
 %%%%% <--   % The place for your own macros is here.
 
-%\draft     % Uncomment this if the version of your document is working only.
+\draft     % Uncomment this if the version of your document is working only.
 %\linespacing=1.7  % uncomment this if you need more spaces between lines
                    % Warning: this works only when \draft is activated!
 %\savetoner        % Turns off the lightBlue backround of tables and

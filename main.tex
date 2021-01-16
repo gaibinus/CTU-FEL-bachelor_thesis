@@ -19,7 +19,7 @@
 \subtitle   {}
 
 \author     {Filip  Geib}
-\date       {January 2021}
+\date       {February 2021}
 \supervisor {Ing. Vojtěch Petrucha, Ph.D.}
 \studyinfo  {Cybernetics and Robotics}
 \workname   {}
@@ -38,32 +38,33 @@
 }
 
 \keywordsEN {
-   CubeSat; PC104; OBC; hardware; PCB design; schematics.
+    CubeSat; PC104; OBC; hardware; PCB design; schematics.
 }
 \keywordsSK {
-   CubeSat; PC104; OBC; hardvér; PCB dizajn; schémy.
+    CubeSat; PC104; OBC; hardvér; PCB dizajn; schémy.
 }
 \thanks {
    \lorem[5]
 }
 \declaration {
-  I hereby declare that the presented thesis is my own work and that I have
-  cited all sources of information in accordance with the Guideline for
-  adhering to ethical principles when elaborating an academic final thesis.
+    I hereby declare that the presented thesis is my own work and that I have
+    cited all sources of information in accordance with the Guideline for
+    adhering to ethical principles when elaborating an academic final thesis.
                 
-  I acknowledge that my thesis is subject to the rights and obligations
-  stipulated by the Act No.\,121/2000~Coll., the Copyright Act, as amended. In
-  accordance with Article~46~(6) of the Act, I hereby grant a nonexclusive
-  authorization (license) to utilize this thesis, including any and all
-  computer programs incorporated therein or attached thereto and all
-  corresponding documentation (hereinafter collectively referred to as the
-  “Work”), to any and all persons that wish to utilize the Work. Such
-  persons are entitled to use the Work for non-profit purposes only, in any
-  way that does not detract from its value. This authorization is not limited
-  in terms of time, location and quantity.
-
-  In Prague on January 13, 2013 % !! Attention, you have to change this item.
-  \signature % makes dots
+    I acknowledge that my thesis is subject to the rights and obligations
+    stipulated by the Act No.\,121/2000~Coll., the Copyright Act, as amended. In
+    accordance with Article~46~(6) of the Act, I hereby grant a nonexclusive
+    authorization (license) to utilize this thesis, including any and all
+    computer programs incorporated therein or attached thereto and all
+    corresponding documentation (hereinafter collectively referred to as the
+    “Work”), to any and all persons that wish to utilize the Work. Such
+    persons are entitled to use the Work for non-profit purposes only, in any
+    way that does not detract from its value. This authorization is not limited
+    in terms of time, location and quantity.
+    
+    \bigskip
+    In Prague on February 25, 1999 % !! Attention, you have to change this item.
+    \signature % makes dots
 }
 
 %%%%% <--   % The place for your own macros is here.
@@ -78,5 +79,53 @@
 
 \makefront  % Mandatory command. Makes title page, acknowledgment, contents etc.
 
+% only for temporary content generation, one chapter => one TeX file
+\chap Introduction
+\chap Related works
+% main body
+\chap PC104 format CubeSats
+\sec CubeSat concept
+\sec PC104 standard
+\secc Mechanical specification
+\secc Main header pinout
+\sec OBC requirements
+\secc Capabilities and features 
+\secc Components certification
+%
+\chap Board Sierra - single OBC
+\sec Submodules and circuit design
+\secc Microcontroller
+\secc Peripheral isolators
+\secc Power management
+\secc External memory
+\secc CAN bus drivers
+\secc Temperature sensing
+\sec PCB design and assembly
+\secc PCB specifications
+\secc Submodles placement
+\secc Routing and fanout
+\secc Assembly and debug
+\sec Board Delta - double OBC
+\secc Circuit modification
+\secc PCB modification
+%
+\chap Element Foxtrot - FlatSat
+\sec Submodules and circuit design
+\secc Ordinary power source
+\secc USB-C power source
+\secc Voltage handling
+\secc PC104 modules slots
+\sec PCB design and assembly
+\secc PCB specifications
+\secc Submodles placement
+\secc Routing and fanout
+\secc Assembly and debug
+%
+\chap Board Sierra testing
+\sec Testing software
+\sec Radiation testing
+\sec Environmental testing
+%
+\chap Conclusion
 
 \bye

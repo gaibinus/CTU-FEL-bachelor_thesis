@@ -79,53 +79,22 @@
 
 \makefront  % Mandatory command. Makes title page, acknowledgment, contents etc.
 
-% only for temporary content generation, one chapter => one TeX file
+% introduction chapters
 \chap Introduction
 \chap Related works
+
 % main body
-\chap PC104 format CubeSats
-\sec CubeSat concept
-\sec PC104 standard
-\secc Mechanical specification
-\secc Main header pinout
-\sec OBC requirements
-\secc Capabilities and features 
-\secc Components certification
-%
-\chap Board Sierra - single OBC
-\sec Submodules and circuit design
-\secc Microcontroller
-\secc Peripheral isolators
-\secc Power management
-\secc External memory
-\secc CAN bus drivers
-\secc Temperature sensing
-\sec PCB design and assembly
-\secc PCB specifications
-\secc Submodles placement
-\secc Routing and fanout
-\secc Assembly and debug
-\sec Board Delta - double OBC
-\secc Circuit modification
-\secc PCB modification
-%
-\chap Element Foxtrot - FlatSat
-\sec Submodules and circuit design
-\secc Ordinary power source
-\secc USB-C power source
-\secc Voltage handling
-\secc PC104 modules slots
-\sec PCB design and assembly
-\secc PCB specifications
-\secc Submodles placement
-\secc Routing and fanout
-\secc Assembly and debug
-%
-\chap Board Sierra testing
-\sec Testing software
-\sec Radiation testing
-\sec Environmental testing
-%
+\input{chapters/chap3_projectDescription}
+\input{chapters/chap4_boardSierra}
+\input{chapters/chap5_elementFoxtrot}
+\input{chapters/chap6_sierraTesting}
+
+% conclusion chapters
 \chap Conclusion
+
+% bibliography
+\bibchap
+\usebib/c (simple) bibliography
+
 
 \bye

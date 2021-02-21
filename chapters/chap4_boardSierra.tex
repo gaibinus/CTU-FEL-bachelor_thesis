@@ -2,6 +2,26 @@
 \chap Board Sierra - single OBC
 \sec Submodules and circuit design
 \secc Microcontroller
+
+\secc External clock sources
+\quad The \glref{MCU} has two internal \glref{RC} oscillators that can be used to drive the system and auxiliary clocks \cite[dat:mcu]. These internal oscillators have a lower frequency stability and a higher temperature dependency than the external ones \cite[app:oscInt]. To ensure clock reliability in the harsh space environment, we had to implement external clock sources.
+
+A $4-48\rm{[MHz]}$ \glref{HSE} oscillator can drive the system clock. Supported types are crystal, ceramic resonator, or silicone oscillator \cite[dat:mcu]. The last option seems to be the best as it is insensitive to \glref{EMI} and vibration. The only downside is its slightly lower temperature rejection \cite[app:oscComp]. We chose the SiT8924B \cite[dat:hse], a $26\rm{[MHz]}$ silicon \glref{MEMS} oscillator. Accordingly to the clock configuration tool of the stm32cube software, we can reach various system clock frequencies up to $78\rm{[MHz]}$ (the max. is $80\rm{[MHz]}$ \cite[dat:mcu]). The circuitry follows the \glref{HSE} datasheet \cite[dat:hse]  and is shown on the right side of figure \ref[fig:clockSource]. The \glref{HSE} output OSE_IN can be enabled or disabled by the binary OSC_EN signal.
+
+A $32.768\rm{[kHz]}$ \glref{LSE} oscillator can drive the \glref{RTC}, hardware auto calibration, or other timing functions. Table 7 in \cite[app:oscDes] recommends individual crystal resonators for this specific purpose with STM32 \glref{MCU}s. After a consideration of these options, we decided to use the ABS07AIG ceramic base crystal. The \glref{LSE} oscillator circuitry is based on the reference design in figure 5 in \cite[app:oscDes]. To achieve a stable frequency of this so-called Pierce oscillator, it is required to determine the values of two load capacitors $C_{L1}$, $C_{L2}$ and an external resistor $R_{Ext}$. This can be obtained using the equations
+
+$$ C_L = {{C_{L1} C_{L2}}\over{C_{L1}} + C_{L2}} + C_S \quad \wedge \quad C_{L1} = C_{L2}, \eqmark $$
+
+$$ R_{Ext} = {1\over{2\pi f C_{L2}}}, \eqmark $$
+
+where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation frequency and $C_S$ is the stray capacitance \cite[app:oscDes]. Values of $C_L$ and $f$ are listed in the crystal datasheet \cite[dat:lse]. We can assume as a rule of thumb, that $C_S=4\rm{[pF]}$. The final \glref{LSE} circuitry with computed values of the components is shown on the left side of figure \ref[fig:clockSource]. 
+
+\midinsert
+    \label[fig:clockSource]
+    \picw=0.6\hsize \cinspic figures/schemes/clockSources.pdf
+    \caption/f Schematic diagram of external clock sources.
+\endinsert
+
 \secc Peripheral isolators
 \secc Power management
 \secc External memory

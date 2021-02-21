@@ -1,6 +1,6 @@
 % On-board computer for PC104 format CubeSats
 % ---------------------------------------------------------------------
-% Filip Geib Jan. 2021
+% Filip Geib Feb. 2021
 
 % export in Long-term Archiving (PDF/A)
 % conversion needed: https://pdfrecover.herokuapp.com/pdfaconvert/
@@ -9,7 +9,11 @@
 \input glyphtounicode-ntx.tex
 \pdfgentounicode=1
 
-\input ctustyle3  % The template (in version 3, for OpTeX) is included here.
+% include template
+\input ctustyle3
+
+% include glossary
+\input database/glosdata
 
 \worktype [B/EN]
 
@@ -67,7 +71,7 @@
     \signature % makes dots
 }
 
-%%%%% <--   % The place for your own macros is here.
+%%%%% MACROS
 
 \draft     % Uncomment this if the version of your document is working only.
 %\linespacing=1.7  % uncomment this if you need more spaces between lines
@@ -77,7 +81,10 @@
 %\blackwhite       % Use this if you need really Black+White thesis.
 %\onesideprinting  % Use this if you really don't use duplex printing. 
 
-\makefront  % Mandatory command. Makes title page, acknowledgment, contents etc.
+%%%%% MAIN TEXT
+
+% make title page, acknowledgment, contents etc.
+\makefront
 
 % introduction chapters
 \chap Introduction
@@ -94,7 +101,7 @@
 
 % bibliography
 \bibchap
-\usebib/c (simple) bibliography
+\usebib/c (iso690) database/bibliography 
 
 
 \bye

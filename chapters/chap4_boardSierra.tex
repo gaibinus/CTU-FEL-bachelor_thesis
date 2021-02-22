@@ -3,18 +3,12 @@
 \sec Submodules and circuit design
 \secc Microcontroller
 
+%%%%% EXTERNAL CLOCK SOURCES
+
 \secc External clock sources
 \quad The \glref{MCU} has two internal \glref{RC} oscillators that can be used to drive the system and auxiliary clocks \cite[dat:mcu]. These internal oscillators have a lower frequency stability and a higher temperature dependency than the external ones \cite[app:oscInt]. To ensure clock reliability in the harsh space environment, we had to implement external clock sources.
 
-A $4-48\rm{[MHz]}$ \glref{HSE} oscillator can drive the system clock. Supported types are crystal, ceramic resonator, or silicone oscillator \cite[dat:mcu]. The last option seems to be the best as it is insensitive to \glref{EMI} and vibration. The only downside is its slightly lower temperature rejection \cite[app:oscComp]. We chose the SiT8924B \cite[dat:hse], a $26\rm{[MHz]}$ silicon \glref{MEMS} oscillator. Accordingly to the clock configuration tool of the stm32cube software, we can reach various system clock frequencies up to $78\rm{[MHz]}$ (the max. is $80\rm{[MHz]}$ \cite[dat:mcu]). The circuitry follows the \glref{HSE} datasheet \cite[dat:hse]  and is shown on the right side of figure \ref[fig:clockSource]. The \glref{HSE} output OSE_IN can be enabled or disabled by the binary OSC_EN signal.
-
-A $32.768\rm{[kHz]}$ \glref{LSE} oscillator can drive the \glref{RTC}, hardware auto calibration, or other timing functions. Table 7 in \cite[app:oscDes] recommends individual crystal resonators for this specific purpose with STM32 \glref{MCU}s. After a consideration of these options, we decided to use the ABS07AIG ceramic base crystal. The \glref{LSE} oscillator circuitry is based on the reference design in figure 5 in \cite[app:oscDes]. To achieve a stable frequency of this so-called Pierce oscillator, it is required to determine the values of two load capacitors $C_{L1}$, $C_{L2}$ and an external resistor $R_{Ext}$. This can be obtained using the equations
-
-$$ C_L = {{C_{L1} C_{L2}}\over{C_{L1}} + C_{L2}} + C_S \quad \wedge \quad C_{L1} = C_{L2}, \eqmark $$
-
-$$ R_{Ext} = {1\over{2\pi f C_{L2}}}, \eqmark $$
-
-where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation frequency and $C_S$ is the stray capacitance \cite[app:oscDes]. Values of $C_L$ and $f$ are listed in the crystal datasheet \cite[dat:lse]. We can assume as a rule of thumb, that $C_S=4\rm{[pF]}$. The final \glref{LSE} circuitry with computed values of the components is shown on the left side of figure \ref[fig:clockSource]. 
+A $4-48\rm{[MHz]}$ \glref{HSE} oscillator can drive the system clock. Supported types are crystal, ceramic resonator, or silicone oscillator \cite[dat:mcu]. The last option seems to be the best as it is insensitive to \glref{EMI} and vibration. The only downside is its slightly lower temperature rejection \cite[app:oscComp]. We chose the SiT8924B, a $26\rm{[MHz]}$ silicon \glref{MEMS} oscillator \cite[dat:hse]. Accordingly to the clock configuration tool of the stm32cube software, we can reach various system clock frequencies up to $78\rm{[MHz]}$ (the max. is $80\rm{[MHz]}$ \cite[dat:mcu]). The circuitry follows the \glref{HSE} datasheet \cite[dat:hse]  and is shown on the right side of figure \ref[fig:clockSource]. The \glref{HSE} output OSE_IN can be enabled or disabled by the binary OSC_EN signal.
 
 \midinsert
     \label[fig:clockSource]
@@ -22,8 +16,43 @@ where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation freq
     \caption/f Schematic diagram of external clock sources.
 \endinsert
 
-\secc Peripheral isolators
+A $32.768\rm{[kHz]}$ \glref{LSE} oscillator can drive the \glref{RTC}, hardware auto calibration, or other timing functions. Table 7 in \cite[app:oscDes] recommends individual crystal resonators for this specific purpose with STM32 \glref{MCU}s. After a consideration of these options, we decided to use the ABS07AIG ceramic base crystal \cite[dat:lse]. The \glref{LSE} oscillator circuitry is based on the reference design in figure 5 in \cite[app:oscDes]. To achieve a stable frequency of this so-called Pierce oscillator, it is required to determine the values of two load capacitors $C_{L1}$, $C_{L2}$ and an external resistor $R_{Ext}$. This can be obtained using the equations
+
+$$ C_L = {{C_{L1} C_{L2}}\over{C_{L1}} + C_{L2}} + C_S \quad \wedge \quad C_{L1} = C_{L2}, \eqmark $$
+
+$$ R_{Ext} = {1\over{2\pi f C_{L2}}}, \eqmark $$
+
+where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation frequency and $C_S$ is the stray capacitance \cite[app:oscDes]. Values of $C_L$ and $f$ are listed in the crystal datasheet \cite[dat:lse]. We can assume as a rule of thumb, that $C_S=4\rm{[pF]}$. The final \glref{LSE} circuitry with computed values of the components is shown on the left side of figure \ref[fig:clockSource]. 
+
+%%%%% POWER MANAGEMENT
+
 \secc Power management
+
+\quad The electrical power and distribution subsystem is known to be the most vital subsystem of a spacecraft. Its reliability and error handling should be ensured by the \glref{PDCU}. However, it is a good engineering practice by professional \glref{OBC}s manufacturers to include an additional power control circuitry to their designs \cite[obc:dataPatterns, obc:isis, obc:mit, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]. Our \glref{OBC} requires $3.3\rm{[V]}$ and $\rm{[5V]}$ power inputs from the main power buses.  In the case of their malfunction, it is our responsibility to sense it and power down the \glref{OBC}.
+
+A functional diagram of the implemented power management is shown in figure \ref[fig:powerManagement]. The \glref{OBC} is connected to each power bus through an electronic fuse. This device continuously monitors the bus for events of under-voltage, over-voltage, and over-current\fnote{This is a crucial feature in handling and resolving a latch-up event.}. As a response to such an event, the \glref{eFuse} will switch into high impedance and pull down specific input of an AND logic gate. This gate simultaneously controls two load switches, one for each power line. This approach ensures that a fault on one power bus will result in a high impedance of both \glref{OBC} power inputs. It also eliminates the risk of a death loop, a state where a reset of \glref{eFuse}s is not possible as they are switching each other off. Added benefits of this design are simple current measurements (using the \glref{eFuse} analog output) and a kill switch integration into the AND logic gate.
+
+\midinsert
+    \label[fig:powerManagement]
+    \picw=0.75\hsize \cinspic figures/diagrams/powerManagement.pdf
+    \caption/f Functional diagram of power management circuitry.
+\endinsert
+
+The final schematic diagram of power management circuitry is shown in figure \ref[app:powerManagement]. The most important part of this design is the \glref{eFuse}, as it covers all of the power control features. We decided to use the TPS25940-Q1 device \cite[dat:efuse]. Custom monitoring thresholds values can be set following the typical application schematic in figure $10-1$ in \cite[dat:efuse]. This was achieved by connecting specific resistors to the device, with values calculated using the TPS2594x design calculation tool \cite[app:tps25940]. As the logic AND gate, we chose the 74LVC1G11-Q100 \cite[dat:gate]. This device is designed to operate in a mixed 3.3V and 5V environment, what corresponds with our application. The last important component is the load switch. In our case, the TPS22965W-Q1 with an inbuilt output discharge function \cite[dat:switch]. For a correct operation of the switch, the VBIAS pin should stay saturated for a while after disconnecting the VIN voltage. We achieved this behavior by charging a capacitor connected to the VBIAS from the VIN through a Schottky diode. Four reservoir capacitors are placed on both sides of the load switches, following the suggestions in \cite[dat:efuse, dat:switch]. Nominal logic values of all switching signals are set by pull-up or pull-down resistors. The summary of the final power management ratings is listed in table \ref[tab:powerManagement]. These values were chosen considering the power requirements of the remaining \glref{OBC} components and are a subject of change by a potential user.
+
+\midinsert \label[tab:powerManagement]
+    \ctable{lc|ccc|c}{
+        Power input         & Parameter & Min & Typ & Max & Unit \crll
+        \vspan2{3V3 BUS}    & voltage   & 2.9 & 3.3 & 3.5 & $\rm{V}$ \cr
+                            & current   & 0.0 & -   & 1.2 & $\rm{A}$ \crl
+        \vspan2{5V BUS}     & voltage   & 4.6 & 5.0 & 5.4 & $\rm{V}$ \cr
+                            & current   & 0.0 & -   & 1.2 & $\rm{A}$
+    }
+    \caption/f \glref{OBC} power rating. Value out of range will cause a protective shutdown.
+\endinsert
+
+
+\secc Peripheral isolators
 \secc External memory
 \secc CAN bus drivers
 \secc Temperature sensing

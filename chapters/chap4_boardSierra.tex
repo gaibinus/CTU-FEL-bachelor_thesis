@@ -6,9 +6,8 @@
 %%%%% EXTERNAL CLOCK SOURCES
 
 \secc External clock sources
-\quad The \glref{MCU} has two internal \glref{RC} oscillators that can be used to drive the system and auxiliary clocks \cite[dat:mcu]. These internal oscillators have a lower frequency stability and a higher temperature dependency than the external ones \cite[app:oscInt]. To ensure clock reliability in the harsh space environment, we had to implement external clock sources.
 
-A $4-48\rm{[MHz]}$ \glref{HSE} oscillator can drive the system clock. Supported types are crystal, ceramic resonator, or silicone oscillator \cite[dat:mcu]. The last option seems to be the best as it is insensitive to \glref{EMI} and vibration. The only downside is its slightly lower temperature rejection \cite[app:oscComp]. We chose the SiT8924B, a $26\rm{[MHz]}$ silicon \glref{MEMS} oscillator \cite[dat:hse]. Accordingly to the clock configuration tool of the stm32cube software, we can reach various system clock frequencies up to $78\rm{[MHz]}$ (the max. is $80\rm{[MHz]}$ \cite[dat:mcu]). The circuitry follows the \glref{HSE} datasheet \cite[dat:hse]  and is shown on the right side of figure \ref[fig:clockSource]. The \glref{HSE} output OSE_IN can be enabled or disabled by the binary OSC_EN signal.
+\quad A $4-48\rm{[MHz]}$ high speed external oscillator (\glref{HSE}) can drive the system clock. Supported types are crystal, ceramic resonator, or silicone oscillator \cite[dat:mcu]. The last option seems to be the best as it is insensitive to electromagnetic interference (\glref{EMI}) and vibration. The only downside is its slightly lower temperature rejection \cite[app:oscComp]. We chose the SiT8924B, a $26\rm{[MHz]}$ silicon microelectromechanical system (\glref{MEMS}) oscillator \cite[dat:hse]. Accordingly to the clock configuration tool of the stm32cube software, we can reach various system clock frequencies up to $78\rm{[MHz]}$ (the max. is $80\rm{[MHz]}$ \cite[dat:mcu]). The circuitry follows the \glref{HSE} datasheet \cite[dat:hse]  and is shown on the right side of figure \ref[fig:clockSource]. The \glref{HSE} output OSE_IN can be enabled or disabled by the binary OSC_EN signal.
 
 \midinsert
     \label[fig:clockSource]
@@ -16,7 +15,7 @@ A $4-48\rm{[MHz]}$ \glref{HSE} oscillator can drive the system clock. Supported 
     \caption/f Schematic diagram of external clock sources.
 \endinsert
 
-A $32.768\rm{[kHz]}$ \glref{LSE} oscillator can drive the \glref{RTC}, hardware auto calibration, or other timing functions. Table 7 in \cite[app:oscDes] recommends individual crystal resonators for this specific purpose with STM32 \glref{MCU}s. After a consideration of these options, we decided to use the ABS07AIG ceramic base crystal \cite[dat:lse]. The \glref{LSE} oscillator circuitry is based on the reference design in figure 5 in \cite[app:oscDes]. To achieve a stable frequency of this so-called Pierce oscillator, it is required to determine the values of two load capacitors $C_{L1}$, $C_{L2}$ and an external resistor $R_{Ext}$. This can be obtained using the equations
+A $32.768\rm{[kHz]}$ low speed external oscillator (\glref{LSE}) can drive the real time clock (\glref{RTC}), hardware auto calibration, or other timing functions. Table 7 in \cite[app:oscDes] recommends individual crystal resonators for this specific purpose with STM32 \glref{MCU}s. After a consideration of these options, we decided to use the ABS07AIG ceramic base crystal \cite[dat:lse]. The \glref{LSE} circuitry is based on the reference design in figure 5 in \cite[app:oscDes]. To achieve a stable frequency of this Pierce oscillator, it is required to determine the values of load capacitors $C_{L1}$, $C_{L2}$ and an external resistor $R_{Ext}$. This can be done using equations
 
 $$ C_L = {{C_{L1} C_{L2}}\over{C_{L1}} + C_{L2}} + C_S \quad \wedge \quad C_{L1} = C_{L2}, \eqmark $$
 
@@ -28,9 +27,7 @@ where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation freq
 
 \secc Power management
 
-\quad The electrical power and distribution subsystem is known to be the most vital subsystem of a spacecraft. Its reliability and error handling should be ensured by the \glref{PDCU}. However, it is a good engineering practice by professional \glref{OBC}s manufacturers to include an additional power control circuitry to their designs \cite[obc:dataPatterns, obc:isis, obc:mit, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]. Our \glref{OBC} requires $3.3\rm{[V]}$ and $\rm{[5V]}$ power inputs from the main power buses.  In the case of their malfunction, it is our responsibility to sense it and power down the \glref{OBC}.
-
-A functional diagram of the implemented power management is shown in figure \ref[fig:powerManagement]. The \glref{OBC} is connected to each power bus through an electronic fuse. This device continuously monitors the bus for events of under-voltage, over-voltage, and over-current\fnote{This is a crucial feature in handling and resolving a latch-up event.}. As a response to such an event, the \glref{eFuse} will switch into high impedance and pull down specific input of an AND logic gate. This gate simultaneously controls two load switches, one for each power line. This approach ensures that a fault on one power bus will result in a high impedance of both \glref{OBC} power inputs. It also eliminates the risk of a death loop, a state where a reset of \glref{eFuse}s is not possible as they are switching each other off. Added benefits of this design are simple current measurements (using the \glref{eFuse} analog output) and a kill switch integration into the AND logic gate.
+\quad A functional diagram of the implemented power management is shown in figure \ref[fig:powerManagement]. The \glref{OBC} is connected to each power bus through an electronic fuse (\glref{eFuse}). This device continuously monitors the bus for events of under-voltage, over-voltage, and over-current\fnote{This is a crucial feature in handling and resolving a latch-up event.}. As a response to such an event, the \glref{eFuse} will switch into high impedance and pull down specific input of an AND logic gate. This gate simultaneously controls two load switches, one for each power line. This approach ensures that a fault on one power bus will result in a high impedance of both \glref{OBC} power inputs. It also eliminates the risk of a death loop, a state where a reset of \glref{eFuse}s is not possible as they are switching each other off. Added benefits of this design are simple current measurements (using the \glref{eFuse} analog output) and a Kill Switch integration into the AND logic gate.
 
 \midinsert
     \label[fig:powerManagement]
@@ -48,11 +45,29 @@ The final schematic diagram of power management circuitry is shown in figure \re
         \vspan2{5V BUS}     & voltage   & 4.6 & 5.0 & 5.4 & $\rm{V}$ \cr
                             & current   & 0.0 & -   & 1.2 & $\rm{A}$
     }
-    \caption/f \glref{OBC} power rating. Value out of range will cause a protective shutdown.
+    \caption/t \glref{OBC} power rating. Value out of range will cause a protective shutdown.
 \endinsert
 
+%%%%% PERIPHERAL ISOLATORS
 
 \secc Peripheral isolators
+
+\quad We chose to implement the design using robust analog switches as isolators of data lines. This approach is more straightforward, less expensive, and requires a smaller \glref{PCB} area than an optocoupler-based or an \glref{FPGA}-based ones (introduced in chapter \ref[chap3:features]). A functional diagram of the implementation is shown in figure \ref[fig:peripheralIsolatorsDiag]. \glref{OBC} data lines are connected to the rest of the spacecraft through a series of analog switches. These lines are grouped by particular data buses and are assigned to a separate switch. The \glref{OBC} can enable or disable a specific switch and therefore isolate a particular data bus from the remaining spacecraft subsystems. Pulling low the Kill Switch will result in high impedance of all switches and completely isolating the \glref{OBC} data lines.
+
+\midinsert
+    \label[fig:peripheralIsolatorsDiag]
+    \picw=0.8\hsize \cinspic figures/diagrams/peripheralIsolators.pdf
+    \caption/f Functional diagram of peripheral isolators circuitry.
+\endinsert
+
+Schematic diagrams of two isolators are shown in figure \ref[fig:peripheralIsolatorsSchem]. We decided to use the DGQ2788A device \cite[dat:isolator]. To cover all of the data buses, the \glref{OBC} hosts fifteen of these analog switches in a dual double pole double throw (\glref{DPDT}) configuration. The \glref{OBC} data lines are connected to common (\glref{COM}) terminals. Normally closed (\glref{NC}) terminals are left floating, whereas normally open (\glref{NO}) terminals are connected to the spacecraft data lines. The important Kill Switch functionality is implemented using the device's power down protection. If the switch loses power, it will enter the normal state. This approach simplifies the circuitry a lot as it substitutes an otherwise necessary system of multiple logic gates. The other beneficial features of this analog switch are inbuild signal clamping diodes and a high latch-up current of $300\rm{[mA]}$. The presence of pull-down resistors and decoupling capacitors in the schematic follows the device datasheet.
+
+\midinsert
+    \label[fig:peripheralIsolatorsSchem]
+    \picw=\hsize \cinspic figures/schemes/peripheralIsolators.pdf
+    \caption/f Schematic diagram of two peripheral isolators.
+\endinsert
+
 \secc External memory
 \secc CAN bus drivers
 \secc Temperature sensing

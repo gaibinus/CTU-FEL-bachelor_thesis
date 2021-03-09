@@ -1,0 +1,70 @@
+
+\chap Project description
+
+%%%%% CUBESATS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\sec CubeSat concept
+
+%%%%% OBC REQUIREMENTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\sec OBC requirements
+
+%%%%% RADIATION
+
+\secc Radiation and redundancy
+
+\quad Occasionally traveling through weaker parts of the Earth's magnetic field and not shielded by the Earth's atmosphere, the CubeSats have to operate in an environment full of radiation. A direct hit of a high-energy particle might have serious consequences for \glref{OBC} functionality. These include transistor gate ruptures, memory bit flips, software upsets, or latch-ups. A proper strategy must be taken to increase the \glref{OBC} durability and ability to handle such an error, resulting in maximizing a possible mission life.
+
+One approach is to use special radiation-hardened components. This strategy is typical for professional and more expensive satellites than the CubeSats. These components are usually bigger, more costly, and have less functionality than ordinary COTS.
+
+Considering the size and budget requirements of our \glref{OBC}, we chose to implement another option. Instead of the previously mentioned physical hardening technique, a logical one was realized. The \glref{OBC} hosts many schematic design-related features ensuring the proper handling of any radiation-related event. These include: i) over-current sensing power management, ii) separate peripheral isolators, iii) full high-impedance mode requested by the higher logic, iv) triple-redundant memories, v) multiple temperature sensors. A fully double-redundant \glref{OBC} is presented in chapter \ref[chap3:delta].
+
+%%%%% FEATURES
+
+\label[chap2:features]
+\secc Capabilities and features
+
+\quad Having in mind the expectations of the \glref{VST} supervisors, features common for \glref{OBC}s by different professional manufacturers, and design requirements created by the radiation, we created and implemented the following list of desired \glref{OBC}'s features:
+
+\begitems
+    * {\sbf Microcontroller:}
+    * {\sbf External clock sources:} The \glref{MCU} has two internal resistor-capacitor (\glref{RC}) oscillators that can be used to drive a master system clock and auxiliary clocks \cite[dat:mcu]. These internal oscillators have a significantly lower frequency stability and a higher temperature dependency than the external ones \cite[app:oscInt]. Therefore, to ensure the clock reliability in the harsh space environment, we had to implement external clock sources.
+    * {\sbf Robust power management:} The electric power subsystem (\glref{EPS}) is known to be the most vital subsystem of a spacecraft. Its reliability and error handling should be ensured by the power control and distribution unit (\glref{PDCU}). However, it is a good engineering practice by professional \glref{OBC} manufacturers to include an additional power control to their designs \cite[obc:dataPatterns, obc:isis, obc:mit, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]. Our \glref{OBC} requires $3.3\rm{[V]}$ and $5\rm{[V]}$ power inputs from the main power buses. In the case of their malfunction, it is our responsibility to sense it and power down the \glref{OBC}. This feature is also important for some of the \glref{OBC} on-earth user cases. During a hardware development or a system presentation, the user might misconnect the power line or use an unsupported power source.
+    * {\sbf Isolation of the peripherals:} The spacecraft \glref{OBC} is connected to many data buses shared among all other subsystems. In some scenarios, the \glref{OBC} must be able to isolate itself from a specific or multiple data buses. For example, to switch between \glref{OBC}s in a redundant configuration, handle the failure on a data bus, or prevent unintentional interferences. Standard approaches to addressing this isolation feature are analog switches \cite[the:wurzburg], optocouplers \cite[pap:satelliteLeo], or \glref{FPGA}s \cite[obc:dataPatterns]. These isolators should also guarantee that all data lines are high impedance when the \glref{OBC} is powered off.
+    * {\sbf Redundant external memory:}
+    * {\sbf CAN bus peripherals:}
+    * {\sbf Temperature monitoring:}
+    * {\sbf Maximal payload sector:}
+\enditems
+
+%%%%% CERTIFICATION
+
+\secc Components certification
+
+%%%%% SELECTION
+
+\secc Components selection
+
+\quad After listing all of the technical requirements for a specific electronic part, we had to chose a particular component. As there are usually multiple similar components from various manufacturers, we had to use additional criteriums for the selection process.
+
+As this \glref{OBC} module is not primarily designed for an actual space flight (explained in chapter \ref[chap1:introduction]), an individual component's price is not negligible. With a lower overall cost of the \glref{OBC}, a broader project expansion in the LibreCube community can be achieved. Thus components with sufficient attributes but lower price were favored.
+
+Another criterium in the component selection was the available PCB surface. As a result of maximizing the payload sector of the PC104 module, the actual \glref{OBC} subsystem area was significantly decreased. Therefore the components of smaller dimensions available in fine-pitch packages (e.g. \glref{SSOP} or \glref{QFN}) were preferred. After researching the technical capabilities and related costs of PCB manufacturers, we decided not to use the \glref{BGA} package components. Their significantly small footprints would require more precise fanout, resulting in increased manufacturing difficulty and price.
+
+Different components are available from various distributors, which can prolong the assembling process. We chose to use Mouser Electronics for purchasing the components. Therefore the availability of a specific component in this store was also a selection factor. This decision was influenced by the \glref{VST} supervisors and previous experiences.
+
+%%%%% PCI104 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\sec PCI104 standard
+
+%%%%% MECHANICAL
+
+\secc Mechanical specification
+
+%%%%% PINOUT
+
+\secc Main header pinout
+
+
+
+

@@ -4,7 +4,7 @@
 \app Thesis Assignment
 
 \midinsert
-    \label[app:thesisAssignment]
+    \clabel[app:thesisAssignment]{Thesis assignment}
     \picw=0.9\hsize \cinspic database/thesisAssignment.pdf
     \caption/f Assignment of this bachelor's thesis.
 \endinsert
@@ -15,7 +15,37 @@
 \app Schematic diagrams
 
 \midinsert
-    \label[app:powerManagement]
+    \clabel[app:powerManagement]{Power management schematic}
     \picw=0.775\hsize \cinspic figures/schemes/powerManagement.pdf
     \caption/f Schematic diagram of power management circuitry.
+\endinsert
+
+\midinsert
+    \clabel[app:externalMemory]{External memory schematic}
+    \picw=0.7\hsize \cinspic figures/schemes/externalMemory.pdf
+    \caption/f Schematic diagram of external memory circuitry.
+\endinsert
+
+\midinsert
+    \clabel[app:temperatureMonitoring]{Temp. monitoring schematic}
+    \picw=0.675\hsize \cinspic figures/schemes/temperatureMonitoring.pdf
+    \caption/f Schematic diagram of temperature monitoring circuitry.
+\endinsert
+
+
+%%%%% additional materials
+
+\app Additional materials
+
+\midinsert \clabel[tab:unqualifiedParts]{Unqualified parts variants}
+    \ctable{clll}{
+        Designator       & Qualified part no.      & Unqualified part no.  & Difference \crll
+        \vspan2{M1 - M3} & \vspan2{S25FL256LAGNFN} & S25FL256LAGNFI        & temp. \cr
+                         &                         & S25FL256LDPNFI        & temp., speed \crl
+        \vspan2{Q1 - Q3} & \vspan2{TPS22965W-Q1 }  & TPS22965-Q1           & temp. \cr
+                         &                         & TPS22975              & temp., auto.\crl
+        TS1 - TS7        & MCP9804x-E/MC           & MCP9808x-E/MC         & accuracy \crl
+        LG1              & 74LVC1G11GW-Q100        & 74LVC1G11GW           & auto. \cr
+    }
+    \caption/t List of available unqualified variants to some of the qualified parts.
 \endinsert

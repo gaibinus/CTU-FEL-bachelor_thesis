@@ -35,10 +35,10 @@
 \pagetwo    {}
 
 \abstractEN {
-   \lorem[1-2]
+
 }
 \abstractSK {
-   \lorem[3-4]
+
 }
 
 \keywordsEN {
@@ -47,9 +47,11 @@
 \keywordsSK {
     CubeSat; PC104; OBC; hardvér; PCB dizajn; schémy.
 }
+
 \thanks {
-   \lorem[5]
+
 }
+
 \declaration {
     I hereby declare that the presented thesis is my own work and that I have
     cited all sources of information in accordance with the Guideline for
@@ -86,15 +88,14 @@
 % make title page, acknowledgment, contents etc.
 \makefront
 
-% introduction chapters
-\chap Introduction
-\chap Related works
+% introduction chapter
+\input{chapters/chapter1}
 
 % main body
-\input{chapters/chap3_projectDescription}
-\input{chapters/chap4_boardSierra}
-\input{chapters/chap5_elementFoxtrot}
-\input{chapters/chap6_sierraTesting}
+\input{chapters/chapter2}
+\input{chapters/chapter3}
+\input{chapters/chapter4}
+\input{chapters/chapter5}
 
 % conclusion chapters
 \chap Conclusion

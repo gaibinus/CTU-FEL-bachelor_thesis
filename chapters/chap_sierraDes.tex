@@ -21,16 +21,17 @@ Considering the size and budget requirements of our \glref{OBC}, we chose to imp
 
 %%%%% FEATURES
 
-\label[chap2:features]
 \secc Capabilities and features
+
+\cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]
 
 \quad Having in mind the expectations of the \glref{VST} supervisors, features common for \glref{OBC}s by different professional manufacturers, and design requirements implied by the radiation, we created and implemented the following list of desired \glref{OBC}'s features:
 
 \begitems
-    * {\sbf Microcontroller:} 
-    * {\sbf External clock sources:} The \glref{MCU} has two internal resistor-capacitor (\glref{RC}) oscillators that can be used to drive a master system clock and auxiliary clocks \cite[dat:mcu]. These internal oscillators have a significantly lower frequency stability and a higher temperature dependency than the external ones \cite[app:oscInt]. Therefore, to ensure the clock reliability in the harsh space environment, we had to implement external clock sources.
-    * {\sbf Robust power management:} The electric power subsystem (\glref{EPS}) is known to be the most vital subsystem of a spacecraft. Its reliability and error handling should be ensured by the power control and distribution unit (\glref{PDCU}). However, it is a good engineering practice by professional \glref{OBC} manufacturers to include an additional power control to their designs \cite[obc:dataPatterns, obc:isis, obc:imt, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro, obc:gos]. Our \glref{OBC} requires $3.3\rm{[V]}$ and $5\rm{[V]}$ power inputs from the main power buses. In the case of their malfunction, it is our responsibility to sense it and power down the \glref{OBC}. This feature is also important for some of the \glref{OBC} on-earth user cases. During a hardware development or a system presentation, the user might misconnect the power line or use an unsupported power source.
-    * {\sbf Isolation of the peripherals:} The spacecraft \glref{OBC} is connected to many data buses shared among all other subsystems. In some scenarios, the \glref{OBC} must be able to isolate itself from a specific or multiple data buses. For example, to switch between \glref{OBC}s in a redundant configuration, handle the failure on a data bus, or prevent unintentional interferences. Standard approaches to addressing this isolation feature are analog switches \cite[the:wurzburg], optocouplers \cite[pap:satelliteLeo], or \glref{FPGA}s \cite[obc:dataPatterns]. These isolators should also guarantee that all data lines are high impedance when the \glref{OBC} is powered off.
+    * {\sbf Microcontroller:}
+    * {\sbf External clock sources:}
+    * {\sbf Robust power management:}
+    * {\sbf Isolation of the peripherals:}
     * {\sbf Redundant external memory:}
     * {\sbf CAN bus peripherals:}
     * {\sbf Temperature monitoring:}

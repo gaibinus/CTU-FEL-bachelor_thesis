@@ -1,13 +1,15 @@
 
 \chap Board Sierra - submodules
 
+
+
 %%%%% MICROCONTROLLER
 
 \sec Microcontroller
 
 \quad The processing unit is the most important part of the \glref{OBC}. Professional designs use a wide variety of different instruction set architectures \cite[obc:dataPatterns, obc:imt, obc:pumpkin, obc:gauss, obc:nanosatpro]. However, the \glref{ARM} architecture seems to be more popular \cite[obc:isis, obc:aac, obc:anteleope, obc:gos]. This architecture is known for its good multiprocessing support, low power consumption, affordable pricing, and broad spectrum of existing applications. Considering these benefits and influenced by the LibreCube and TUDSaT, our \glref{VST} supervisors decided to pick an STM32 \glref{MCU}.
 
-Our task was to choose a particular model of this 32-bit, Arm and Cortex-M based \glref{MCU}. Aiming rather for a low-power than high-performance characteristics, we decided to select an L series. Particularly the L4 series as it combines the largest flash memory size with the highest number of general-purpose input/output pins (\glref{GPIO}s) \cite[dat:mcuSeries]. Although, only one device from the L4 series is equipped with two CAN bus channels. As the presence of a second bus is crucial for our double-redundant approach, the STM32L496xx option was selected. This family comes in six different packages. Avoiding all of the \glref{BGA}-like ones (as described in chapter \ref[chap:componentsSelection]) narrows the selection to Zx, Vx, and Rx variants. The Zx is the most capable one in terms of flash size and \glref{GPIO} count. Therefore the STM32L496ZG (G stands for extended operating temperature range) was our final choice \cite[dat:mcu]. Some of its key characteristics are listed in table \ref[tab:microcontroller].
+Our task was to choose a particular model of this 32-bit, Arm and Cortex-M based \glref{MCU}. Aiming rather for a low-power than high-performance characteristics, we decided to select an L series. Particularly the L4 series as it combines the largest flash memory size with the highest number of general-purpose input/output pins (\glref{GPIO}s) \cite[dat:mcuSeries]. Although, only one device from the L4 series is equipped with two CAN bus channels. As the presence of a second bus is crucial for our double-redundant approach, the STM32L496xx option was selected. This family comes in six different packages. Avoiding all of the \glref{BGA}-like ones (as described in chapter \ref[chap:componentsSelection]) narrows the selection to Zx, Vx, and Rx variants. The Zx is the most capable one in terms of flash size and \glref{GPIO} count. Therefore the STM32L496ZG (where G stands for extended operating temperature range) was our final choice \cite[dat:mcu]. From now on, we will refer to this particular device as the \glref{MCU}. Some of its key characteristics are listed in table \ref[tab:microcontroller].
 
 \midinsert \clabel[tab:microcontroller]{Microcontroller characteristics}
     \ctable{lcc|lcc}{
@@ -31,7 +33,7 @@ The clock and data lines of both \glref{I2C} busses are equipped with standard $
 
 \secc PCB design
 
-\quad The location and fanout of the \glref{MCU} are shown in figure \ref[pcb:microcontroller]. The \glref{MCU} is placed on the \glref{PCB} top side, covering most of the non-payload area. This big footprint of a LQFP144 package (approximately $2\rm{x}2\rm{[cm]}$) is a consequence of avoiding the \glref{BGA} packages while still trying to keep the pin count high. All of the capacitors were placed as close to their assigned pins as possible. In some cases, it was necessary to use the bottom side of the \glref{PCB}. The same approach was applied to the resistors.
+\quad Location and fanout of the \glref{MCU} are shown in figure \ref[pcb:microcontroller]. The \glref{MCU} is placed on the \glref{PCB} top side, covering most of the non-payload area. This big footprint of a LQFP144 package (approximately $2\rm{x}2\rm{[cm]}$) is a consequence of avoiding the \glref{BGA} packages while still trying to keep the pin count high. All of the capacitors were placed as close to their assigned pins as possible. In some cases, it was necessary to use the bottom side of the \glref{PCB}. The same approach was applied to all of the resistors.
 
 \midinsert
     \clabel[pcb:microcontroller]{Microcontroller circuitry}
@@ -39,39 +41,56 @@ The clock and data lines of both \glref{I2C} busses are equipped with standard $
     \caption/f Highlighted location of microcontroller circuitry.
 \endinsert
 
+
 %%%%% EXTERNAL CLOCK SOURCES
 
 \sec External clock sources
 
-\quad A $4-48\rm{[MHz]}$ high speed external oscillator (\glref{HSE}) can drive the system clock. Supported types are crystal, ceramic resonator, or silicone oscillator \cite[dat:mcu]. The last option seems to be the best as it is insensitive to electromagnetic interference (\glref{EMI}) and vibration. The only downside is its slightly lower temperature rejection \cite[app:oscComp]. We chose the SiT8924B, a $26\rm{[MHz]}$ silicon microelectromechanical system (\glref{MEMS}) oscillator \cite[dat:hse]. Accordingly to the clock configuration tool of the stm32cube software, we can reach various system clock frequencies up to $78\rm{[MHz]}$ (the max. is $80\rm{[MHz]}$ \cite[dat:mcu]). The circuitry follows the \glref{HSE} datasheet \cite[dat:hse]  and is shown on the right side of figure \ref[fig:clockSource]. The \glref{HSE} output OSE_IN can be enabled or disabled by the binary OSC_EN signal.
+\quad Proper timing and synchronization are the key features while dealing with high-speed data busses, \glref{ADC}s, or other precise applications. The \glref{MCU} is equipped with two internal \glref{RC} oscillators that can be used to drive a master system clock and other auxiliary clocks \cite[dat:mcu]. These internal oscillators generally have a significantly lower frequency stability,  a higher temperature dependency, and smaller overall accuracy than their external equivalents \cite[app:oscInt]. Therefore, to increase the clock precision and reliability in the harsh space environment, we had to implement external clock sources.
+
+A $4-48\rm{[MHz]}$ high speed external oscillator (\glref{HSE}) can drive the system clock. Supported types are crystal, ceramic resonator, or silicone oscillator \cite[dat:mcu]. The last option seems to be the best as it is insensitive to electromagnetic interference (\glref{EMI}) and vibration. The only downside is its slightly lower temperature rejection \cite[app:oscComp]. We chose the SiT8924B, a $26\rm{[MHz]}$ silicon microelectromechanical system (\glref{MEMS}) oscillator \cite[dat:hse]. Accordingly to the clock configuration tool of the stm32cube software, we can reach various system clock and auxiliary clocks frequencies up to $78\rm{[MHz]}$ (maximum is $80\rm{[MHz]}$ \cite[dat:mcu]). This is done using the phase-locked loop (\glref{PLL}) clock generation.
+
+A $32.768\rm{[kHz]}$ low speed external oscillator (\glref{LSE}) can drive the real time clock (\glref{RTC}), hardware auto calibration, or other timing functions \cite[dat:mcu]. Table 7 in \cite[app:oscDes] recommends individual crystal resonators for combination with STM32 \glref{MCU}s. After a consideration of these options, we decided to pick the ABS07AIG ceramic base crystal \cite[dat:lse].
+
+\secc Schematic design
+
+\quad The \glref{HSE} circuitry follows the oscillator datasheet \cite[dat:hse]  and is shown on the right side of figure \ref[sch:clockSources]. Only a decoupling capacitor and a terminator resistor are required. The clock output {\it OSE_IN} can be enabled or disabled by the binary {\it OSC_EN} signal.
+
+ The \glref{LSE} circuitry is based on a reference design in the oscillator design guide \cite[app:oscDes]. To achieve a stable frequency of this Pierce oscillator, it is required to find the values of load capacitors $C_{L1}$, $C_{L2}$ and external resistor $R_{E}$. This can be done using equations
+$$ C_L = {{C_{L1} C_{L2}}\over{C_{L1}} + C_{L2}} + C_S \quad \wedge \quad C_{L1} = C_{L2}, \eqmark $$
+$$ R_{E} = {1\over{2\pi f C_{L2}}}, \eqmark $$
+where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation frequency and $C_S$ is the stray capacitance \cite[app:oscDes]. Values of $C_L$ and $f$ are listed in the crystal datasheet \cite[dat:lse]. We can assume as a rule of thumb, that $C_S=4\rm{[pF]}$. The final \glref{LSE} circuitry with computed values of the components is shown on the left side of figure \ref[sch:clockSources].
 
 \midinsert
-    \clabel[fig:clockSource]{Clock sources schematic}
+    \clabel[sch:clockSources]{Clock sources schematic}
     \picw=0.502\hsize \cinspic figures/schemes/clockSources.pdf
     \caption/f Schematic diagram of external clock sources.
 \endinsert
 
-A $32.768\rm{[kHz]}$ low speed external oscillator (\glref{LSE}) can drive the real time clock (\glref{RTC}), hardware auto calibration, or other timing functions. Table 7 in \cite[app:oscDes] recommends individual crystal resonators for this specific purpose with STM32 \glref{MCU}s. After a consideration of these options, we decided to use the ABS07AIG ceramic base crystal \cite[dat:lse]. The \glref{LSE} circuitry is based on the reference design in figure 5 in \cite[app:oscDes]. To achieve a stable frequency of this Pierce oscillator, it is required to determine the values of load capacitors $C_{L1}$, $C_{L2}$ and an external resistor $R_{Ext}$. This can be done using equations
+\secc PCB design
 
-$$ C_L = {{C_{L1} C_{L2}}\over{C_{L1}} + C_{L2}} + C_S \quad \wedge \quad C_{L1} = C_{L2}, \eqmark $$
+\quad Location and fanout of the external clock circuitry are shown in figure \ref[pcb:clockSources]. All of the components are placed on the bottom side of the \glref{PCB}. The circuitry layout follows multiple tips presented in the oscillator design guide \cite[app:oscDes]. Separate \glref{GND} planes are assigned to both the \glref{HSE} and \glref{LSE} circuitry. These planes are bounded by guard rings, formed by series of vias. Each of the planes is connected to a common \glref{GND} only at one point. This approach provides proper \glref{EMI} shielding while reducing a ground loop effect. We also minimized the distance between the \glref{MCU} pins and both oscillators. All these measures combined should improve the clock generation stability and robustness.
 
-$$ R_{Ext} = {1\over{2\pi f C_{L2}}}, \eqmark $$
+\midinsert
+    \clabel[pcb:clockSources]{Clock sources circuitry}
+    \picw=0.75\hsize \cinspic figures/pcbs/clockSources.png
+    \caption/f Highlighted location of external clock sources circuitry.
+\endinsert
 
-where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation frequency and $C_S$ is the stray capacitance \cite[app:oscDes]. Values of $C_L$ and $f$ are listed in the crystal datasheet \cite[dat:lse]. We can assume as a rule of thumb, that $C_S=4\rm{[pF]}$. The final \glref{LSE} circuitry with computed values of the components is shown on the left side of figure \ref[fig:clockSource]. 
 
 %%%%% POWER MANAGEMENT
 
 \sec Power management
 
-\quad A functional diagram of the implemented power management is shown in figure \ref[fig:powerManagement]. The \glref{OBC} is connected to each power bus through an electronic fuse (\glref{eFuse}). This device continuously monitors the bus for events of under-voltage, over-voltage, and over-current\fnote{This is a crucial feature in handling and resolving a latch-up event.}. As a response to such an event, the \glref{eFuse} will switch into high impedance and pull down specific input of an AND logic gate. This gate simultaneously controls two load switches, one for each power line. This approach ensures that a fault on one power bus will result in a high impedance of both \glref{OBC} power inputs. It also eliminates the risk of a death loop, a state where a reset of \glref{eFuse}s is not possible as they are switching each other off. Added benefits of this design are simple current measurements (using the \glref{eFuse} analog output) and a Kill Switch integration into the AND logic gate.
+\quad The electric power subsystem (\glref{EPS}) is known to be the most vital subsystem of a spacecraft. Its reliability and error handling should be ensured by the power control and distribution unit (\glref{PDCU}). However, it is a good practice by professional manufacturers to include an additional power monitoring and control to their \glref{OBC} module designs \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]. We have to implement circuitry that can sense a power bus malfunction and, as a response, power down the \glref{OBC}. This feature is also important for some of the \glref{OBC} on-earth user cases. During a hardware development or a system presentation, the user might misconnect the power line or use an unsupported power source by a mistake.
 
 \midinsert
-    \clabel[fig:powerManagement]{Power management diagram}
+    \clabel[dia:powerManagement]{Power management diagram}
     \picw=0.75\hsize \cinspic figures/diagrams/powerManagement.pdf
     \caption/f Functional diagram of power management circuitry.
 \endinsert
 
-The final schematic diagram of power management circuitry is shown in figure \ref[app:powerManagement]. The most important part of this design is the \glref{eFuse}, as it covers all of the power control features. We decided to use the TPS25940-Q1 device \cite[dat:efuse]. Custom monitoring thresholds values can be set following the typical application schematic in figure $10-1$ in \cite[dat:efuse]. This was achieved by connecting specific resistors to the device, with values calculated using the TPS2594x design calculation tool \cite[app:tps2594Calc]. As the logic AND gate, we chose the 74LVC1G11-Q100 \cite[dat:gate]. This device is designed to operate in a mixed 3.3V and 5V environment, what corresponds with our application. The last important component is the load switch. In our case, the TPS22965W-Q1 with an inbuilt output discharge function \cite[dat:switch]. For a correct operation of the switch, the VBIAS pin should stay saturated for a while after disconnecting the VIN voltage. We achieved this behavior by charging a capacitor connected to the VBIAS from the VIN through a Schottky diode. Four reservoir capacitors are placed on both sides of the load switches, following the suggestions in \cite[dat:efuse, dat:switch]. Nominal logic values of all switching signals are set by pull-up or pull-down resistors. The summary of the final power management ratings is listed in table \ref[tab:powerManagement]. These values were chosen considering the power requirements of the remaining \glref{OBC} components and are a subject of change by a potential user.
+A functional diagram of the implemented power management is shown in figure \ref[dia:powerManagement]. To increase the overall efficiency and decrease complexity, we decided to avoid any voltage conversion independent from the \glref{PDCU}. Therefore, our \glref{OBC} requires two separate inputs from the main power buss ($3.3\rm{[V]}$ and $5\rm{[V]}$). The \glref{OBC} is connected to each of these inputs through an electronic fuse (\glref{eFuse}). This device continuously monitors the bus for events of under-voltage, over-voltage, and over-current\fnote{This is a crucial feature in handling and resolving a latch-up event.}. As a response to such an event, the \glref{eFuse} will switch into high impedance and pull down specific input of an AND logic gate. This gate simultaneously controls two load switches, one for each power line. This approach ensures that a fault on one power bus will result in a high impedance of both \glref{OBC} power inputs. It also eliminates the risk of a death loop, in which a reset of \glref{eFuse}s is not possible as they are switching each other off. Added benefits of this design are an inbuild current measurement and a Kill Switch integration into the logic gate. A summary of the final power management rating is listed in table \ref[tab:powerManagement]. These values were chosen considering the power requirements of the remaining \glref{OBC} components and are a subject of change by a future user.
 
 \midinsert \clabel[tab:powerManagement]{Power management rating}
     \ctable{lc|ccc|c}{
@@ -84,11 +103,35 @@ The final schematic diagram of power management circuitry is shown in figure \re
     \caption/t \glref{OBC} power rating. Value out of range will cause a protective shutdown.
 \endinsert
 
+\secc Schematic design
+
+\quad An actual schematic diagram of power management circuitry is shown in figure \ref[sch:powerManagement]. The most important part of this design is the \glref{eFuse}, as it covers all of the power control features. We decided to use the TPS25940-Q1 device \cite[dat:efuse]. Custom  threshold values can be set following the typical application schematic in the datasheet \cite[dat:efuse]. This is done by connecting specific resistors, with values calculated using the TPS2594x design calculation tool \cite[app:tps2594Calc]. As the logic AND gate, we chose the 74LVC1G11-Q100 \cite[dat:gate]. This device is designed to operate in a mixed logic level environment, what corresponds with our application. The last important component is the load switch. In our case, the TPS22965W-Q1 with an inbuilt output discharge function \cite[dat:switch]. For a correct operation of the switch, the {\it VBIAS} pin should stay saturated for a while after disconnecting the {\it VIN} voltage. We achieved this behavior by charging a capacitor connected to the {\it VBIAS} from the {\it VIN} through a Schottky diode. Four reservoir capacitors are placed on both sides of the load switches, following the suggestions in both datasheets \cite[dat:efuse, dat:switch]. Nominal logic values of all switching signals are set by pull-up or pull-down resistors.
+
+\midinsert
+    \clabel[sch:powerManagement]{Power management schematic}
+    \picw=0.941\hsize \cinspic figures/schemes/powerManagement.pdf
+    \caption/f Schematic diagram of power management circuitry.
+\endinsert
+
+\secc PCB design
+
+\quad Location and fanout of the power management circuitry are shown in figure \ref[pcb:powerManagement].  All of the power management components are placed on the top side of the \glref{PCB}. Similarly, all of the power tracks are on the top copper layer. Only a few signal traces are running within the second or the bottom layer. Both the $3.3\rm{[V]}$ and $5\rm{[V]}$ control circuitry share the same layout and tracing regarding recommendations presented in the \glref{eFuse} and load switch datasheets \cite[dat:efuse, dat:switch]. The $3.3\rm{[V]}$ part is situated closer to the main PC104 header, while the $5\rm{[V]}$ part is right below it. Both \glref{eFuse}s are connected to the main PC104 header power pins through strengthened $0.77\rm{[mm]}$ traces in the third copper layer. Considering a standard copper thickness of $35\rm{[\mu m]}$, each of the input traces is rated to deliver up to $2\rm{[A]}$ of current. The logic gate with associated pull-down resistors is located above all of the remaining circuitry, closest to the main PC104 header.
+
+\midinsert
+    \clabel[pcb:powerManagement]{Power management circuitry}
+    \picw=0.75\hsize \cinspic figures/pcbs/powerManagement.png
+    \caption/f Highlighted location of power management circuitry.
+\endinsert
+
+
+
 %%%%% PERIPHERAL ISOLATORS
 
 \sec Peripheral isolators
 
-\quad We chose to implement the design using robust analog switches as isolators of data lines. This approach is more straightforward, less expensive, and requires a smaller \glref{PCB} area than an optocoupler-based or an \glref{FPGA}-based ones (referred in chapter \ref[chap2:features]). A functional diagram of the implementation is shown in figure \ref[fig:peripheralIsolatorsDiag]. \glref{OBC} data lines are connected to the rest of the spacecraft through a series of analog switches. These lines are grouped by particular data buses and are assigned to a separate switch. The \glref{OBC} can enable or disable a specific switch and therefore isolate a particular data bus from the remaining spacecraft subsystems. Pulling low the Kill Switch will result in high impedance of all switches and completely isolating the \glref{OBC} data lines.
+\quad The spacecraft \glref{OBC} is connected to many data buses shared among all other subsystems. In some scenarios, the \glref{OBC} must be able to isolate itself from a specific or multiple data buses. For example, to switch between \glref{OBC}s in a redundant configuration, handle the failure on a data bus, or prevent unintentional interferences. Standard approaches to addressing this isolation feature are analog switches \cite[the:wurzburg], optocouplers \cite[pap:satelliteLeo], or \glref{FPGA}s \cite[obc:dataPatterns]. These isolators should also guarantee that all data lines are high impedance when the \glref{OBC} is powered off.
+
+We chose to implement the design using robust analog switches as isolators of data lines. This approach is more straightforward, less expensive, and requires a smaller \glref{PCB} area than an optocoupler-based or an \glref{FPGA}-based ones (referred in chapter \ref[chap2:features]). A functional diagram of the implementation is shown in figure \ref[fig:peripheralIsolatorsDiag]. \glref{OBC} data lines are connected to the rest of the spacecraft through a series of analog switches. These lines are grouped by particular data buses and are assigned to a separate switch. The \glref{OBC} can enable or disable a specific switch and therefore isolate a particular data bus from the remaining spacecraft subsystems. Pulling low the Kill Switch will result in high impedance of all switches and completely isolating the \glref{OBC} data lines.
 
 \midinsert
     \clabel[fig:peripheralIsolatorsDiag]{Peripheral isolators diagram}
@@ -96,7 +139,9 @@ The final schematic diagram of power management circuitry is shown in figure \re
     \caption/f Functional diagram of peripheral isolators circuitry.
 \endinsert
 
-Schematic diagrams of two isolators are shown in figure \ref[fig:peripheralIsolatorsSchem]. We decided to use the DGQ2788A device \cite[dat:isolator]. To cover all of the data buses, the \glref{OBC} hosts fifteen of these analog switches in a dual double pole double throw (\glref{DPDT}) configuration. The \glref{OBC} data lines are connected to common (\glref{COM}) terminals. Normally closed (\glref{NC}) terminals are left floating, whereas normally open (\glref{NO}) terminals are connected to the spacecraft data lines. The important Kill Switch functionality is implemented using the device's power down protection. If the switch loses power, it will enter the normal state. This approach simplifies the circuitry a lot as it substitutes an otherwise necessary system of multiple logic gates. The other beneficial features of this analog switch are inbuild signal clamping diodes and a high latch-up current of $300\rm{[mA]}$. The presence of pull-down resistors and decoupling capacitors in the schematic follows the device datasheet.
+\secc Schematic design
+
+\quad Schematic diagrams of two isolators are shown in figure \ref[fig:peripheralIsolatorsSchem]. We decided to use the DGQ2788A device \cite[dat:isolator]. To cover all of the data buses, the \glref{OBC} hosts fifteen of these analog switches in a dual double pole double throw (\glref{DPDT}) configuration. The \glref{OBC} data lines are connected to common (\glref{COM}) terminals. Normally closed (\glref{NC}) terminals are left floating, whereas normally open (\glref{NO}) terminals are connected to the spacecraft data lines. The important Kill Switch functionality is implemented using the device's power down protection. If the switch loses power, it will enter the normal state. This approach simplifies the circuitry a lot as it substitutes an otherwise necessary system of multiple logic gates. The other beneficial features of this analog switch are inbuild signal clamping diodes and a high latch-up current of $300\rm{[mA]}$. The presence of pull-down resistors and decoupling capacitors in the schematic follows the device datasheet.
 
 \midinsert
     \clabel[fig:peripheralIsolatorsSchem]{Peripheral isolators schematic}
@@ -104,20 +149,56 @@ Schematic diagrams of two isolators are shown in figure \ref[fig:peripheralIsola
     \caption/f Schematic diagram of two peripheral isolators.
 \endinsert
 
+\secc PCB design
+
+\midinsert
+    \clabel[pcb:peripheralIsolators]{Peripheral isolators circuitry}
+    \picw=0.75\hsize \cinspic figures/pcbs/peripheralIsolators.png
+    \caption/f Highlighted location of peripheral isolators circuitry.
+\endinsert
+
+
 %%%%% EXTERNAL MEMORY
 
 \sec External memory
+
+\secc Schematic design
+\midinsert
+    \clabel[sch:externalMemory]{External memory schematic}
+    \picw=0.955\hsize \cinspic figures/schemes/externalMemory.pdf
+    \caption/f Schematic diagram of external memory circuitry.
+\endinsert
+
+\secc PCB design
+
+
 
 %%%%% CAN BUS DRIVERS
 
 \sec CAN bus drivers
 
+\secc Schematic design
+
 \midinsert
-    \clabel[fig:canBusDrivers]{CAN drivers schematic}
+    \clabel[sch:canBusDrivers]{CAN drivers schematic}
     \picw=0.75\hsize \cinspic figures/schemes/canBusDrivers.pdf
     \caption/f Schematic diagram of CAN buses driving circuitry.
 \endinsert
 
+\secc PCB design
+
+
+
 %%%%% TEMPERATURE MONITORING
 
 \sec Temperature monitoring
+
+\secc Schematic design
+
+\midinsert
+    \clabel[sch:temperatureMonitoring]{Temp. monitoring schematic}
+    \picw=1.01\hsize \cinspic figures/schemes/temperatureMonitoring.pdf
+    \caption/f Schematic diagram of temperature monitoring circuitry.
+\endinsert
+
+\secc PCB design

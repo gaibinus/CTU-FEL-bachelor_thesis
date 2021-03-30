@@ -37,9 +37,10 @@ The clock and data lines of both \glref{I2C} busses are equipped with standard $
 
 \midinsert
     \clabel[pcb:microcontroller]{Microcontroller circuitry}
-    \picw=0.75\hsize \cinspic figures/pcbs/microcontroller.png
+    \picw=0.55\hsize \cinspic figures/pcbs/microcontroller.png
     \caption/f Highlighted location of microcontroller circuitry.
 \endinsert
+
 
 
 %%%%% EXTERNAL CLOCK SOURCES
@@ -73,9 +74,10 @@ where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation freq
 
 \midinsert
     \clabel[pcb:clockSources]{Clock sources circuitry}
-    \picw=0.75\hsize \cinspic figures/pcbs/clockSources.png
+    \picw=0.55\hsize \cinspic figures/pcbs/clockSources.png
     \caption/f Highlighted location of external clock sources circuitry.
 \endinsert
+
 
 
 %%%%% POWER MANAGEMENT
@@ -86,7 +88,7 @@ where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation freq
 
 \midinsert
     \clabel[dia:powerManagement]{Power management diagram}
-    \picw=0.75\hsize \cinspic figures/diagrams/powerManagement.pdf
+    \picw=0.941\hsize \cinspic figures/diagrams/powerManagement.pdf
     \caption/f Functional diagram of power management circuitry.
 \endinsert
 
@@ -119,7 +121,7 @@ A functional diagram of the implemented power management is shown in figure \ref
 
 \midinsert
     \clabel[pcb:powerManagement]{Power management circuitry}
-    \picw=0.75\hsize \cinspic figures/pcbs/powerManagement.png
+    \picw=0.55\hsize \cinspic figures/pcbs/powerManagement.png
     \caption/f Highlighted location of power management circuitry.
 \endinsert
 
@@ -135,7 +137,7 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[fig:peripheralIsolatorsDiag]{Peripheral isolators diagram}
-    \picw=0.8\hsize \cinspic figures/diagrams/peripheralIsolators.pdf
+    \picw=0.9\hsize \cinspic figures/diagrams/peripheralIsolators.pdf
     \caption/f Functional diagram of peripheral isolators circuitry.
 \endinsert
 
@@ -153,9 +155,10 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[pcb:peripheralIsolators]{Peripheral isolators circuitry}
-    \picw=0.75\hsize \cinspic figures/pcbs/peripheralIsolators.png
+    \picw=0.55\hsize \cinspic figures/pcbs/peripheralIsolators.png
     \caption/f Highlighted location of peripheral isolators circuitry.
 \endinsert
+
 
 
 %%%%% EXTERNAL MEMORY
@@ -171,6 +174,12 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \secc PCB design
 
+\midinsert
+    \clabel[pcb:ExternalMemory]{External memory circuitry}
+    \picw=0.55\hsize \cinspic figures/pcbs/externalMemory.png
+    \caption/f Highlighted location of external memory circuitry.
+\endinsert
+
 
 
 %%%%% CAN BUS DRIVERS
@@ -181,11 +190,17 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[sch:canBusDrivers]{CAN drivers schematic}
-    \picw=0.75\hsize \cinspic figures/schemes/canBusDrivers.pdf
-    \caption/f Schematic diagram of CAN buses driving circuitry.
+    \picw=0.605\hsize \cinspic figures/schemes/canDrivers.pdf
+    \caption/f Schematic diagram of CAN bus driving circuitry.
 \endinsert
 
 \secc PCB design
+
+\midinsert
+    \clabel[pcb:canDrivers]{CAN drivers circuitry}
+    \picw=0.55\hsize \cinspic figures/pcbs/canDrivers.png
+    \caption/f Highlighted location of CAN bus drivers circuitry.
+\endinsert
 
 
 
@@ -202,3 +217,31 @@ We chose to implement the design using robust analog switches as isolators of da
 \endinsert
 
 \secc PCB design
+
+\midinsert
+    \clabel[pcb:temperatureMonitoring]{Temperature monitoring circuitry}
+    \picw=0.55\hsize \cinspic figures/pcbs/temperatureMonitoring.png
+    \caption/f Highlighted location of temperature monitoring circuitry.
+\endinsert
+
+
+
+%%%%% PROGRAM PORT
+
+\sec Programming port
+
+\secc Schematic design
+
+\midinsert
+    \clabel[sch:programPort]{Programming port schematic}
+    \picw=0.495\hsize \cinspic figures/schemes/programPort.pdf
+    \caption/f Schematic diagram of programming port circuitry.
+\endinsert
+
+\secc PCB design
+
+\midinsert
+    \clabel[pcb:programPort]{Programming port circuitry}
+    \picw=0.55\hsize \cinspic figures/pcbs/programPort.png
+    \caption/f Highlighted location of programming port circuitry.
+\endinsert

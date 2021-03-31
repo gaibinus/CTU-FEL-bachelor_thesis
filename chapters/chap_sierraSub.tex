@@ -37,7 +37,7 @@ The clock and data lines of both \glref{I2C} busses are equipped with standard $
 
 \midinsert
     \clabel[pcb:microcontroller]{Microcontroller circuitry}
-    \picw=0.55\hsize \cinspic figures/pcbs/microcontroller.png
+    \picw=0.9\hsize \cinspic figures/pcbs/microcontroller.pdf
     \caption/f Highlighted location of microcontroller circuitry.
 \endinsert
 
@@ -74,7 +74,7 @@ where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation freq
 
 \midinsert
     \clabel[pcb:clockSources]{Clock sources circuitry}
-    \picw=0.55\hsize \cinspic figures/pcbs/clockSources.png
+    \picw=0.9\hsize \cinspic figures/pcbs/clockSources.pdf
     \caption/f Highlighted location of external clock sources circuitry.
 \endinsert
 
@@ -95,8 +95,8 @@ where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation freq
 A functional diagram of the implemented power management is shown in figure \ref[dia:powerManagement]. To increase the overall efficiency and decrease complexity, we decided to avoid any voltage conversion independent from the \glref{PDCU}. Therefore, our \glref{OBC} requires two separate inputs from the main power buss ($3.3\rm{[V]}$ and $5\rm{[V]}$). The \glref{OBC} is connected to each of these inputs through an electronic fuse (\glref{eFuse}). This device continuously monitors the bus for events of under-voltage, over-voltage, and over-current\fnote{This is a crucial feature in handling and resolving a latch-up event.}. As a response to such an event, the \glref{eFuse} will switch into high impedance and pull down specific input of an AND logic gate. This gate simultaneously controls two load switches, one for each power line. This approach ensures that a fault on one power bus will result in a high impedance of both \glref{OBC} power inputs. It also eliminates the risk of a death loop, in which a reset of \glref{eFuse}s is not possible as they are switching each other off. Added benefits of this design are an inbuild current measurement and a Kill Switch integration into the logic gate. A summary of the final power management rating is listed in table \ref[tab:powerManagement]. These values were chosen considering the power requirements of the remaining \glref{OBC} components and are a subject of change by a future user.
 
 \midinsert \clabel[tab:powerManagement]{Power management rating}
-    \ctable{lc|ccc|c}{
-        Power input      & Parameter & Min & Typ & Max & Unit \crll
+    \ctable{lccccc}{
+        Power input      & Parameter & Min & Typ & Max & Unit \crl
         \vspan2{3V3 BUS} & voltage   & 2.9 & 3.3 & 3.5 & $\rm{V}$ \cr
                          & current   & 0.0 & -   & 1.2 & $\rm{A}$ \crl
         \vspan2{5V BUS}  & voltage   & 4.6 & 5.0 & 5.4 & $\rm{V}$ \cr
@@ -121,7 +121,7 @@ A functional diagram of the implemented power management is shown in figure \ref
 
 \midinsert
     \clabel[pcb:powerManagement]{Power management circuitry}
-    \picw=0.55\hsize \cinspic figures/pcbs/powerManagement.png
+    \picw=0.9\hsize \cinspic figures/pcbs/powerManagement.pdf
     \caption/f Highlighted location of power management circuitry.
 \endinsert
 
@@ -155,7 +155,7 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[pcb:peripheralIsolators]{Peripheral isolators circuitry}
-    \picw=0.55\hsize \cinspic figures/pcbs/peripheralIsolators.png
+    \picw=0.9\hsize \cinspic figures/pcbs/peripheralIsolators.pdf
     \caption/f Highlighted location of peripheral isolators circuitry.
 \endinsert
 
@@ -180,7 +180,7 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[pcb:ExternalMemory]{External memory circuitry}
-    \picw=0.55\hsize \cinspic figures/pcbs/externalMemory.png
+    \picw=0.9\hsize \cinspic figures/pcbs/externalMemory.pdf
     \caption/f Highlighted location of external memory circuitry.
 \endinsert
 
@@ -202,7 +202,7 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[pcb:canDrivers]{CAN drivers circuitry}
-    \picw=0.55\hsize \cinspic figures/pcbs/canDrivers.png
+    \picw=0.9\hsize \cinspic figures/pcbs/canDrivers.pdf
     \caption/f Highlighted location of CAN bus drivers circuitry.
 \endinsert
 
@@ -212,9 +212,21 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \sec Temperature monitoring
 
-
-
 \secc Schematic design
+
+\midinsert \clabel[tab:temperatureMonitoring]{Temp. sensors description}
+    \ctable{cclcc}{
+        Designator  & \mspan2[l]{Targeted component}    & Slave addr.   & \glref{I2C} addr. \crl
+        TS1         & M2  & - Flash memory              & $000$         & $0\rm{x}18$       \cr
+        TS2         & U1  & - \glref{MCU}, south west   & $001$         & $0\rm{x}19$       \cr
+        TS3         & EF2 & - $5\rm{[V]}$ eFuse         & $100$         & $0\rm{x}1C$       \cr
+        TS4         & U1  & - \glref{MCU}, north east   & $011$         & $0\rm{x}1B$       \cr
+        TS5         & U3  & - \glref{CAN}2 driver       & $010$         & $0\rm{x}1A$       \cr
+        TS6         & EF1 & - $3.3\rm{[V]}$ eFuse       & $110$         & $0\rm{x}1E$       \cr
+        TS7         & U2  & - \glref{CAN}1 driver       & $111$         & $0\rm{x}1F$       \cr
+    }
+    \caption/t List of temperature sensors location and addresses.
+\endinsert
 
 \midinsert
     \clabel[sch:temperatureMonitoring]{Temp. monitoring schematic}
@@ -225,8 +237,8 @@ We chose to implement the design using robust analog switches as isolators of da
 \secc PCB design
 
 \midinsert
-    \clabel[pcb:temperatureMonitoring]{Temperature monitoring circuitry}
-    \picw=0.55\hsize \cinspic figures/pcbs/temperatureMonitoring.png
+    \clabel[pcb:temperatureMonitoring]{Temp. monitoring circuitry}
+    \picw=0.9\hsize \cinspic figures/pcbs/temperatureMonitoring.pdf
     \caption/f Highlighted location of temperature monitoring circuitry.
 \endinsert
 
@@ -248,6 +260,12 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[pcb:programPort]{Programming port circuitry}
-    \picw=0.55\hsize \cinspic figures/pcbs/programPort.png
+    \picw=0.9\hsize \cinspic figures/pcbs/programPort.pdf
     \caption/f Highlighted location of programming port circuitry.
+\endinsert
+
+\midinsert
+    \clabel[mod:programPort]{Programming port pinout}
+    \picw=0.5\hsize \cinspic figures/model/programPort.pdf
+    \caption/f Programming port pinout.
 \endinsert

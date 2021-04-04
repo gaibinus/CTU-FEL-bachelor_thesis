@@ -37,7 +37,7 @@ The clock and data lines of both \glref{I2C} busses are equipped with standard $
 
 \midinsert
     \clabel[pcb:microcontroller]{Microcontroller circuitry}
-    \picw=0.9\hsize \cinspic figures/pcbs/microcontroller.pdf
+    \picw=0.85\hsize \cinspic figures/pcbs/microcontroller.pdf
     \caption/f Highlighted location of microcontroller circuitry.
 \endinsert
 
@@ -64,7 +64,7 @@ where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation freq
 
 \midinsert
     \clabel[sch:clockSources]{Clock sources schematic}
-    \picw=0.502\hsize \cinspic figures/schemes/clockSources.pdf
+    \picw=0.5\hsize \cinspic figures/schemes/clockSources.pdf
     \caption/f Schematic diagram of external clock sources.
 \endinsert
 
@@ -74,7 +74,7 @@ where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation freq
 
 \midinsert
     \clabel[pcb:clockSources]{Clock sources circuitry}
-    \picw=0.9\hsize \cinspic figures/pcbs/clockSources.pdf
+    \picw=0.85\hsize \cinspic figures/pcbs/clockSources.pdf
     \caption/f Highlighted location of external clock sources circuitry.
 \endinsert
 
@@ -88,7 +88,7 @@ where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation freq
 
 \midinsert
     \clabel[dia:powerManagement]{Power management diagram}
-    \picw=0.941\hsize \cinspic figures/diagrams/powerManagement.pdf
+    \picw=0.75\hsize \cinspic figures/diagrams/powerManagement.pdf
     \caption/f Functional diagram of power management circuitry.
 \endinsert
 
@@ -111,7 +111,7 @@ A functional diagram of the implemented power management is shown in figure \ref
 
 \midinsert
     \clabel[sch:powerManagement]{Power management schematic}
-    \picw=0.941\hsize \cinspic figures/schemes/powerManagement.pdf
+    \picw=0.95\hsize \cinspic figures/schemes/powerManagement.pdf
     \caption/f Schematic diagram of power management circuitry.
 \endinsert
 
@@ -121,7 +121,7 @@ A functional diagram of the implemented power management is shown in figure \ref
 
 \midinsert
     \clabel[pcb:powerManagement]{Power management circuitry}
-    \picw=0.9\hsize \cinspic figures/pcbs/powerManagement.pdf
+    \picw=0.85\hsize \cinspic figures/pcbs/powerManagement.pdf
     \caption/f Highlighted location of power management circuitry.
 \endinsert
 
@@ -131,31 +131,34 @@ A functional diagram of the implemented power management is shown in figure \ref
 
 \sec Peripheral isolators
 
-\quad The spacecraft \glref{OBC} is connected to many data buses shared among all other subsystems. In some scenarios, the \glref{OBC} must be able to isolate itself from a specific or multiple data buses. For example, to switch between \glref{OBC}s in a redundant configuration, handle the failure on a data bus, or prevent unintentional interferences. Standard approaches to addressing this isolation feature are analog switches \cite[the:wurzburg], optocouplers \cite[pap:satelliteLeo], or \glref{FPGA}s \cite[obc:dataPatterns]. These isolators should also guarantee that all data lines are high impedance when the \glref{OBC} is powered off.
+\quad The spacecraft \glref{OBC} is connected to many data buses shared among all other subsystems. In some scenarios, the \glref{OBC} must be able to isolate itself from a specific or multiple data buses. For example, to switch between \glref{OBC}s in a redundant configuration, to handle a failure on a data bus, or to prevent unintentional interference. Standard approaches to address this feature are based on using analog switches \cite[the:wurzburg], optocouplers \cite[pap:satelliteLeo], or \glref{FPGA}s \cite[obc:dataPatterns]. Furthermore, these isolators should also guarantee that all data lines are in a high impedance state when the \glref{OBC} is powered off.
 
-We chose to implement the design using robust analog switches as isolators of data lines. This approach is more straightforward, less expensive, and requires a smaller \glref{PCB} area than an optocoupler-based or an \glref{FPGA}-based ones (referred in chapter \ref[chap2:features]). A functional diagram of the implementation is shown in figure \ref[fig:peripheralIsolatorsDiag]. \glref{OBC} data lines are connected to the rest of the spacecraft through a series of analog switches. These lines are grouped by particular data buses and are assigned to a separate switch. The \glref{OBC} can enable or disable a specific switch and therefore isolate a particular data bus from the remaining spacecraft subsystems. Pulling low the Kill Switch will result in high impedance of all switches and completely isolating the \glref{OBC} data lines.
+After a brief survey, we decided to implement the design using robust analog switches. This approach is more straightforward, less expensive, and requires a smaller \glref{PCB} area than the optocoupler or the \glref{FPGA}-based ones. A functional diagram of the implemented circuity is shown in figure \ref[dia:peripheralIsolators]. All of the \glref{OBC} data lines are connected to the rest of the spacecraft through a series of analog switches. These data lines are grouped by particular data buses and are assigned to a separate switch. The \glref{OBC} can enable or disable a specific switch and therefore isolate a particular data bus from the remaining spacecraft subsystems. Pulling low the Kill Switch will result in high impedance of all switches and completely isolating the \glref{OBC} data lines.
 
 \midinsert
-    \clabel[fig:peripheralIsolatorsDiag]{Peripheral isolators diagram}
-    \picw=0.9\hsize \cinspic figures/diagrams/peripheralIsolators.pdf
+    \clabel[dia:peripheralIsolators]{Peripheral isolators diagram}
+    \picw=0.8\hsize \cinspic figures/diagrams/peripheralIsolators.pdf
     \caption/f Functional diagram of peripheral isolators circuitry.
 \endinsert
 
 \secc Schematic design
 
-\quad Schematic diagrams of two isolators are shown in figure \ref[fig:peripheralIsolatorsSchem]. We decided to use the DGQ2788A device \cite[dat:isolator]. To cover all of the data buses, the \glref{OBC} hosts fifteen of these analog switches in a dual double pole double throw (\glref{DPDT}) configuration. The \glref{OBC} data lines are connected to common (\glref{COM}) terminals. Normally closed (\glref{NC}) terminals are left floating, whereas normally open (\glref{NO}) terminals are connected to the spacecraft data lines. The important Kill Switch functionality is implemented using the device's power down protection. If the switch loses power, it will enter the normal state. This approach simplifies the circuitry a lot as it substitutes an otherwise necessary system of multiple logic gates. The other beneficial features of this analog switch are inbuild signal clamping diodes and a high latch-up current of $300\rm{[mA]}$. The presence of pull-down resistors and decoupling capacitors in the schematic follows the device datasheet.
+\quad Schematic diagrams of two isolators are shown in figure \ref[sch:peripheralIsolators]. We decided to use the DGQ2788A device \cite[dat:isolator]. To cover all of the data buses, the \glref{OBC} hosts fifteen of these analog switches in a dual double pole double throw (\glref{DPDT}) configuration. The \glref{OBC} data lines are connected to common terminals ({\it COM}). Normally closed terminals ({\it NC}) are left floating, whereas normally open terminals ({\it NO}) terminals are connected to the spacecraft data lines. The important Kill Switch functionality is implemented using the device's power down protection. If the switch loses power, it will enter the normal state. This approach simplifies the circuitry a lot as it substitutes an otherwise necessary system of multiple logic gates. Other beneficial features of this analog switch are a high latch-up current of $300\rm{[mA]}$ and inbuild signal clamping. The device will clamp all of the signals exceeding its supply voltage by internal diodes. As the \glref{MCU} pins connected to these analog switches are $5\rm{[V]}$ tolerant, we chose to power the switches from the $5\rm{[V]}$ power bus. A potential problem could be caused by the switch's enable terminals ({\it EN}), as they do not include internal pull-down or pull-up resistors. We decided to use hardware pull-down resistors to avoid a floating state of these control signals.  The placement decoupling capacitors follows the device datasheet \cite[dat:isolator].
 
 \midinsert
-    \clabel[fig:peripheralIsolatorsSchem]{Peripheral isolators schematic}
-    \picw=\hsize \cinspic figures/schemes/peripheralIsolators.pdf
+    \clabel[shc:peripheralIsolatorsS]{Peripheral isolators schematic}
+    \picw=0.92\hsize \cinspic figures/schemes/peripheralIsolators.pdf
     \caption/f Schematic diagram of two peripheral isolators.
 \endinsert
 
+\label[secc:peripheralIsolatorsPCBDesign]
 \secc PCB design
+
+\quad Location and fanout of the isolators circuitry are shown in figure \ref[pcb:peripheralIsolators]. Sixty separate signals are running from the \glref{MCU} pins through analog switches up to assigned pins in the PC104 header. Hence this part of the \glref{PCB} was the most challenging to design. The switches are placed in two main rows, each on one side of the \glref{PCB} (only two switches are not aligned). The position of every switch was determined by its assigned \glref{MCU} and PC104 header pins. It took several iterations to find out the current layout. The routing network is quite dense, using all three copper signal layers. To accommodate all of the signal traces, the standard signal trace width was decreased from $200\rm{[\mu m]}$ to $173\rm{[\mu m]}$. This new value was acquired as a maximal width possible to squeeze three traces between two pins of the PC104 header. To ensure \glref{CAN} buses signal integrity, we addressed a length matching of its differential pairs. As a finishing step of the routing, lengths of separate \glref{CAN} traces were measured and tuned with serpentine patterns.
 
 \midinsert
     \clabel[pcb:peripheralIsolators]{Peripheral isolators circuitry}
-    \picw=0.9\hsize \cinspic figures/pcbs/peripheralIsolators.pdf
+    \picw=0.85\hsize \cinspic figures/pcbs/peripheralIsolators.pdf
     \caption/f Highlighted location of peripheral isolators circuitry.
 \endinsert
 
@@ -172,7 +175,7 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[sch:externalMemory]{External memory schematic}
-    \picw=0.955\hsize \cinspic figures/schemes/externalMemory.pdf
+    \picw=1\hsize \cinspic figures/schemes/externalMemory.pdf
     \caption/f Schematic diagram of external memory circuitry.
 \endinsert
 
@@ -180,7 +183,7 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[pcb:ExternalMemory]{External memory circuitry}
-    \picw=0.9\hsize \cinspic figures/pcbs/externalMemory.pdf
+    \picw=0.85\hsize \cinspic figures/pcbs/externalMemory.pdf
     \caption/f Highlighted location of external memory circuitry.
 \endinsert
 
@@ -190,19 +193,27 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \sec CAN bus drivers
 
+\quad As described in chapter {\Magenta ???}, the SpaceCAN is considered a primary control and monitoring bus of a LibreCube spacecraft. Therefore it was required to ensure its full support by the \glref{OBC}. An external \glref{CAN} transceiver is usually added to a microcontroller, as its internal physical layer has only limited properties or does not even exists. The separate transceiver provides a stable and reliable physical environment. In our case, the \glref{MCU}'s BxCAN is compatible with both 2.0A and 2.0B \glref{CAN} specifications with a bit rate up to $1\rm{[MB\,s^{-1}]}$ \cite[dat:mcu]. As the \glref{MCU}'s \glref{CAN} drivers are equipped with the 2nd network layer only, an external transceiver implementation to our design was required.
+
 \secc Schematic design
+
+\quad A schematic diagram of implemented \glref{CAN} driving circuitry is shown in figure \ref[sch:canBusDrivers]. As the \glref{MCU} supports two independent \glref{CAN} busses, we had to accommodate each of them. For the \glref{CAN} transceiver, we decided to use a TCAN1051V-Q1 device \cite[dat:canDriver]. The \glref{Rx/Tx} lines of the \glref{MCU} are connected to the device with a $22\rm{[\Omega]}$ terminating resistors. A test point is also present on each of these lines to assist potential debugging. This version of the device comes with a level shifting feature. Different voltage levels on \glref{CAN} and \glref{Rx/Tx} sides are supported. Since the SpaceCAN is a $5\rm{[V]}$ bus and the \glref{MCU} operates at $3.3\rm{[V]}$, we set the device's power levels accordingly. As recommended in the device datasheet, decoupling capacitors were added to power pins. Considering the \glref{CAN} bus's importance, we expect it to stay active straight from powering on the \glref{OBC}. To save some complexity and \glref{MCU} pins,  we decided to ignore the option of controlling the device standby mode. A pull-down resistor on the {\it STBY} pin forces an active mode.
+
+A well-designed \glref{CAN} network usually contains a terminating resistor, filtering, and a transient \& \glref{ESD} protection. To correctly implement these optional features, we followed application reports \cite[app:canDesign, app:canChokes]. Instead of a simple $120\rm{[\Omega]}$ terminating resistor, we chose a more advanced terminating node. A difference is in added filtering as the node consists of two $60\rm{[\Omega]}$ series resistors connected to a \glref{GND} through a $4.7\rm{[nF]}$ capacitor. Furthermore, $100\rm{[pF]}$ filtering capacitors were added to signal lines. Recognizing the suggestions in the reports, we did not include any common-mode chokes or \glref{ESD} protection in our design. Since our \glref{OBC} is not intended to operate near heavy machinery, no extra improvement of susceptibility to electromagnetic disturbance or \glref{EMC} is required.
 
 \midinsert
     \clabel[sch:canBusDrivers]{CAN drivers schematic}
-    \picw=0.605\hsize \cinspic figures/schemes/canDrivers.pdf
+    \picw=0.62\hsize \cinspic figures/schemes/canDrivers.pdf
     \caption/f Schematic diagram of CAN bus driving circuitry.
 \endinsert
 
 \secc PCB design
 
+\quad Location and fanout of the \glref{CAN} bus driving circuitry are shown in figure \ref[pcb:canDrivers]. The transceivers are placed on the \glref{PCB} top side in two different locations. Prioritizing the \glref{PCB} surface's optimal usage,  we were unable to keep the devices in a mutual area. The transceiver circuitry layout follows suggestions in the datasheet \cite[dat:canDriver] and the application report \cite[app:canDesign]. This layout is the same for both devices. As mentioned in section \ref[secc:peripheralIsolatorsPCBDesign], serpentine patterns were used to match trace lengths of particular differential pairs.
+
 \midinsert
     \clabel[pcb:canDrivers]{CAN drivers circuitry}
-    \picw=0.9\hsize \cinspic figures/pcbs/canDrivers.pdf
+    \picw=0.85\hsize \cinspic figures/pcbs/canDrivers.pdf
     \caption/f Highlighted location of CAN bus drivers circuitry.
 \endinsert
 
@@ -218,11 +229,11 @@ We chose to implement the design using robust analog switches as isolators of da
     \ctable{cclcc}{
         Designator  & \mspan2[l]{Targeted component}    & Slave addr.   & \glref{I2C} addr. \crl
         TS1         & M2  & - Flash memory              & $000$         & $0\rm{x}18$       \cr
-        TS2         & U1  & - \glref{MCU}, south west   & $001$         & $0\rm{x}19$       \cr
-        TS3         & EF2 & - $5\rm{[V]}$ eFuse         & $100$         & $0\rm{x}1C$       \cr
-        TS4         & U1  & - \glref{MCU}, north east   & $011$         & $0\rm{x}1B$       \cr
+        TS2         & U1  & - \glref{MCU}, central west & $100$         & $0\rm{x}1C$       \cr
+        TS3         & EF2 & - $5\rm{[V]}$ eFuse         & $001$         & $0\rm{x}19$       \cr
+        TS4         & U1  & - \glref{MCU}, north east   & $110$         & $0\rm{x}1E$       \cr
         TS5         & U3  & - \glref{CAN}2 driver       & $010$         & $0\rm{x}1A$       \cr
-        TS6         & EF1 & - $3.3\rm{[V]}$ eFuse       & $110$         & $0\rm{x}1E$       \cr
+        TS6         & EF1 & - $3.3\rm{[V]}$ eFuse       & $011$         & $0\rm{x}1B$       \cr
         TS7         & U2  & - \glref{CAN}1 driver       & $111$         & $0\rm{x}1F$       \cr
     }
     \caption/t List of temperature sensors location and addresses.
@@ -230,7 +241,7 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[sch:temperatureMonitoring]{Temp. monitoring schematic}
-    \picw=1.01\hsize \cinspic figures/schemes/temperatureMonitoring.pdf
+    \picw=1.\hsize \cinspic figures/schemes/temperatureMonitoring.pdf
     \caption/f Schematic diagram of temperature monitoring circuitry.
 \endinsert
 
@@ -238,7 +249,7 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[pcb:temperatureMonitoring]{Temp. monitoring circuitry}
-    \picw=0.9\hsize \cinspic figures/pcbs/temperatureMonitoring.pdf
+    \picw=0.85\hsize \cinspic figures/pcbs/temperatureMonitoring.pdf
     \caption/f Highlighted location of temperature monitoring circuitry.
 \endinsert
 
@@ -252,7 +263,7 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[sch:programPort]{Programming port schematic}
-    \picw=0.495\hsize \cinspic figures/schemes/programPort.pdf
+    \picw=0.5\hsize \cinspic figures/schemes/programPort.pdf
     \caption/f Schematic diagram of programming port circuitry.
 \endinsert
 
@@ -260,12 +271,12 @@ We chose to implement the design using robust analog switches as isolators of da
 
 \midinsert
     \clabel[pcb:programPort]{Programming port circuitry}
-    \picw=0.9\hsize \cinspic figures/pcbs/programPort.pdf
+    \picw=0.85\hsize \cinspic figures/pcbs/programPort.pdf
     \caption/f Highlighted location of programming port circuitry.
 \endinsert
 
 \midinsert
     \clabel[mod:programPort]{Programming port pinout}
-    \picw=0.5\hsize \cinspic figures/model/programPort.pdf
+    \picw=0.45\hsize \cinspic figures/model/programPort.pdf
     \caption/f Programming port pinout.
 \endinsert

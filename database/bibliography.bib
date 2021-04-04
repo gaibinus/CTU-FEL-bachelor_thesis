@@ -35,6 +35,22 @@
   %url = {https://www.st.com/resource/en/application_note/dm00125306-getting-started-with-stm32l4-series-and-stm32l4-series-hardware-development-stmicroelectronics.pdf},
 }
 
+@MISC{canChokes,
+  author = {Ole-Kristian Skroppa and Scott Monroe},
+  title = {SLLA271},
+  option = {titlepost:{Common Mode Chokes in CAN Networks: Source of Unexpected Transients}},
+  endnote = {Dallas: Texas Instruments Inc., 2008. Rev Jan},
+  %url = {https://www.ti.com/lit/an/slla271/slla271.pdf?ts=1593763769749},
+}
+
+@MISC{app:canDesign,
+  author = {Daniel Kisling and Abhi Aarey and Bhavin Kumar},
+  title = {SLLA419},
+  option = {titlepost:{How to Design Isolated CAN Systems With Correct Bus Protection}},
+  endnote = {Dallas: Texas Instruments Inc., 2018. Rev Jul},
+  %url = {https://www.ti.com/lit/an/slla419/slla419.pdf?ts=1617481935304},
+}
+
 %%%%% datasheets
 
 @MISC{dat:mcuSeries,
@@ -68,14 +84,14 @@
 @MISC{dat:efuse,
   title = {TPS25940-Q1},
   option = {titlepost:{TPS25940xx-Q1 2.7-V to 18-V eFuse with Integrated Short-to-Battery Protection}},
-  ednote = {Dallas: Texas Instruments Incorporated, 2021. Rev January 2021},
+  ednote = {Dallas: Texas Instruments Inc., 2021. Rev January 2021},
   %url = {https://www.ti.com/lit/ds/symlink/tps25940-q1.pdf},
 }
 
 @MISC{dat:switch,
   title = {TPS22965-Q1},
   option = {titlepost:{TPS22965x-Q1 5.5-V, 4-A, 16-mΩ On-Resistance Load Switch}},
-  ednote = {Dallas: Texas Instruments Incorporated, 2019. Rev December 2019},
+  ednote = {Dallas: Texas Instruments Inc., 2019. Rev December 2019},
   %url = {https://www.ti.com/lit/ds/symlink/tps22965-q1.pdf},
 }
 
@@ -89,8 +105,15 @@
 @MISC{dat:isolator,
   title = {DGQ2788A},
   option = {titlepost:{Automotive 125 °C Analog Switch Dual DPDT / Quad SPDT, 0.37 , 338 MHz Bandwidth}},
-  ednote = {Malvern: VISHAY INTERTECHNOLOGY, INC., 2021. Rev 01-Jan-2021},
+  ednote = {Malvern: Vishay Intertechnology, INC., 2021. Rev 01-Jan-2021},
   %url = {https://www.vishay.com/docs/75683/dgq2788a.pdf},
+}
+
+@MISC{dat:canDriver,
+  title = {SLLSET0C},
+  option = {titlepost:{TCAN1051-Q1 Automotive Fault Protected CAN Transceiver with CAN FD}},
+  ednote = {Dallas: Texas Instruments Inc., 2017. Rev May 2017},
+  %url = {https://www.ti.com/lit/ds/symlink/tcan1051g-q1.pdf?ts=1617425521718},
 }
 
 %%%%% OBC datasheets
@@ -211,27 +234,6 @@
   year = {2015},
   edition = {Version 3.0},
   url = {https://pc104.org/wp-content/uploads/2015/03/PCI104_Express_v3_0.pdf},
-}
-
-@thesis{Skroppa2008,
-  author = {Ole-Kristian Skroppa and Scott Monroe},
-  title = {SLLA271},
-  subtitle = {Common Mode Chokes in CAN Networks: Source of Unexpected Transients},
-  address = {Dallas},
-  year = {2008},
-  school = {Texas Instruments Incorporated},
-  type = {Application Report},
-  url = {https://www.ti.com/lit/an/slla271/slla271.pdf?ts=1593763769749\&ref_url=https\%253A\%252F\%252Fwww.google.com\%252F\#:~:text=In\%20general\%2C\%20common\%2Dmode\%20chokes,results\%20in\%20the\%20CAN\%20network.\&text=Following\%20the\%20choke\%20in\%20the,is\%20the\%20optional\%20termination\%20circuit.},
-}
-
-@thesis{Kisling2018,
-  author = {Daniel Kisling and Abhi Aarey and Bhavin Kumar},
-  title = {SLLA419},
-  subtitle = {How to Design Isolated CAN Systems With Correct Bus Protection},
-  address = {Dallas},
-  year = {2018},
-  school = {Texas Instruments Incorporated},
-  type = {Application Report},
 }
 
 @article{Bouwmeester2017,

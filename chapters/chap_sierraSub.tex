@@ -258,7 +258,7 @@ Accordingly to the survey on CubeSat electrical bus reliability \cite[pap:reliab
 
 \quad The layout of the temperature monitoring circuitry is dependent on the other subsystems. Therefore, it had to be implemented as the very last one. Each of the \glref{IC} sensors was assigned to monitor a temperature of a particular device from another subsystem. These monitored devices were carefully chosen to cover all of the \glref{OBC}'s most critical components. These are various \glref{IC}s used in the other subsystems as they execute multiple tasks, produce most of the heat, and are vulnerable to latch-up events. A listing of the monitored devices and their assigned temperature sensors is stated in table \ref[tab:temperatureMonitoring].
 
-As we cannot exceed a total number of eight \glref{IC} temperature sensors (MCP9804 devices) at one $\rm{I^2C}$ bus, we decided to monitor only one of the three FLASH devices. We selected the one in the middle as a good approximation of the two remaining FLASH \glref{IC}s. None of the three F-ram devices is monitored directly as the opposite side of the \glref{PCB} in their location contains a dense layout of the power management circuitry. However, the F-ram \glref{IC}s are neighboured by three temperature sensors: TS5, TS6, and TS3. Measurements obtained from these sensors should be sufficient to monitor the F-ram devices. The \glref{MCU} contains an inbuilt temperature sensor suitable only for applications that detect temperature changes only. We decided to monitor the \glref{MCU} with a pair of \glref{IC} sensors as we prefer to measure the absolute temperature.
+As we cannot exceed a total number of eight \glref{IC} temperature sensors (MCP9804 devices) at one $\rm{I^2C}$ bus, we decided to monitor only one of the three FLASH devices. We selected the one in the middle as a good approximation of the two remaining FLASH devices. None of the three F-ram devices is monitored directly as the opposite side of the \glref{PCB} in their location contains a dense layout of the power management circuitry. However, the F-ram devices are neighbored by three temperature sensors: TS5, TS6, and TS3. Measurements obtained from these sensors should be sufficient to monitor the F-ram devices. The \glref{MCU} contains an inbuilt temperature sensor suitable only for applications that detect temperature changes only \cite[dat:mcu]. We decided to monitor the \glref{MCU} with a pair of \glref{IC} sensors as we prefer to measure the absolute temperature.
 
 To ensure correct temperature measurement, we have to create a sufficient thermal bridge between the temperature sensor and its targeted device. A common approach is to place the sensor on the other side of the \glref{PCB}, right opposite the device. A thermal bridge is then created using a set of \glref{PCB} vias. This method is recommended and described in the temperature sensors guideline for \glref{SMD}s \cite[app:temperature]. Its illustration for our use case is shown in figure \ref[dia:temperatureMonitoring]. It is worth mentioning that the added vias help dissipate the heat into the \glref{PCB} and are usually required by the device's datasheet. 
 
@@ -283,6 +283,8 @@ Location and fanout of the temperature monitoring circuitry are shown in figure 
 %%%%% PROGRAM PORT
 
 \sec Programming port
+
+\quad 
 
 \secc Schematic design
 

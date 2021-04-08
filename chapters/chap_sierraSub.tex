@@ -14,7 +14,7 @@ Our task was to choose a particular model of this 32-bit, Arm and Cortex-M based
 \midinsert \clabel[tab:microcontroller]{Microcontroller characteristics}
     \ctable{lcc|lcc}{
         Max. frequency      & $80\;\rm{[MHz]}$            &&& \glref{SPI}     & $3$     \cr
-        Flash memory        & $1\;\rm{[MB]}$              &&& \glref{I2C}     & $4$     \cr
+        Flash memory        & $1\;\rm{[MB]}$              &&& \glref{$\rm{I^2C}$}     & $4$     \cr
         Static RAM          & $320\;\rm{[kB]}$            &&& \glref{UART}    & $5$     \cr
         Comparators         & $2$                         &&& \glref{CAN}     & $2$     \cr
         Op. amplifiers      & $2$                         &&& \glref{GPIO}    & $115$   \cr
@@ -29,7 +29,7 @@ Our task was to choose a particular model of this 32-bit, Arm and Cortex-M based
 
 A significant number of filtering and reservoir capacitors is needed to ensure the proper \glref{MCU} functionality. The assignment of correct capacitors to required \glref{MCU} pins was pretty straightforward, following the device datasheet \cite[dat:mcu] and STM32L4 hardware development application note \cite[app:getStart]. Furthermore, a $10\rm{[\mu H]}$ choke and $120\rm{[\Omega]}$ at $100\rm{[MHz]}$ ferrite bead were placed in series with the analog power input. This \glref{LC} filter supported by the bead should effectively eliminate both low and high-frequency interference.
 
-The clock and data lines of both \glref{I2C} busses are equipped with standard $4.7\rm{[k\Omega]}$ resistors. Multiple $22\rm{[\Omega]}$ resistors were placed in series with high-speed clock signals of the \glref{SPI} interface. Two $0\rm{[\Omega]}$ resistors are present on {\it FAULT} and {\it MODE} lines to facilitate an optional hardware isolation. A $10\rm[k\Omega]$ resitor at {\it PH3} is suggested by \cite[app:getStart].
+The clock and data lines of both \glref{$\rm{I^2C}$} busses are equipped with standard $4.7\rm{[k\Omega]}$ resistors. Multiple $22\rm{[\Omega]}$ resistors were placed in series with high-speed clock signals of the \glref{SPI} interface. Two $0\rm{[\Omega]}$ resistors are present on {\it FAULT} and {\it MODE} lines to facilitate an optional hardware isolation. A $10\rm[k\Omega]$ resitor at {\it PH3} is suggested by \cite[app:getStart].
 
 \secc PCB design
 
@@ -105,6 +105,7 @@ A functional diagram of the implemented power management is shown in figure \ref
     \caption/t \glref{OBC} power rating. Value out of range will cause a protective shutdown.
 \endinsert
 
+\label[secc:powerManagementSch]
 \secc Schematic design
 
 \quad An actual schematic diagram of power management circuitry is shown in figure \ref[sch:powerManagement]. The most important part of this design is the \glref{eFuse}, as it covers all of the power control features. We decided to use the TPS25940-Q1 device \cite[dat:efuse]. Custom  threshold values can be set following the typical application schematic in the datasheet \cite[dat:efuse]. This is done by connecting specific resistors, with values calculated using the TPS2594x design calculation tool \cite[app:tps2594Calc]. As the logic AND gate, we chose the 74LVC1G11-Q100 \cite[dat:gate]. This device is designed to operate in a mixed logic level environment, what corresponds with our application. The last important component is the load switch. In our case, the TPS22965W-Q1 with an inbuilt output discharge function \cite[dat:switch]. For a correct operation of the switch, the {\it VBIAS} pin should stay saturated for a while after disconnecting the {\it VIN} voltage. We achieved this behavior by charging a capacitor connected to the {\it VBIAS} from the {\it VIN} through a Schottky diode. Four reservoir capacitors are placed on both sides of the load switches, following the suggestions in both datasheets \cite[dat:efuse, dat:switch]. Nominal logic values of all switching signals are set by pull-up or pull-down resistors.
@@ -146,7 +147,7 @@ After a brief survey, we decided to implement the design using robust analog swi
 \quad Schematic diagrams of two isolators are shown in figure \ref[sch:peripheralIsolators]. We decided to use the DGQ2788A device \cite[dat:isolator]. To cover all of the data buses, the \glref{OBC} hosts fifteen of these analog switches in a dual double pole double throw (\glref{DPDT}) configuration. The \glref{OBC} data lines are connected to common terminals ({\it COM}). Normally closed terminals ({\it NC}) are left floating, whereas normally open terminals ({\it NO}) terminals are connected to the spacecraft data lines. The important Kill Switch functionality is implemented using the device's power down protection. If the switch loses power, it will enter the normal state. This approach simplifies the circuitry a lot as it substitutes an otherwise necessary system of multiple logic gates. Other beneficial features of this analog switch are a high latch-up current of $300\rm{[mA]}$ and inbuild signal clamping. The device will clamp all of the signals exceeding its supply voltage by internal diodes. As the \glref{MCU} pins connected to these analog switches are $5\rm{[V]}$ tolerant, we chose to power the switches from the $5\rm{[V]}$ power bus. A potential problem could be caused by the switch's enable terminals ({\it EN}), as they do not include internal pull-down or pull-up resistors. We decided to use hardware pull-down resistors to avoid a floating state of these control signals.  The placement decoupling capacitors follows the device datasheet \cite[dat:isolator].
 
 \midinsert
-    \clabel[shc:peripheralIsolatorsS]{Peripheral isolators schematic}
+    \clabel[sch:peripheralIsolatorsS]{Peripheral isolators schematic}
     \picw=0.92\hsize \cinspic figures/schemes/peripheralIsolators.pdf
     \caption/f Schematic diagram of two peripheral isolators.
 \endinsert
@@ -223,11 +224,17 @@ A well-designed \glref{CAN} network usually contains a terminating resistor, fil
 
 \sec Temperature monitoring
 
+\quad Temperature is a critical parameter in the space environment, and all electronic components are sensitive to its variation. Any increase in temperature may reduce their lifespan and even result in irreversible damage. Such a temperature increase can be evoked by an ambient temperature or by the component's activity. Most electronic components are designed to dissipate heat into the ambient air. This is problematic in the space due to its lack of an atmosphere. Instead, a component transfers heat into the \glref{PCB}'s thermal capacity.\fnote{And then dissipated into the spacecraft environment by the thermal radiation.} This conduction can produce temperature gradients throughout the \glref{PCB} and influence other components. Furthermore, a change in a component's temperature can indicate its malfunction. Sudden temperature increase is a common sign of a latch-up event \cite[app:badBoys]. Accordingly, the \glref{OBC} temperature is an essential part of a spacecraft telemetry and worthy of continuous monitoring. Professional \glref{OBC} manufacturers have also included multiple temperature sensors in their designs \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gauss].
+
+Standard temperature sensor technologies include integrated circuit (\glref{IC}) sensors, thermistors, resistance temperature detectors (\glref{RTD}s), and thermocouples. Their key features are compared in the guide to temperature sensing \cite[boo:temperature]. The \glref{IC} sensors appeared to be the best choice for our design challenge. These sensors are typical for their good accuracy, small footprint, easy complexity, and excellent linearity. A processing unit can usually communicate with the \glref{IC} sensors using one shared data bus and receive ready-to-use temperature data. In contrast, the implementation of the other sensor technologies requires extra analog components and circuitry. For example, amplifiers and \glref{ADC}s for thermistors and thermocouples or precise current sources and \glref{ADC}s for \glref{RTD}s. These non-\glref{IC} technologies would also use multiple \glref{MCU} pins and require additional calibration and shielding. As our goal was to design a compact PCB and a simple system, we decided to implement the \glref{IC} sensors approach.
+
 \secc Schematic design
+
+\quad A schematic diagram of a temperature sensor network is shown in figure \ref[sch:temperatureMonitoring]. After a brief survey, we selected a MCP9804 device \cite[dat:temperature]. This temperature sensor has an accuracy of $\pm0.25\rm{[{^\circ C}]}$ and communicates through an $\rm{I^2C}$ interface. The device offers eight different $\rm{I^2C}$ addresses, selected by different logic levels on three slave address pins ({\it A0-A2}). Thanks to this feature, we were able to use only one $\rm{I^2C}$ bus for all of the devices. The final address assignment to particular sensors is listed in table \ref[tab:temperatureMonitoring]. As the temperature monitoring is continuous, we decided not to use the device's inbuild alter function. Placement of a decoupling capacitor and $10\rm{[k\Omega]}$ pull-up resistors on $\rm{I^2C}$ lines were suggested by the device datasheet. It is worth mentioning that this sensor supports a low-power standby mode, accessible through a special register.
 
 \midinsert \clabel[tab:temperatureMonitoring]{Temp. sensors description}
     \ctable{cclcc}{
-        Designator  & \mspan2[l]{Targeted component}    & Slave addr.   & \glref{I2C} addr. \crl
+        Designator  & \mspan2[l]{Targeted component}    & Slave addr.   & \glref{$\rm{I^2C}$} addr. \crl
         TS1         & M2  & - Flash memory              & $000$         & $0\rm{x}18$       \cr
         TS2         & U1  & - \glref{MCU}, central west & $100$         & $0\rm{x}1C$       \cr
         TS3         & EF2 & - $5\rm{[V]}$ eFuse         & $001$         & $0\rm{x}19$       \cr
@@ -239,13 +246,31 @@ A well-designed \glref{CAN} network usually contains a terminating resistor, fil
     \caption/t List of temperature sensors location and addresses.
 \endinsert
 
+Accordingly to the survey on CubeSat electrical bus reliability \cite[pap:reliability], the $\rm{I^2C}$ interface is the most likely to fail. Over half of investigated spacecrafts experienced at least one $\rm{I^2C}$ lockup\fnote{A continuous busy state of the $\rm{I^2C}$ bus, where is the master prevented from starting a new transaction.}. Hence it was essential to apply measures assuring the proper functionality of our $\rm{I^2C}$ based temperature monitoring network. We had to implement a mechanism that can either prevent the lockup from occurring or is capable of resolving it. We chose the second option, as we consider it as a more robust and reliable. A simple but efficient approach to resolve an $\rm{I^2C}$ lockup is to reset the power of all its slave devices. For this purpose, we implemented the TPS22965W-Q1 load switch in the very same configuration as we have used in the power management circuitry (subsection \ref[secc:powerManagementSch]).
+
 \midinsert
     \clabel[sch:temperatureMonitoring]{Temp. monitoring schematic}
-    \picw=1.\hsize \cinspic figures/schemes/temperatureMonitoring.pdf
+    \picw=1.0\hsize \cinspic figures/schemes/temperatureMonitoring.pdf
     \caption/f Schematic diagram of temperature monitoring circuitry.
 \endinsert
 
 \secc PCB design
+
+\quad The layout of the temperature monitoring circuitry is dependent on the other subsystems. Therefore, it had to be implemented as the very last one. Each of the \glref{IC} sensors was assigned to monitor a temperature of a particular device from another subsystem. These monitored devices were carefully chosen to cover all of the \glref{OBC}'s most critical components. These are various \glref{IC}s used in the other subsystems as they execute multiple tasks, produce most of the heat, and are vulnerable to latch-up events. A listing of the monitored devices and their assigned temperature sensors is stated in table \ref[tab:temperatureMonitoring].
+
+As we cannot exceed a total number of eight \glref{IC} temperature sensors (MCP9804 devices) at one $\rm{I^2C}$ bus, we decided to monitor only one of the three FLASH devices. We selected the one in the middle as a good approximation of the two remaining FLASH \glref{IC}s. None of the three F-ram devices is monitored directly as the opposite side of the \glref{PCB} in their location contains a dense layout of the power management circuitry. However, the F-ram \glref{IC}s are neighboured by three temperature sensors: TS5, TS6, and TS3. Measurements obtained from these sensors should be sufficient to monitor the F-ram devices. The \glref{MCU} contains an inbuilt temperature sensor suitable only for applications that detect temperature changes only. We decided to monitor the \glref{MCU} with a pair of \glref{IC} sensors as we prefer to measure the absolute temperature.
+
+To ensure correct temperature measurement, we have to create a sufficient thermal bridge between the temperature sensor and its targeted device. A common approach is to place the sensor on the other side of the \glref{PCB}, right opposite the device. A thermal bridge is then created using a set of \glref{PCB} vias. This method is recommended and described in the temperature sensors guideline for \glref{SMD}s \cite[app:temperature]. Its illustration for our use case is shown in figure \ref[dia:temperatureMonitoring]. It is worth mentioning that the added vias help dissipate the heat into the \glref{PCB} and are usually required by the device's datasheet. 
+
+\circleparams={\ratio=1 \fcolor=\White \lcolor=\Black \hhkern=0.9pt \vvkern=0.9pt}
+
+\midinsert
+    \clabel[dia:temperatureMonitoring]{Thermal bridge illustration}
+    \picw=0.8\hsize \cinspic figures/diagrams/temperatureMonitoring.pdf
+    \caption/f Illustration of a thermal bridge between the temperature sensor and WSON package (left) or LQFP package (right). Legend: {\typosize[8/]\incircle{⟨1⟩}} \glref{PCB}, {\typosize[8/]\incircle{⟨2⟩}} targeted device, {\typosize[8/]\incircle{⟨3⟩}} \glref{IC} temperature sensor, {\typosize[8/]\incircle{⟨4⟩}} measurement die, {\typosize[8/]\incircle{⟨5⟩}} \glref{PCB} via, {\typosize[8/]\incircle{⟨6⟩}} thermal pad, {\typosize[8/]\incircle{⟨7⟩}} epoxy resin.
+\endinsert
+
+Location and fanout of the temperature monitoring circuitry are shown in figure \ref[pcb:temperatureMonitoring]. All \glref{IC} sensors are placed at the bottom side of the \glref{PCB}, directly under their targeted devices. The load switch is located at the \glref{PCB}'s west-central part. The switch itself and most of its auxiliary components are placed on the top side of the \glref{PCB}. The $\rm{I^2C}$ bus signal traces and separate power bus runs between all of the sensors.
 
 \midinsert
     \clabel[pcb:temperatureMonitoring]{Temp. monitoring circuitry}

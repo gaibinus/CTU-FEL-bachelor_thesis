@@ -1,23 +1,22 @@
 
-\chap Board Sierra - description
+\chap Board Sierra
 
-%%%%% CUBESATS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\sec CubeSat concept
-
-%%%%% OBC REQUIREMENTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% OBC REQUIREMENTS
 
 \sec OBC requirements
+
 
 %%%%% RADIATION
 
 \secc Radiation and redundancy
 
-\quad Occasionally traveling through weaker parts of the Earth's magnetic field and not shielded by the Earth's atmosphere, the CubeSats have to operate in an environment full of radiation. A direct hit of a high-energy particle might have serious consequences for \glref{OBC} functionality. These include transistor gate ruptures, memory bit flips, software upsets, or latch-ups. A proper strategy must be taken to increase the \glref{OBC} durability and ability to handle such an error, resulting in maximizing a possible mission life.
+\quad Occasionally traveling through weaker parts of the Earth's magnetic field and not shielded by the Earth's atmosphere, the CubeSats have to operate in an environment full of radiation. A direct hit of a high-energy particle might have serious consequences for \glref{OBC} functionality. These include transistor gate ruptures, memory bit flips, software upsets, or latch-ups. Proper measures have to be taken to increase the \glref{OBC} durability and ability to handle errors, resulting in maximizing a mission lifetime. This process is known as radiation hardening and can be achieved by two different techniques.
 
-One approach is to use special radiation-hardened components. This strategy is typical for professional and more expensive satellites than the CubeSats. These components are usually bigger, more costly, and have less functionality than ordinary COTS.
+A physical approach, also known as a radiation hardening by design, relies on special radiation-hardened components. Hardened \glref{IC}s are manufactured on insulating substrates (rather than typical semiconductor wafers) or use some of the many dedicated design principles \cite[pap:radiationSurvey]. Implementation of this strategy is typical for professional and more expensive satellites than the CubeSats. These components are usually bigger, costly, and have reduced performance and functionality compared to ordinary ones.
 
-Considering the size and budget requirements of our \glref{OBC}, we chose to implement another option. Instead of the previously mentioned physical hardening technique, a logical one was realized. The \glref{OBC} hosts many schematic design-related features ensuring the proper handling of any radiation-related event. These include: i) over-current sensing power management, ii) separate peripheral isolators, iii) full high-impedance mode requested by the higher logic, iv) triple-redundant memories, v) multiple temperature sensors. A fully double-redundant \glref{OBC} is presented in chapter \ref[chap3:delta].
+Considering the size and budget requirements of our \glref{OBC}, we chose to implement another option. Instead of the previously mentioned physical hardening technique, a logical one was realized. The \glref{OBC} hosts multiple schematic design features ensuring the proper handling of any radiation-related event. These include: i) over-current sensing power management, ii) separate peripheral isolators, iii) full high-impedance mode requested by the higher logic, iv) triple-redundant memories, or v) multiple temperature sensors. A fully double-redundant \glref{OBC} is presented in chapter \ref[chap:boardDelta].
+
+
 
 %%%%% FEATURES
 
@@ -38,41 +37,97 @@ Considering the size and budget requirements of our \glref{OBC}, we chose to imp
     * {\sbf Maximal payload sector:}
 \enditems
 
+
+
+%%%%% ELECTRONIC COMPONENTS
+
+\sec Electronic components
+
+\quad Electronic components are the building stones of each electronic hardware. Big commercial, military, or research spacecrafts use specialized components designed, modified, or particularly selected for space applications. CubeSats, on the other hand, use in most cases commercial off-the-shelf (\glref{COTS}) components that are not specifically designed for application within the space environment \cite[pap:tempModeling]. The use of \glref{COTS} components is certainly an attractive option for the development team of small satellite projects. Lead times are short, and recent developments in personal computing equipment and consumer electronic allow for high performance \cite[pap:thermal]. In the VST104 project, we also decided to follow this trend and to use COTS components. In this section, we describe various requirements applied to these components and the criteria of their selection.
+
+
+
 %%%%% CERTIFICATION
 
+\label[chap:componentsCertification]
 \secc Components certification
 
-%%%%% SELECTION
+\quad Spacecrafts are exposed to a harsh environment and its effects during their lifetime. This problem needs to be also addressed on the electronic components level by selecting components with adequate parameters. The two essential criteria that need to be watched are operational temperature range and mechanical stress resistance.
 
-\label[chap:componentsSelection]
-\secc Components selection 
+The temperature range that electronic components can encounter in orbit is quite large as the thermal control options are limited \cite[boo:cubesatTemp]. The most crucial impact on the temperatures of a spacecraft is caused by the external radiation from Sun and Earth, as well as internal heat dissipation throughout electronic devices \cite[pap:tempModeling]. Typical operational temperature for CubeSat components is in the range of $-40$ to $+85\rm{[^\circ C]}$ \cite[pap:tempModeling, boo:cubesatTemp], usually referred to as an industrial temperature range. As we wanted to be on the safe side, we decided to add a safety margin by extending the range. We chose the automotive range of $-40$ to $+125\rm{[^\circ C]}$ as a requirement for electronic components in our design.
 
-\quad After listing all of the technical requirements for a specific electronic part, we had to chose a particular component. As there are usually multiple similar components from various manufacturers, we had to use additional criteriums for the selection process.
+During the launch, a spacecraft is subjected to various external loads resulting from vibroacoustic noise, booster ignition and burn out, propulsion system engine vibration, steady-state booster acceleration, and much more \cite[pap:vibration]. Hence, various measures are applied to increase the robustness of the spacecraft. Regarding the \glref{OBC} design, it was necessary to select only the electronic components meeting the \glref{AEC}-Q100 and \glref{AEC}-Q200 standards. Components meeting these specifications are suitable for the harsh automotive environment without additional component-level qualification testing \cite[nor:AEC].
 
-As this \glref{OBC} module is not primarily designed for an actual space flight (explained in chapter \ref[chap1:introduction]), an individual component's price is not negligible. With a lower overall cost of the \glref{OBC}, a broader project expansion in the LibreCube community can be achieved. Thus components with sufficient attributes but lower price were favored.
+To sum it up, all of the electronic components used in the Sierra Board i) are rated for the automotive temperature range of $-40$ to $+125\rm{[^\circ C]}$, and ii) obtained the \glref{AEC}-Q100 or \glref{AEC}-Q200 qualification. The only exception is the \glref{MCU} with no \glref{AEC} qualification.
 
-Another criterium in the component selection was the available PCB surface. As a result of maximizing the payload sector of the PC104 module, the actual \glref{OBC} subsystem area was significantly decreased. Therefore the components of smaller dimensions available in fine-pitch packages (e.g. \glref{SSOP} or \glref{QFN}) were preferred. After researching the technical capabilities and related costs of PCB manufacturers, we decided not to use the \glref{BGA} package components. Their significantly small footprints would require more precise fanout, resulting in increased manufacturing difficulty and price.
+Some of the \glref{OBC}'s potential applications may not require temperature and automotive certification of the electronics components. In such a case, some components may be replaced by their uncertified variants to save a bit of the financial budget. All of the electronics components with an official uncertified version are listed in table \ref[tab:uncertifiedParts]. Furthermore, the potential user is encouraged to replace all passive components (resistors, capacitors, ferrite beads, inductors) with unqualified parts of the same parameters. A replacement of oscillators Y[1,2] is possible, although this change is non-negligible.
 
-Different components are available from various distributors, which can prolong the assembling process. We chose to use Mouser Electronics for purchasing the components. Therefore the availability of a specific component in this store was also a selection factor. This decision was influenced by the \glref{VST} supervisors and previous experiences.
 
-%%%%% PCI104 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\sec PCI104 standard
-
-%%%%% MECHANICAL
-
-\secc Mechanical specification
 
 %%%%% POWER CONSUMPTION
 
+\label[chap:powerConsumption]
 \secc Power consumption
 
-%%%%% PINOUT
+\quad CubeSat's power budget is a closely monitored thing. Such a small spacecraft has a limited means of generating and storing electric power. Solar arrays are usually bound in their active surface and lack advanced tools of positioning. Similarly, battery storage systems are restricted by the available space and means of temperature control. It is crucial to minimize the power requirements of the CubeSat, including the \glref{OBC}. 
 
-\secc Main header pinout
+Reasonable power consumption of the \glref{OBC} can be achieved on the level of electronic components selection by prioritizing the low-power components. A downfall of this approach is usually an implied decrease in their performance, speed, or frequency. Therefore, we preferred components with similar parameters but lower power consumption. This affected mostly the selection process in cases of the \glref{MCU} and memory \glref{IC}s.
+
+Not only a component's power consumption but also its efficiency is an important parameter. While choosing switching components such as electronic fuses, hot-side switches, or analog switches, a low on-resistance was preferred. Power losses on pull-down/pull-up resistors had to be also taken into consideration. A single $10\rm{[k\Omega]}$ pull-down resistor connected to a $3.3\rm{[V]}$ signal drains a constant current of $330\rm{[\mu A]}$, creating a power loss of approximately $1.1\rm{[mW]}$. During the schematic design, we aimed more at a subsystem's robustness rather than avoiding this particular type of power loss. Therefore, some of the pull-down/pull-up resistors may be left unpopulated and their functionality compensated by programmable resistors integrated inside the \glref{MCU}.
+
+The summary of power consumption of the specific electronics components is listed in table \ref[tab:componentsConsumption]. Overall power consumption of specific \glref{OBC}'s submodules is listed in table 10. It sums power consumptions of all \glref{IC}s and losses on pull-down/pull-up resistors in the particular subsystem. For the computation, two assumptions were made: i) full functionality of the subsystem, ii) input voltage range as described in table \ref[tab:powerManagement].
+
+
+\midinsert \clabel[tab:componentsConsumption]{Components consumption}
+    \ctable{ccccc}{
+        Designator  & Manufacturer no.  & \mspan3[c]{Supply current $\rm{[mA]}$} \cr
+                    &                   & Min.  & Typ.  & Max.  \crl
+        AS[1-15]    & DGQ2788A          & -     & 0.024 & 0.060 \cr
+        EF[1,2]     & TPS25940-Q1       & 0.140 & 0.210 & 0.300 \cr
+        ESD1        & SP3012-06         & -     & -     & -     \cr
+        LG1         & 74LVC1G11-Q100    & -     & 0.100 & 4     \cr
+        M[1-3]      & S25FL256L         & 10    & -     & 40    \cr
+        M[4-6]      & CY15B102Q         & -     & -     & 5     \cr
+        Q[1-3]      & TPS22965W-Q1      & -     & -     & -     \cr
+        TS[1-7]     & MCP9804           & -     & 0.200 & 0.400 \cr
+        U1          & STM32L496ZG       & -     & -     & -     \cr
+        U[2,3]      & TCAN1051V-Q1      & -     & 40    & 70    \cr
+        Y1          & ABS07AIG          & -     & -     & -     \cr
+        Y2          & SiT8924B          & -     & 4.0   & 4.8
+    }
+    \caption/t List of components power consumption.
+\endinsert
+
+
+
+%%%%% SELECTION
+
+\label[chap:additionalParams]
+\secc Additional parameters
+
+\quad A selection of particular electronic components is a vital part of designing circuitry. Usually, various electronic components share the same functionality and are available from different manufacturers. After filtering the available components by specific functionality (with respect to \ref[chap:componentsCertification] and \ref[chap:powerConsumption]), it was common to find various suitable candidates. Therefore, additional criteriums had to be set to resolve the selection:
+
+\begitems
+    * {\sbf Price:} As this \glref{OBC} is not primarily designed for an actual space flight (as explained in \ref[chap:introduction]), an individual component's price is not negligible. With a lower overall cost of the \glref{OBC}, a broader project expansion in the LibreCube community can be achieved. Thus components with sufficient attributes but lower price were favored.
+    
+    * {\sbf Footprint:} As a result of maximizing the PC104 payload sector, the actual \glref{OBC} area was significantly decreased. Therefore the components of smaller dimensions available in fine-pitch packages (e.g. \glref{SSOP} or \glref{QFN}) were preferred. After researching the technical capabilities and related costs of PCB manufacturers, we decided not to use the \glref{BGA} package components. Their significantly smaller footprints would require more precise fanout, resulting in increased manufacturing difficulty and price.
+    
+    * {\sbf Distributor:} We considered it important to use only typically stocked components available from the global distributors. In our case, Mouser electronic\fnote{http://www.mouser.com/}.This rule should repeal any future problems in components sourcing or logistics. Therefore, the availability of a specific component in this distributor was a selection factor.
+\enditems
+
+
+
+%%%%% BOMs
+
+\secc Bills of materials
+
+
 
 \sec PCB design and assembly
 \secc PCB specifications
+
+ Adding a layer of copper to the circuit board can significantly decrease the resulting temperatures \cite[pap:tempModeling].
+
 \secc Routing and fanout
 
 

@@ -138,7 +138,7 @@ The summary of power consumption of the specific electronics components is liste
 
 \secc PCB requirements
 
-\quad The benefit of the Board Sierra's lower price regarding the particular electronic components was described in chapter \ref[chap:additionalParams]. The same logic applies to the decision-making during the\glref{PCB} design. It is a common feature between \glref{PCB}s manufacturers that the less advanced design, the cheaper \glref{PCB}. This includes many parameters such as copper layer count, presence of buried vias and their size, copper clearances, tracks widths, and much more. On the other hand, fine features such as buried vias simplify the process of \glref{PCB} design and allow more compact layouts. Therefore, it was crucial to find a balance between the manufacturing price and complexity of the \glref{OBC}'s layout and tracing.
+\quad The benefit of the Board Sierra's lower price regarding the particular electronic components was described in chapter \ref[chap:additionalParams]. The same logic applies to the decision-making during the \glref{PCB} design. It is a common feature between \glref{PCB}s manufacturers that the less advanced design, the cheaper \glref{PCB}. This includes many parameters such as copper layer count, presence of buried vias and their size, copper clearances, tracks widths, and much more. On the other hand, fine features such as buried vias simplify the process of \glref{PCB} design and allow more compact layouts. Therefore, it was crucial to find a balance between the manufacturing price and complexity of the \glref{OBC}'s layout and routing.
 
 Although, following the proper design rules and standards created for automotive and especially space applications is much more important than lowering the \glref{PCB}'s manufacturing price. We addressed various requirements and suggestions listed in \glref{ECSS} standards ECSS-Q-ST-70-12C \cite[sta:ECSS-12C] and ECSS-Q-ST-70-60C \cite[sta:ECSS-60C]. Other precious recommendations were found and implemented from the TEC-ED IoD Board Specification \cite[sta:TEC-ED]. These specifications refer, for example, to track width and spacing, pad design, copper planes, or thermal rules. Multiple references to these documents may be found in the following chapters. However, these documents are aimed at state-of-the-art spacecrafts designed and operated by the \glref{ESA}. Thus a punctual following of all of the requirements and suggestions was not necessary for our CubeSat application.
 
@@ -152,15 +152,29 @@ Although, following the proper design rules and standards created for automotive
 
 Regarding the manufacturing price and complexity, the\glref{PCB} would ideally be a four-layer one. This means two copper layers for signal traces, a power distribution layer, and a ground plane. Unfortunately, the two signal layers would not be enough to accommodate complex\glref{OBC}'s circuitry. Therefore, we had to choose a six-layer\glref{PCB} with the following setup: i) signal layers: top, second inner, bottom; ii) ground plane layers: first inner, fourth inner; iii) power distribution layers: third inner. An additional benefit of the added layers is improved thermal dissipation, as adding a layer of copper to the circuit board can significantly decrease the resulting temperatures \cite[pap:tempModeling].
 
-HERE
+Additional parameters of the \glref{PCB} manufacturing such as material, isolation and copper thickness, surface finish and solder mask types are not specified in this thesis nor the VST104 project. It is the responsibility of the potential user to customize these parameters accordingly to the requirements of the specific application. In such a case, we encourage the user to follow relevant sections of the \glref{ECCS} standard \cite[sta:ECSS-12C].
 
-Additional parameters of the\glref{PCB} manufacturing such as material, isolation and copper thickness, surface finish and solder mask types are not specified in this thesis nor the VST104 project. It is the responsibility of the potential user to customize these parameters accordingly to the requirements of the specific application. In such a case, we encourage the user to follow relevant sections of the \glref{ECCS} standard \cite[sta:ECSS-12C].
+
+
+%%%%% TRACES, VIAS AND ROUTING
+
+\secc Traces, vias and routing
+
+\quad Electronic components are placed on both sides of the \glref{PCB} due to the restricted OBC area. Corresponding top and bottom copper layers cover as much routing as possible. The second inside layer accommodates traces that do not fit into the two surface layers. The general width of a signal trace is $0.2\rm{[mm]}$, respectively $0.173\rm{[mm]}$ for traces near the main PC104 header. Clearance between traces themselves and other copper planes is set to $0.127\rm{[mm]}$. All of these parameters satisfy the minimal specifications in the \glref{ECSS} standard \cite[sta:ECSS-12C]. No blind, buried or micro vias are used in the design. The diameter of general via is $0.45\rm{[mm]}$ with a $0.24\rm{[mm]}$ drill. This parameters result in a $6.7$ aspect ratio for a standard $1.6\rm{[mm]}$ thick \glref{PCB}, which recognizes the \glref{ECSS} $\leq7$ rule \cite[sta:ECSS-12C].
+
+The first and fourth inner layers are ground plane layers. Their purpose is to connect all of the component's \glref{GND} pins, provide shielding against the \glref{EMI} and act as heatsink dissipating components heat. Despite the \glref{ECSS} suggestion, both the ground planes have a solid fill instead of additional openings in a grid format \cite[sta:ECSS-12C]. The reason is, the current fifth version of KiCad does not support this option. This design flaw will be improved shortly as the checked fill option is included in the upcoming KiCad v6.
+
+A copper plane with a solid fill is also located in the third inside layer. This plane is attached to a $3.3\rm{[V]}$ power source, and its task is to connect all required components to this power bus. This layer also accommodates a $5\rm{[V]}$ power distribution routing. Its traces are $0.45\rm{[mm]}$ wide with multiple vias to minimize the potential voltage drop.
+
+The final \glref{PCB} routing highlighted by the particular \glref{OBC}'s subsystems is shown throughout multiple figures in chapter \ref[chap:BoardSierraSubmodules]. General principles of good routing were implemented throughout the \glref{PCB} design. These include steep turns avoiding, differential pairs matching, or sliver and peelable prevention \cite[sta:ECSS-60C]. If available, fanout and routing suggestions included in electronic components datasheets were followed. As suggested by the \glref{ECSS} \cite[sta:ECSS-12C], a teardrop finish was applied to all of the pads using the KiCad extension mentioned in chapter \ref[chap:openSource]. It is important to mention that the current KiCad v5 does not support advanced design settings common for professional software such as Altium Designer or CadSoft EAGLE. Our approach to handling this problem was adding extra margins to the few parameters listed in KiCad, which increased the overall tolerance. The final \glref{PCB} design passed a design rule check (\glref{DRC}) with various parameters set according to manufacturers' standards and \glref{ECSS} suggestions \cite[sta:ECSS-60C].
 
 
 
 %%%%% COMPONENTS FOOTPRINTS
 
 \secc Components footprints
+
+\quad Every electronic component needs to be properly attached to the \glref{PCB}'s surface. An arrangement of pads required to solder the component on the \glref{PCB} is called a footprint. Components with different standardized packages require corresponding footprints. These footprints are usually available for download on various websites or are included in the KiCad official libraries. Although it is comfortable to use these premade footprints, this approach brings inconsistency and dependency to the \glref{PCB} design. Therefore we decided to create each of the used footprints by ourselves, following reference designs in components' datasheets and KiCad library conventions \cite[app:kiCadLib]. 
 
 
 
@@ -169,8 +183,4 @@ Additional parameters of the\glref{PCB} manufacturing such as material, isolatio
 \secc OBC and payload sector
 
 
-
-%%%%% ROUTING AND FANOUT
-
-\secc Routing and fanout
 

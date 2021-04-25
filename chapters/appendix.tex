@@ -1,5 +1,5 @@
 
-%%%%% thesis assignment
+%%%%% THESIS ASSIGNMENT
 
 \app Thesis Assignment
 
@@ -9,10 +9,21 @@
     \caption/f Assignment of this bachelor's thesis.
 \endinsert
 
+%%%%% BOARD SIERRA
 
-%%%%% schematics that are too big for the main text body
+\app Board Sierra
 
-\app Schematic diagrams
+\midinsert
+    \clabel[app_vis:sierraTop]{Board Sierra 3D top}
+    \picw=0.80\hsize \cinspic figures/model/top.pdf
+    \caption/f Visualization of the Board Sierra captured from its top side.
+\endinsert
+
+\midinsert
+    \clabel[app_vis:sierraBottom]{Board Sierra 3D bottom}
+    \picw=0.80\hsize \cinspic figures/model/bottom.pdf
+    \caption/f Visualization of the Board Sierra captured from its bottom side.
+\endinsert
 
 \midinsert
     \clabel[app_sch:microcontroller]{Microcontroller schematic}
@@ -24,6 +35,26 @@
 %%%%% additional materials
 
 \app Additional materials
+
+\midinsert \clabel[tab:componentsConsumption]{Components consumption}
+    \ctable{ccccccc}{
+        \vspan2{Designator} & \mspan3[c]{$3.3\rm{[V]}$ current $\rm{[mA]}$} & \mspan3[c]{$5\rm{[V]}$ current $\rm{[mA]}$} \cr
+                    & Min.  & Typ.  & Max.  & Min.  & Typ.  & Max.  \crl
+        AS[1-15]    & -     & 0.024 & 0.060 &&& \cr %DGQ2788A  
+        EF[1,2]     & 0.140 & 0.210 & 0.300 &&& \cr %TPS25940-Q1
+        %ESD1        & -     & -     & -     &&& \cr %SP3012-06
+        LG1         & -     & 0.100 & 4     &&& \cr %74LVC1G11-Q100
+        M[1-3]      & 10    & -     & 40    &&& \cr %S25FL256L
+        M[4-6]      & -     & -     & 5     &&& \cr %CY15B102Q
+        %Q[1-3]      & -     & -     & -     &&& \cr %TPS22965W-Q1
+        TS[1-7]     & -     & 0.200 & 0.400 &&& \cr %MCP9804
+        U1          & -     & -     & -     &&& \cr %STM32L496ZG
+        U[2,3]      & -     & 40    & 70    &&& \cr %TCAN1051V-Q1
+        Y1          & -     & -     & -     &&& \cr %ABS07AIG
+        Y2          & -     & 4.0   & 4.8   &&&     %SiT8924B
+    }
+    \caption/t List of components power consumption.
+\endinsert
 
 \midinsert \clabel[tab:uncertifiedParts]{Uncertified parts variants}
     \ctable{clll}{

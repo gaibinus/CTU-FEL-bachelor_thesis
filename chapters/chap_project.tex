@@ -12,17 +12,45 @@
 Despite growing interest from industry in CubeSats as proper means of technology
 demonstration, such platforms are still primarily considered as an educational tool. \cite[pap:fromDesignToOperation]
 
+%%%%% EXISTING OBC MODULES
+
+\label[chap:existingOBCmodules]
+\secc Existing OBC modules
+
+\cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]
+
+
 %%%%% VST104 MOTIVATION
 
 \sec Project motivation
 
+\secc Board Sierra
+
+\secc Element Foxtrot
 
 %%%%% OPEN SOURCE
 
 \label[chap:openSource]
 \secc Open source
 
-% software
+
+%%%%% PROJECT WORKFLOW
+
+\sec Project workflow
+
+%%%%% COMPONENTS FOOTPRINTS
+
+\secc Components footprints
+
+\quad Every electronic component needs to be properly attached to the \glref{PCB}'s surface. An arrangement of pads required to solder the component on the \glref{PCB} is called a footprint. Components with different standardized packages require corresponding footprints. These footprints are usually available for download on various websites or are included in the KiCad official libraries. Although it is comfortable to use these premade footprints, this approach brings inconsistency and dependency to the \glref{PCB} design. Therefore we decided to create each of the used footprints by ourselves, following reference designs in components' datasheets and KiCad library conventions \cite[app:kiCadLib].
+
+It is a common feature in modern PCB design software such as KiCad to support a 3D visualization. Besides pads, copper traces or
+
+%%%%% BOMs
+
+\secc Bills of materials
+
+\secc PCB assembly
 
 %%%%% PCI104
 

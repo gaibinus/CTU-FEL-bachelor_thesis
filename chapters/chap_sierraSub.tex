@@ -12,7 +12,7 @@
 
 \sec Microcontroller
 
-\quad The processing unit is the most important part of the \glref{OBC}. Professional designs use a wide variety of different instruction set architectures \cite[obc:dataPatterns, obc:imt, obc:pumpkin, obc:gauss, obc:nanosatpro]. However, the \glref{ARM} architecture seems to be more popular \cite[obc:isis, obc:aac, obc:anteleope, obc:gos]. This architecture is known for its good multiprocessing support, low power consumption, affordable pricing, and broad spectrum of existing applications. Considering these benefits and influenced by the LibreCube and TUDSaT, our \glref{VST} supervisors decided to pick an STM32 \glref{MCU}.
+\quad The processing unit is the most important part of the \glref{OBC}. Professional designs use a wide variety of different instruction set architectures \cite[obc:dataPatterns, obc:imt, obc:pumpkin, obc:gauss, obc:nanosatpro]. However, the \glref{ARM} architecture seems to be more popular \cite[obc:isis, obc:gos, obc:aac, obc:anteleope]. This architecture is known for its good multiprocessing support, low power consumption, affordable pricing, and various existing applications. Considering these benefits and influenced by the LibreCube, TUDSaT, and most importantly \glref{VST} supervisors, we decided to pick an STM32 \glref{MCU}.
 
 Our task was to choose a particular model of this 32-bit, Arm and Cortex-M based \glref{MCU}. Aiming rather for a low-power than high-performance characteristics, we decided to select an L series. Particularly the L4 series as it combines the largest flash memory size with the highest number of general-purpose input/output pins (\glref{GPIO}s) \cite[dat:mcuSeries]. Although, only one device from the L4 series is equipped with two CAN bus channels. As the presence of a second bus is crucial for our double-redundant approach, the STM32L496xx option was selected. This family comes in six different packages. Avoiding all of the \glref{BGA}-like ones (as described in chapter \ref[chap:componentsSelection]) narrows the selection to Zx, Vx, and Rx variants. The Zx is the most capable one in terms of flash size and \glref{GPIO} count. Therefore the STM32L496ZG (where G stands for extended operating temperature range) was our final choice \cite[dat:mcu]. From now on, we will refer to this particular device as the \glref{MCU}. Some of its key characteristics are listed in table \ref[tab:microcontroller].
 
@@ -23,7 +23,7 @@ Our task was to choose a particular model of this 32-bit, Arm and Cortex-M based
         Static RAM          & $320\;\rm{[kB]}$            &&& \glref{UART}    & $5$     \cr
         Comparators         & $2$                         &&& \glref{CAN}     & $2$     \cr
         Op. amplifiers      & $2$                         &&& \glref{GPIO}    & $115$   \cr
-        Temperature         & $-40$ to $125\;\rm{[°C]}$   &&& \glref{DAC}     & $2$
+        Operation temp.     & $-40$ to $125\;\rm{[°C]}$   &&& \glref{DAC}     & $2$
     }
     \caption/t Highlighted characteristics of the STM32L469ZG microcontroller \cite[dat:mcu].
 \endinsert
@@ -38,7 +38,7 @@ The clock and data lines of both \glref{$\rm{I^2C}$} busses are equipped with st
 
 \secc PCB design
 
-\quad Location and fanout of the \glref{MCU} are shown in figure \ref[pcb:microcontroller]. The \glref{MCU} is placed on the \glref{PCB} top side, covering most of the non-payload area. This big footprint of a LQFP144 package (approximately $2\rm{x}2\rm{[cm]}$) is a consequence of avoiding the \glref{BGA} packages while still trying to keep the pin count high. All of the capacitors were placed as close to their assigned pins as possible. In some cases, it was necessary to use the bottom side of the \glref{PCB}. The same approach was applied to all of the resistors.
+\quad Location and fanout of the \glref{MCU} are shown in figure \ref[pcb:microcontroller]. The \glref{MCU} is placed on the \glref{PCB} top side, covering most of the non-payload area. This big footprint of a LQFP144 package (approximately $2\rm{x}2\rm{[cm]}$) is a consequence of avoiding the \glref{BGA} packages while still trying to keep the pin count high. All of the capacitors were placed as close to their assigned pins as possible. In some cases, it was necessary to use the bottom side of the \glref{PCB}. The same approach was applied to all of the resistors. A hole of $1.2\rm{[mm]}$ diameter is placed roughly at the middle of the \glref{MCU} footprint. The diameter was set to fit a 19 gauge needle attached to a syringe with epoxy. This epoxy glue should be filled through this hole into the void space between the \glref{PCB} and the \glref{MCU}. This procedure is typical for space applications. Its purpose is to add some mechanical robustness to the LQFP device and create a thermal bridge between the \glref{PCB} and the devices.
 
 \midinsert
     \clabel[pcb:microcontroller]{Microcontroller circuitry}
@@ -101,11 +101,11 @@ A functional diagram of the implemented power management is shown in figure \ref
 
 \midinsert \clabel[tab:powerManagement]{Power management rating}
     \ctable{lccccc}{
-        Power input      & Parameter & Min & Typ & Max & Unit \crl
-        \vspan2{3V3 BUS} & voltage   & 2.9 & 3.3 & 3.5 & $\rm{V}$ \cr
-                         & current   & 0.0 & -   & 1.2 & $\rm{A}$ \crl
-        \vspan2{5V BUS}  & voltage   & 4.6 & 5.0 & 5.4 & $\rm{V}$ \cr
-                         & current   & 0.0 & -   & 1.2 & $\rm{A}$
+        Power input                 & Parameter & Min & Typ & Max & Unit        \crl
+        \vspan2{$3.3\rm{[V]}$ BUS}  & voltage   & 2.9 & 3.3 & 3.5 & $\rm{V}$    \cr
+                                    & current   & 0.0 & -   & 1.2 & $\rm{A}$    \crl
+        \vspan2{$5\rm{[V]}$ BUS}    & voltage   & 4.6 & 5.0 & 5.4 & $\rm{V}$    \cr
+                                    & current   & 0.0 & -   & 1.2 & $\rm{A}$
     }
     \caption/t \glref{OBC} power rating. Value out of range will cause a protective shutdown.
 \endinsert
@@ -137,7 +137,7 @@ A functional diagram of the implemented power management is shown in figure \ref
 
 \sec Peripheral isolators
 
-\quad The spacecraft \glref{OBC} is connected to many data buses shared among all other subsystems. In some scenarios, the \glref{OBC} must be able to isolate itself from a specific or multiple data buses. For example, to switch between \glref{OBC}s in a redundant configuration, to handle a failure on a data bus, or to prevent unintentional interference. Standard approaches to address this feature are based on using analog switches \cite[the:wurzburg], optocouplers \cite[pap:satelliteLeo], or \glref{FPGA}s \cite[obc:dataPatterns]. Furthermore, these isolators should also guarantee that all data lines are in a high impedance state when the \glref{OBC} is powered off.
+\quad The spacecraft \glref{OBC} is connected to many data buses shared among all other CubeSat submodules. In some scenarios, the \glref{OBC} must be able to isolate itself from a specific or multiple data buses. For example, to switch between \glref{OBC}s in a redundant configuration, to handle a failure on a data bus, or to prevent unintentional interference. Standard approaches to address this feature are based on using analog switches \cite[the:wurzburg], optocouplers \cite[pap:satelliteLeo], or \glref{FPGA}s \cite[obc:dataPatterns]. Furthermore, these isolators should also guarantee that all data lines are in a high impedance state when the \glref{OBC} is powered off.
 
 After a brief survey, we decided to implement the design using robust analog switches. This approach is more straightforward, less expensive, and requires a smaller \glref{PCB} area than the optocoupler or the \glref{FPGA}-based ones. A functional diagram of the implemented circuity is shown in figure \ref[dia:peripheralIsolators]. All of the \glref{OBC} data lines are connected to the rest of the spacecraft through a series of analog switches. These data lines are grouped by particular data buses and are assigned to a separate switch. The \glref{OBC} can enable or disable a specific switch and therefore isolate a particular data bus from the remaining spacecraft subsystems. Pulling low the Kill Switch will result in high impedance of all switches and completely isolating the \glref{OBC} data lines.
 
@@ -149,10 +149,10 @@ After a brief survey, we decided to implement the design using robust analog swi
 
 \secc Schematic design
 
-\quad Schematic diagrams of two isolators are shown in figure \ref[sch:peripheralIsolators]. We decided to use the DGQ2788A device \cite[dat:isolator]. To cover all of the data buses, the \glref{OBC} hosts fifteen of these analog switches in a dual double pole double throw (\glref{DPDT}) configuration. The \glref{OBC} data lines are connected to common terminals ({\it COM}). Normally closed terminals ({\it NC}) are left floating, whereas normally open terminals ({\it NO}) terminals are connected to the spacecraft data lines. The important Kill Switch functionality is implemented using the device's power down protection. If the switch loses power, it will enter the normal state. This approach simplifies the circuitry a lot as it substitutes an otherwise necessary system of multiple logic gates. Other beneficial features of this analog switch are a high latch-up current of $300\rm{[mA]}$ and inbuild signal clamping. The device will clamp all of the signals exceeding its supply voltage by internal diodes. As the \glref{MCU} pins connected to these analog switches are $5\rm{[V]}$ tolerant, we chose to power the switches from the $5\rm{[V]}$ power bus. A potential problem could be caused by the switch's enable terminals ({\it EN}), as they do not include internal pull-down or pull-up resistors. We decided to use hardware pull-down resistors to avoid a floating state of these control signals.  The placement decoupling capacitors follows the device datasheet \cite[dat:isolator].
+\quad Schematic diagrams of two isolators are shown in figure \ref[sch:peripheralIsolators]. We decided to use the DGQ2788A device \cite[dat:isolator]. The \glref{OBC} hosts fifteen of these analog switches in a dual double pole double throw (\glref{DPDT}) configuration. The \glref{OBC} data lines are connected to common terminals ({\it COM}). Normally closed terminals ({\it NC}) are left floating, whereas normally open terminals ({\it NO}) terminals are connected to the spacecraft data lines. The important Kill Switch functionality is implemented using the device's power down protection. If the switch loses power, it will enter the normal state. This approach simplifies the circuitry a lot as it substitutes an otherwise necessary system of multiple logic gates. Other beneficial features of this analog switch are a high latch-up current of $300\rm{[mA]}$ and inbuild signal clamping. The device will clamp all of the signals exceeding its supply voltage by internal diodes. As the \glref{MCU} pins connected to these analog switches are $5\rm{[V]}$ tolerant, we chose to power the switches from the $5\rm{[V]}$ power bus. A malfunction could be caused by the switch's enable terminals ({\it EN}), as they do not include internal pull-up or pull-down resistors. We decided to use external pull-down ones to avoid the enable signals' floating state and avoid unintentional device switching. The decoupling capacitors were placed accordingly to the device datasheet. 
 
 \midinsert
-    \clabel[sch:peripheralIsolatorsS]{Peripheral isolators schematic}
+    \clabel[sch:peripheralIsolators]{Peripheral isolators schematic}
     \picw=0.92\hsize \cinspic figures/schemes/peripheralIsolators.pdf
     \caption/f Schematic diagram of two peripheral isolators.
 \endinsert
@@ -174,18 +174,36 @@ After a brief survey, we decided to implement the design using robust analog swi
 
 \sec External memory
 
-\quad 
+\quad One of the \glref{OBC}'s important tasks is collecting and processing data from other submodules present in the spacecraft. As this payload and housekeeping communication might generate a wide data flow, external memory storage is usually dedicated to the \glref{MCU} \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]. This secondary memory should be writable, preferably fast, and non-volatile (can retain the stored information after power off) to support quick buffering and permanent data storage. Commonly used semiconductor memory technologies matching the criteria are EPROM, EEPROM, FLASH, and various NVRAMs. 
 
+A great threat to memory storage is space radiation, as presented in chapter \cite[chap:radiationAndRedundancy]. In a single event upset (SEU), the storage node charge in memory is upset due to particle strike and change its logic level \cite[pap:radiationSurvey]. This effect results in random bit-flips throughout the memory address space, corrupting the stored information. Approaches handling this damage are based on i) more durable or even rad-hard memory \glref{IC}s, ii) triple modular redundancy, and iii) error detecting and correcting codes. As the last approach is a software implementation, only the first two could be used in our design.
+
+The EPROM and EEPROM memories are not a good candidate for the \glref{OBC}, as they proved to be more sensitive to gamma radiation \cite[pap:memoryDamage]. The same applies to MRAM, as these memories are generally sensitive to single event effects (SEE) \cite[pap:mramSurvey]. On the other hand, the cell of fairly popular FLASH devices proved to be robust against SEU because more energy is required to change the state of a bit. FLASH memories are more tolerant to radiation and are a good candidate for vital data and code \cite[boo:framInSpace]. F-RAM is a technology that combines the best of Flash and SRAM. It offers faster writes, high read-write cycle endurance, and very low power consumption \cite[pap:ramSurvey]. Moreover, the F-RAM memories have excellent tolerance to radiation \cite[boo:framInSpace]. Considering the listed aspects of radiation effects rejection, together with speed and power consumption, we decided to include both FLASH and F-RAM memories in our \glref{OBC} design. The final parameters of the external memory subsystems are listed in table \ref[tab:externalMemory].
+
+\midinsert \clabel[tab:externalMemory]{External memory parameters}
+    \ctable{llll}{
+        Subsystem   & Size              & Max. clock        & SPI connection        \crl
+        FLASH       & 3x $32\rm{[MB]}$  & $133\rm{[MHz]}$   & SIO, DIO, QIO, QPI    \cr
+        F-RAM       & 3x $2\rm{[Mb]}$   & $25\rm{[MHz]}$    & SIO, QIO
+    }
+    \caption/t Parameters of the external memory subsystems.
+\endinsert
 
 \secc Schematic design
+
+\quad Schematic diagrams of FLASH (left) and F-RAM (right) memory subsystems are shown in figure \ref[sch:externalMemory]. Triple modular redundancy is achieved in both of them by connecting three of the same memory \glref{IC}s to one shared data bus. The \glref{MCU} can separately enable or disable a particular \glref{IC} throughout its chip select (\textit{CS}) pin. External pull-up resistors added to these selection lines set the disable mode as a default one. 
+
+As a FLASH memory, the S25FL256L device was selected \cite[dat:flash]. The \glref{SPI} interface of this $32\rm{[MB]}$ NOR memory (also available in $16\rm{[MB]}$ version) can operate in single, dual, or four-bit wide signal lines and also supports the quad peripheral interface (\glref{QPI}) commands. For the F-RAM device, we chose the CY15B102Q \cite[dat:fram]. This $2\rm{[Mb]}$ memory supports a dual or four-bit wide \glref{SPI} interface. The $100\rm{[nF]}$ decoupling capacitors connected to the power inputs of the memory \glref{IC}s were suggested by both devices datasheets. Additionally, a test point was placed on each signal line of both \glref{SPI} data buses. This addition may improve the potential debugging of these subsystems.
 
 \midinsert
     \clabel[sch:externalMemory]{External memory schematic}
     \picw=1\hsize \cinspic figures/schemes/externalMemory.pdf
-    \caption/f Schematic diagram of external memory circuitry.
+    \caption/f Schematic diagram of external memory circuitry. 
 \endinsert
 
 \secc PCB design
+
+\quad Locations and fanout of external memory circuitry are shown in figure \ref[pcb:ExternalMemory]. Devices of the FLASH subsystem are located at the top side of the \glref{PCB}, below the \glref{MCU}. Devices of the F-RAM subsystem are located at the bottom side of the \glref{PCB}, right from the \glref{MCU}. This device is the only one in the entire \glref{OBC} design with a non-fine pitch package. All of the \glref{SPI} test pads are placed from the bottom side of the \glref{PCB}.
 
 \midinsert
     \clabel[pcb:ExternalMemory]{External memory circuitry}
@@ -199,7 +217,7 @@ After a brief survey, we decided to implement the design using robust analog swi
 
 \sec CAN bus drivers
 
-\quad As described in chapter {\Magenta ???}, the SpaceCAN is considered a primary control and monitoring bus of a LibreCube spacecraft. Therefore it was required to ensure its full support by the \glref{OBC}. An external \glref{CAN} transceiver is usually added to a microcontroller, as its internal physical layer has only limited properties or does not even exists. The separate transceiver provides a stable and reliable physical environment. In our case, the \glref{MCU}'s BxCAN is compatible with both 2.0A and 2.0B \glref{CAN} specifications with a bit rate up to $1\rm{[MB\,s^{-1}]}$ \cite[dat:mcu]. As the \glref{MCU}'s \glref{CAN} drivers are equipped with the 2nd network layer only, an external transceiver implementation to our design was required.
+\quad The high-speed SpaceCAN is considered a primary control and monitoring bus of a LibreCube spacecraft. Therefore it was required to ensure its full support by the \glref{OBC}. An external \glref{CAN} transceiver is usually added to a microcontroller, as its internal physical layer has only limited properties or does not even exists. The separate transceiver provides a stable and reliable physical environment. In our case, the \glref{MCU}'s BxCAN is compatible with both 2.0A and 2.0B \glref{CAN} specifications with a bit rate up to $1\rm{[MB\,s^{-1}]}$ \cite[dat:mcu]. As the \glref{MCU}'s \glref{CAN} drivers are equipped with the 2nd network layer only, an external transceiver implementation to our design was required.
 
 \secc Schematic design
 
@@ -229,7 +247,7 @@ A well-designed \glref{CAN} network usually contains a terminating resistor, fil
 
 \sec Temperature monitoring
 
-\quad Temperature is a critical parameter in the space environment, and all electronic components are sensitive to its variation. Any increase in temperature may reduce their lifespan and even result in irreversible damage. Such a temperature increase can be evoked by an ambient temperature or by the component's activity. Most electronic components are designed to dissipate heat into the ambient air. This is problematic in the space due to its lack of an atmosphere. Instead, a component transfers heat into the \glref{PCB}'s thermal capacity.\fnote{And then dissipated into the spacecraft environment by the thermal radiation \cite[pap:tempModeling].} This conduction can produce temperature gradients throughout the \glref{PCB} and influence other components. Furthermore, a change in a component's temperature can indicate its malfunction. Sudden temperature increase is a common sign of a latch-up event \cite[app:badBoys]. Accordingly, the \glref{OBC} temperature is an essential part of a spacecraft telemetry and worthy of continuous monitoring. Professional \glref{OBC} manufacturers have also included multiple temperature sensors in their designs \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gauss].
+\quad Temperature is a critical parameter in the space environment, and all electronic components are sensitive to its variation. Any increase in temperature may reduce their lifespan and even result in irreversible damage. Such a temperature increase can be evoked by an ambient temperature or by the component's activity. Most electronic components are designed to dissipate heat into the ambient air. This is problematic in the space due to its lack of an atmosphere. Instead, a component transfers heat into the \glref{PCB}'s thermal capacity.\fnote{And then dissipated into the spacecraft environment by the thermal radiation \cite[pap:tempModeling].} This conduction can produce temperature gradients throughout the \glref{PCB} and influence other components. Furthermore, a change in a component's temperature can indicate its malfunction. Sudden temperature increase is a common sign of a latch-up event \cite[app:badBoys]. Accordingly, the \glref{OBC} temperature is a valuable part of a spacecraft telemetry and worthy of monitoring. Professional \glref{OBC} manufacturers have also included temperature sensors into their designs \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gauss].
 
 Standard temperature sensor technologies include integrated circuit (\glref{IC}) sensors, thermistors, resistance temperature detectors (\glref{RTD}s), and thermocouples. Their key features are compared in the guide to temperature sensing \cite[boo:temperature]. The \glref{IC} sensors appeared to be the best choice for our design challenge. These sensors are typical for their good accuracy, small footprint, easy complexity, and excellent linearity. A processing unit can usually communicate with the \glref{IC} sensors using one shared data bus and receive ready-to-use temperature data. In contrast, the implementation of the other sensor technologies requires extra analog components and circuitry. For example, amplifiers and \glref{ADC}s for thermistors and thermocouples or precise current sources and \glref{ADC}s for \glref{RTD}s. These non-\glref{IC} technologies would also use multiple \glref{MCU} pins and require additional calibration and shielding. As our goal was to design a compact PCB and a simple system, we decided to implement the \glref{IC} sensors approach.
 
@@ -285,32 +303,38 @@ Location and fanout of the temperature monitoring circuitry are shown in figure 
 
 
 
-%%%%% PROGRAM PORT
+%%%%% DEBUG CONNECTOR
 
-\sec Programming port
+\sec Debug connector
 
-\quad 
+\quad A host/target interface is required to program or debug the \glref{MCU}. This interface is made of three components. A hardware debug tool, an \glref{SWJ} connector and a cable connecting the host to the debug tool \cite[app:getStart]. As the \glref{SWJ} connector is a part of the target board, we had to implement it into our \glref{PCB} design. The MCU has an embedded \glref{SWJ-DP} interface that enables either a serial wire debug (\glref{SWD}) or a \glref{JTAG} probe to be connected to the target \cite[dat:mcu]. Considering that the \glref{SWD} is required by the ST-LINK, is performed using two pins (five needed for the \glref{JTAG}), and is the preferred debug port \cite[app:debugToolbox], we decided to implement the \glref{SWD} only. This decision slightly decreased the \glref{PCB} complexity and freed some \glref{MCU} pins for further usage. Also, the Sierra Board was not created with a mass production indent, the primary use case of the \glref{JTAG} debug.
+
+The implemented \glref{SWD} connector includes not only the two mandatory SWDIO and SWCLK pins. An NRST signal is also presented, enabling a connection under reset. This signal is required to take back the control of the board when it is not responding \cite[app:debugToolbox]. Also, a serial wire output (SWO) is available, providing an asynchronous serial communication channel. It has to be used in combination with a serial wire viewer (SWV) \cite[app:debugToolbox]. Additionally, one UART channel is also presented, providing a convenient communication option for the development and testing process. Pin assignment of the ST-LINK compatible connector of the Board Sierra is shown in figure \ref[mod:programPort].
+
+\midinsert
+    \clabel[mod:programPort]{Debug connector pinout}
+    \picw=0.45\hsize \cinspic figures/model/programPort.pdf
+    \caption/f Debug connector pinout.
+\endinsert
 
 \secc Schematic design
 
+\quad The programing connector is intended to be in direct touch with external hardware and human manipulation. As suggested in the application report \cite[app:badBoys], we decided to protect the associated signals against the \glref{ESD}. A \glref{TVS} diode array SP3012-06 \cite[dat:esd] was selected, as it provides the exact pin count as needed. All of the debugging \glref{MCU} signals were routed through this low-capacitance \glref{ESD} protection device. A schematic diagram of the circuitry is shown in picture \ref[sch:programPort]. Additionally, a $22\rm{[\Omega]}$ terminating resistor is connected in series to each signal. A $100\rm{[\Omega]}$ resistor and a ferrite bead are connected to the connector's power pin. Their purpose is to limit the transient current and suppresses high-frequency electronic noise that may affect the \glref{OBC} from an attached debugger.
+
 \midinsert
-    \clabel[sch:programPort]{Programming port schematic}
+    \clabel[sch:programPort]{Debug connector schematic}
     \picw=0.5\hsize \cinspic figures/schemes/programPort.pdf
-    \caption/f Schematic diagram of programming port circuitry.
+    \caption/f Schematic diagram of debug connector circuitry.
 \endinsert
 
 \secc PCB design
 
-\midinsert
-    \clabel[pcb:programPort]{Programming port circuitry}
-    \picw=0.85\hsize \cinspic figures/pcbs/programPort.pdf
-    \caption/f Highlighted location of programming port circuitry.
-\endinsert
+\quad Location and fanout of the debug connector circuitry are shown in figure \ref[pcb:programPort]. A small $4$x$2$ female header with a $1.27\rm{[mm]}$ pitch was selected as a debug connector. Its placement near the edge of the PCB in a cutout area should improve its accessibility and cable management. This \glref{SMD} connector is located on the \glref{PCB}'s top side, while the remaining electronics parts are placed below it, from the bottom side of the \glref{PCB}.
 
 \midinsert
-    \clabel[mod:programPort]{Programming port pinout}
-    \picw=0.45\hsize \cinspic figures/model/programPort.pdf
-    \caption/f Programming port pinout.
+    \clabel[pcb:programPort]{Debug connector circuitry}
+    \picw=0.85\hsize \cinspic figures/pcbs/programPort.pdf
+    \caption/f Highlighted location of debug connector circuitry.
 \endinsert
 
 
@@ -319,4 +343,6 @@ Location and fanout of the temperature monitoring circuitry are shown in figure 
 
 \sec Payload sector
 
-After discussing with VST supervisors, we decided to use the payload sector as a universal prototyping board. We implemented this feature to illustrate the purpose of this sector to accommodate any user-specific circuitry. 
+\quad As mentioned in chapter \ref[chap:payloadSector], only one-fourth of the entire PCB surface is occupied by the OBC circuitry. The remaining space is meant to be used as a user-defined payload sector. After discussing with VST supervisors, we decided to utilize this sector as a universal prototyping board. We implemented this feature to illustrate the purpose of this sector - to accommodate any user-specific circuitry. We expect that a future user of the Board Sierra would replace the universal board with his mission-specific circuitry.
+
+The design of the universal prototyping board is visible in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom]. Its main feature is a grid of $0.85\rm{[mm]}$ wide THT holes with a plating utilized for an SMD soldering. This THT array is surrounded and divided by power bus rails, providing $5\rm{[V]}$, $3.3\rm{[V]}$, and GND connections. This power delivery is sourced directly from the main PC104 header, bypassing the power management circuitry. However, each of the rails is fused by a 1206 packaged ceramic fuse. In the lower part of the prototyping board, two universal SO-24 footprints are available on each PCB side for rapid prototyping. Every pad of these footprints is routed to a small circular pad for easier soldering.

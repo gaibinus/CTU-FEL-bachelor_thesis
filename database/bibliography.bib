@@ -1,3 +1,4 @@
+
 %%%%% application notes
 
 @MISC{app:oscDes,
@@ -26,6 +27,13 @@
   option = {titlepost:{Getting started with STM32L4 Series and STM32L4+ Series  hardware development}},
   ednote = {Geneva: STMicroelectronics, c2019. Rev 8},
   %url = {https://www.st.com/resource/en/application_note/dm00125306-getting-started-with-stm32l4-series-and-stm32l4-series-hardware-development-stmicroelectronics.pdf},
+}
+
+@MISC{app:debugToolbox,
+  title = {AN4989},
+  option = {titlepost:{STM32 microcontroller debug toolbox}},
+  ednote = {Geneva: STMicroelectronics, c2021. Rev 3},
+  %url = {https://www.st.com/resource/en/application_note/dm00354244-stm32-microcontroller-debug-toolbox-stmicroelectronics.pdf},
 }
 
 @MISC{app:tps2594Calc,
@@ -108,6 +116,8 @@
   %url = {https://klc.kicad.org/},
 }
 
+
+
 %%%%% datasheets
 
 @MISC{dat:mcuSeries,
@@ -174,10 +184,31 @@
 }
 
 @MISC{dat:temperature,
-  title = {DS22203CMCP9804},
+  title = {DS22203C},
   option = {titlepost:{MCP9804: ±0.25°C Typical Accuracy Digital Temperature Sensor}},
   ednote = {Chandler: Microchip Technology Inc., 2012. Rev May 2017},
-  %url = {https://www.ti.com/lit/ds/symlink/tcan1051g-q1.pdf?ts=1617425521718},
+  %url = {http://ww1.microchip.com/downloads/en/devicedoc/22203c.pdf},
+}
+
+@MISC{dat:flash,
+  title = {002-00124},
+  option = {titlepost:{S25FL256L/S25FL128L 256-Mb (32-MB)/128-Mb (16-MB), 3.0 V FL-L Flash Memory}},
+  ednote = {Chandler: Microchip Technology Inc., 2018. Rev *H},
+  %url = {https://www.cypress.com/file/316171/download},
+}
+
+@MISC{dat:fram,
+  title = {001-89166},
+  option = {titlepost:{CY15B102Q 2-Mbit (256K×8) Serial (SPI) Automotive F-RAM}},
+  ednote = {Chandler: Microchip Technology Inc., 2017. Rev *F},
+  %url = {https://www.cypress.com/file/175731/download},
+}
+
+@MISC{dat:esd,
+  title = {TVS Diode Array (SPA® Diodes)},
+  option = {titlepost:{Low Capacitance ESD Protection - SP3012 Series}},
+  ednote = {Chicago: Littelfuse Inc., 2020. Rev JC.10/26/20},
+  %url = {https://www.littelfuse.com/~/media/electronics/datasheets/tvs_diode_arrays/littelfuse_tvs_diode_array_sp3012_datasheet.pdf.pdf},
 }
 
 
@@ -305,7 +336,7 @@
 }
 
 @ARTICLE{pap:radiationSurvey
-  title={A survey of radiation hardening by design (rhbd) techniques for electronic systems for space application},
+  title={A survey of radiation hardening by design (RHDB) techniques for electronic systems for space application},
   author={Trivedi, Rakesh and Mehta, Usha S},
   journal={International Journal of Electronics and Communication Engineering \& Technology (IJECET)},
   year={2016},
@@ -331,19 +362,47 @@
   %url = {https://www.hindawi.com/journals/sv/2014/740102/},
 }
 
+@BOOK{boo:framInSpace,
+  author = {Sansoe, Claudio and Tranchero, Maurizio},
+  title = {Use of FRAM Memories in Spacecrafts},
+  book = {Ferroelectrics - Applications},
+  year = {2011},
+  isbn = {978-953-307-456-6},
+  doi = {10.5772/18529},
+  %url = {https://core.ac.uk/download/pdf/11424758.pdf},
+}
+
+@ARTICLE{pap:ramSurvey,
+  author={Sheikholeslami, A. and Gulak, P.G.},
+  title={A survey of circuit innovations in ferroelectric random-access memories}, 
+  journal={Proceedings of the IEEE}, 
+  year={2000},
+  doi={10.1109/5.849164},
+  %url = {https://ieeexplore.ieee.org/document/849164},
+}
+
+@ARTICLE{pap:memoryDamage,
+  author={Fetahović, Irfan and Pejović, Milič and Vujisić, Miloš},
+  title={Radiation Damage in Electronic Memory Devices},
+  journal={International Journal of Photoenergy},
+  year={2013},
+  publisher={Hindawi Publishing Corporation},
+  issn={1110-662X},
+  doi={10.1155/2013/170269},
+  %url={https://doi.org/10.1155/2013/170269},
+}
+
+@ARTICLE{pap:mramSurvey,
+  author = {Nguyen, D.N. and Irom, Farokh},
+  title = {Radiation effects on MRAM},
+  year = {2007},
+  doi = {10.1109/RADECS.2007.5205554},
+  %url={https://www.researchgate.net/publication/224578454_Radiation_effects_on_MRAM},
+}
+
 
 
 %%%%%
-
-@manual{DEInPqCRdobEdM4e,
-  title = {AN4760},
-  subtitle = {Quad-SPI interface on STM32 microcontrollers and microprocessors},
-  publisher = {STMicroelectronics},
-  address = {Geneva},
-  year = {c2020},
-  edition = {Rev 3},
-  url = {https://www.st.com/resource/en/application_note/dm00227538-quadspi-interface-on-stm32-microcontrollers-and-microprocessors-stmicroelectronics.pdf},
-}
 
 @manual{pSQjLDGsux7XAtfA,
   title = {PCI/104-Express™ \& PCIe/104™ Specification},

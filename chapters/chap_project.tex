@@ -1,17 +1,56 @@
 
 \chap VST104 project
 
-%%%%% CUBESATS
 
-\sec CubeSat concept
 
-Despite growing interest from industry in CubeSats as proper means of technology demonstration, such platforms are still primarily considered as an educational tool. \cite[pap:fromDesignToOperation]
+%%%%% CUBESAT BACKGROUND
+
+\sec CubeSat background
+
+
+
+%%%%% CUBESAT CONCEPT
+
+\secc CubeSat concept
+
+\quad CubeSats are modular spacecraft from a picosatellite class, usually constructed of similar components and limited to specific dimensions and materials. CubeSats are being developed in several sizes, which are based on a standard 1U unit \cite[boo:nasa101]. This unit is defined as being $100.0 ± 0.1\rm{[mm]}$ wide and $113.5 ± 0.1\rm{[mm]}$ tall, with a limited mass of $1.33\rm{[kg]}$ \cite[app:cubeSat]. Numerous CubeSats also include deployable subsystems, such as antennas, probes, or solar panels that exceed the normative dimensions when deployed \cite[pap:tempModeling]. For illustration, some of the already launched CubeSats are shown in figure \ref[img:cubesats].
+
+\midinsert
+    \clabel[img:cubesats]{Existing CubeSats}
+    \picw=0.75\hsize \cinspic figures/illustrations/cubesats.pdf
+    \caption/f Photos of already launched CubeSats of various sizes. 1U SkCube (left), 2U Asgardia-1 (center), 3U EnduroSat platform (right). Sources: TASR, Asgardia, SmallSat.
+\endinsert
+
+\"CubeSats are very popular among universities and other non-commercials groups globally. Larger space companies are developing CubeSat missions in-house to train new employees and assess the possibilities of new technologies" \cite[boo:cubesatTemp]. \"Several types of CubeSats have been developed and deployed for a specific mission, such as research and development satellites, earth remote sensing satellites, and space tethers satellites" \cite[pap:vibration].
+
+\"A CubeSat must conform to specific criteria that control factors such as its shape, size, and weight. The standardized aspects of CubeSats make it possible for companies to mass-produce components and offer off-the-shelf parts. As a result, the engineering and development of CubeSats become less costly than highly customized small satellites. The standardized shape and size also reduces costs associated with transporting them to, and deploying them into, space" \cite[boo:nasa101]. Some of the standards were introduced by the concept's originators in the CubeSat Design Specification \cite[app:cubeSat]. A team from the \glref{JPL} has compiled the CubeSat principles in The CubeSat Approach to Space Access \cite[pap:approachToSpace].
+
+
+
+%%%%% PC/104 STANDARD
+
+\label[chap:PC104standard]
+\secc PC/104 standard
+
+\quad \"The CubeSat industry has adopted the PC/104 specifications \cite[app:pc104] as a de-facto standard for electronic boards. Moreover, such specifications provide mechanical and electrical benefits towards CubeSat fabrication beyond the compatibility with different structure and electronics suppliers. Following the PC/104 specifications, all electronic boards must measure $90.17$ x $95.89\rm{[mm]}$, and the electric bus must allocate four rows with 26 contacts of standard $2.54\rm{[mm]}$ spacing through-hole (\glref{THT}) headers" \cite[pap:fromDesignToOperation]. 
+
+The PC/104 boards are meant to be stacked on top of each other, forming a rigid structure. The 104 pin headers provide a electrical connection between the individual boards, creating one electrical system. Excluding the headers, the PC/104 boards are firmly attached together with M3 standoffs placed in the corner mounting holes. This combination of the shared electrical bus and M3 bolts improves the stiffness provided by the CubeSat’s structure and simplifies the internal harnessing \cite[pap:fromDesignToOperation]. 
+
+As the PC/104 standard allows some freedom for changes, a slightly modified PC/104 board template was used in this project. The template was designed by the LibreCube initiative \cite[sta:libreBoard] and its drawings are shown in figure \ref[img:PC104]. The only modification done to the original PC/104 board are $1.9\rm$ x $20.3\rm{[mm]}$ cutouts located on the board's four edges. These cutouts are designed to accommodate CubeSat's auxiliary cables.
+
+\midinsert
+    \clabel[img:PC104]{PC/104 board dimensions}
+    \picw=1\hsize \cinspic figures/illustrations/PC104Drawing.pdf
+    \caption/f Technical drawings of the LibreCube PC/104 board. Overall geometry (left) and edge cutouts (right). All dimensions are in $\rm{[mm]}$. Source: LibreCube.
+\endinsert
 
 %%%%% OBC
 
 \secc On Board Computer
 
 The three main design parameters of the electronic systems of small satellites are power consumption, physical dimensions and radiation environment behavior. \cite[boo:framInSpace]
+
+
 
 %%%%% EXISTING OBC MODULES
 
@@ -21,9 +60,12 @@ The three main design parameters of the electronic systems of small satellites a
 \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]
 
 
+
 %%%%% VST104 MOTIVATION
 
 \sec Project motivation
+
+Despite growing interest from industry in CubeSats as proper means of technology demonstration, such platforms are still primarily considered as an educational tool. \cite[pap:fromDesignToOperation]
 
 It is possible to start programming the satellite at the beginning of the project. However, some software developing practices, such as Test-driven Development (TDD), recommend testing the software while it is being developed. Therefore, in practice, software should be directly programmed on the target computer. \cite[pap:fromDesignToOperation]
 
@@ -43,6 +85,10 @@ It is possible to start programming the satellite at the beginning of the projec
 
 \sec Project workflow
 
+\secc Main header pinout
+
+In addition, the allocation and distribution topology for power are not taken over, nor standardized for CubeSats, leading to compatibility issues [6]. Therefore, when PC/104 is mentioned as standard in relation to CubeSats, this refers to a fixed physical wiring harness and the mechanical layout and not the data bus or pin allocation \cite[pap:reliability].
+
 %%%%% COMPONENTS FOOTPRINTS
 
 \secc Components footprints
@@ -51,22 +97,6 @@ It is possible to start programming the satellite at the beginning of the projec
 
 It is a common feature in modern PCB design software such as KiCad to support a 3D visualization. Besides pads, copper traces or
 
-%%%%% BOMs
-
 \secc Bills of materials
 
 \secc PCB assembly
-
-%%%%% PCI104
-
-\label[chap:PC104standard]
-\sec PCI104 standard
-
-%%%%% MECHANICAL
-
-\secc Mechanical specification
-
-%%%%% PINOUT
-
-\secc Main header pinout
-

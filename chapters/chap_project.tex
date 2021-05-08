@@ -1,11 +1,17 @@
 
+%%%%% VST104 PROJECT
+
 \chap VST104 project
 
+\quad This project is being conducted and sponsored by the company VisionSpace Technologies (\glref{VST}), as mentioned in chapter \ref[chap:intro]. The project name, VST104, is a compilation of the company abbreviation \glref{VST} and standard CubeSat board format PC/104 (section \ref[chap:PC104standard]). In this chapter, we present a brief introduction into related space industry background together with the project's motivation, goals and workflow.
 
 
-%%%%% CUBESAT BACKGROUND
 
-\sec CubeSat background
+%%%%% PROJECT BACKGROUND
+
+\sec Project background
+
+\quad The VST104 project is about designing electronics hardware for space applications. Therefore a fundamental orientation in a part of the space industry jargon is required. In this section, we provide a short introduction to the corresponding space industry concepts. We briefly explain what CubeSats, PC/104 boards, Fltasats, and onboard computers (\glref{OBC}s) are. A summary of recently available OBC modules is also listed.
 
 
 
@@ -18,12 +24,12 @@
 \midinsert
     \clabel[img:cubesats]{Existing CubeSats}
     \picw=0.75\hsize \cinspic figures/illustrations/cubesats.pdf
-    \caption/f Photos of already launched CubeSats of various sizes. 1U SkCube (left), 2U Asgardia-1 (center), 3U EnduroSat platform (right). Sources: TASR, Asgardia, SmallSat.
+    \caption/f Photos of already launched CubeSats of various sizes. 1U SkCube (left), 2U Antelsat (center), 3U Grifex (right). Sources: TASR, GAUSS, NASA.
 \endinsert
 
-\"CubeSats are very popular among universities and other non-commercials groups globally. Larger space companies are developing CubeSat missions in-house to train new employees and assess the possibilities of new technologies" \cite[boo:cubesatTemp]. \"Several types of CubeSats have been developed and deployed for a specific mission, such as research and development satellites, earth remote sensing satellites, and space tethers satellites" \cite[pap:vibration].
+\"CubeSats are very popular among universities and other non-commercials groups globally. Larger space companies are developing CubeSat missions in-house to train new employees and assess the possibilities of new technologies." \cite[boo:cubesatTemp] \"Several types of CubeSats have been developed and deployed for a specific mission, such as research and development satellites, earth remote sensing satellites, and space tethers satellites." \cite[pap:vibration]
 
-\"A CubeSat must conform to specific criteria that control factors such as its shape, size, and weight. The standardized aspects of CubeSats make it possible for companies to mass-produce components and offer off-the-shelf parts. As a result, the engineering and development of CubeSats become less costly than highly customized small satellites. The standardized shape and size also reduces costs associated with transporting them to, and deploying them into, space" \cite[boo:nasa101]. Some of the standards were introduced by the concept's originators in the CubeSat Design Specification \cite[app:cubeSat]. A team from the \glref{JPL} has compiled the CubeSat principles in The CubeSat Approach to Space Access \cite[pap:approachToSpace].
+\"A CubeSat must conform to specific criteria that control factors such as its shape, size, and weight. The standardized aspects of CubeSats make it possible for companies to mass-produce components and offer off-the-shelf parts. As a result, the engineering and development of CubeSats become less costly than highly customized small satellites. The standardized shape and size also reduces costs associated with transporting them to, and deploying them into, space." \cite[boo:nasa101] Some of the standards were introduced by the concept's originators in the CubeSat Design Specification \cite[app:cubeSat]. A team from the \glref{JPL} has compiled the CubeSat principles in The CubeSat Approach to Space Access \cite[pap:approachToSpace].
 
 
 
@@ -32,11 +38,9 @@
 \label[chap:PC104standard]
 \secc PC/104 standard
 
-\quad \"The CubeSat industry has adopted the PC/104 specifications \cite[app:pc104] as a de-facto standard for electronic boards. Moreover, such specifications provide mechanical and electrical benefits towards CubeSat fabrication beyond the compatibility with different structure and electronics suppliers. Following the PC/104 specifications, all electronic boards must measure $90.17$ x $95.89\rm{[mm]}$, and the electric bus must allocate four rows with 26 contacts of standard $2.54\rm{[mm]}$ spacing through-hole (\glref{THT}) headers" \cite[pap:fromDesignToOperation]. 
+\quad \"The CubeSat industry has adopted the PC/104 specifications \cite[app:pc104] as a de-facto standard for electronic boards. Moreover, such specifications provide mechanical and electrical benefits towards CubeSat fabrication beyond the compatibility with different structure and electronics suppliers. Following the PC/104 specifications, all electronic boards must measure $90.17$ x $95.89\rm{[mm]}$, and the electric bus must allocate four rows with 26 contacts of standard $2.54\rm{[mm]}$ spacing through-hole (\glref{THT}) headers." \cite[pap:fromDesignToOperation]
 
 The PC/104 boards are meant to be stacked on top of each other, forming a rigid structure. The 104 pin headers provide a electrical connection between the individual boards, creating one electrical system. Excluding the headers, the PC/104 boards are firmly attached together with M3 standoffs placed in the corner mounting holes. This combination of the shared electrical bus and M3 bolts improves the stiffness provided by the CubeSat’s structure and simplifies the internal harnessing \cite[pap:fromDesignToOperation]. 
-
-As the PC/104 standard allows some freedom for changes, a slightly modified PC/104 board template was used in this project. The template was designed by the LibreCube initiative \cite[sta:libreBoard] and its drawings are shown in figure \ref[img:PC104]. The only modification done to the original PC/104 board are $1.9\rm$ x $20.3\rm{[mm]}$ cutouts located on the board's four edges. These cutouts are designed to accommodate CubeSat's auxiliary cables.
 
 \midinsert
     \clabel[img:PC104]{PC/104 board dimensions}
@@ -44,11 +48,29 @@ As the PC/104 standard allows some freedom for changes, a slightly modified PC/1
     \caption/f Technical drawings of the LibreCube PC/104 board. Overall geometry (left) and edge cutouts (right). All dimensions are in $\rm{[mm]}$. Source: LibreCube.
 \endinsert
 
+As the PC/104 standard allows some freedom for changes, a slightly modified PC/104 board template was used in this project. The template was designed by the LibreCube initiative \cite[sta:libreBoard] and its drawings are shown in figure \ref[img:PC104]. The only modification done to the original PC/104 board are $1.9\rm$ x $20.3\rm{[mm]}$ cutouts located on the board's four edges. These cutouts are designed to accommodate CubeSat's auxiliary cables.
+
+
+
+%%%%% FLATSAT TEST BENCH
+
+\secc Flatsat test bench
+
+\quad During the hardware and software debugging and development, physical access to a particular CubeSat module is usually required. As the spacing between the stacked PC/104 boards is only $15.24\rm{[mm]}$ \cite[app:pc104], it is not easy nor practical to work with these already stacked modules. Therefore, a test bench called Flatsat is often used to mount all of the CubeSats modules next to each other on a plain surface. This bench should substitute an electrical bus and connect all of the PC/104 headers together. Some of the available Flatsats accommodate additional features such as an inbuild power supply, sun power emulator, or \glref{ESD} protection. A modular Flatsat is shown in figure \ref[img:aalto_flatsat].
+
+\midinsert
+    \clabel[img:aalto_flatsat]{PC/104 board dimensions}
+    \picw=0.80\hsize \cinspic figures/illustrations/flatsat_aalto.pdf
+    \caption/f The first version of the Aalto-3 Flatsat. Source: AaltoSatellites.
+\endinsert
+
+
+
 %%%%% OBC
 
-\secc On Board Computer
+\secc On-Board Computer
 
-The three main design parameters of the electronic systems of small satellites are power consumption, physical dimensions and radiation environment behavior. \cite[boo:framInSpace]
+\quad \"The onboard computer (\glref{OBC}) in CubeSat is the module that acts as a bridge connecting the other modules with each other. It supervises many of the tasks done by the different modules of a satellite and performs housekeeping and monitoring to ensure the health and status of those modules. The hardware and software design of the OBC mainly depends on the mission of the CubeSat." \cite[pap:obc] The three main design parameters for \glref{OBC}'s electronic subsystems are power consumption, physical dimensions, redundancy, and radiation environment behavior \cite[boo:framInSpace].
 
 
 
@@ -57,7 +79,17 @@ The three main design parameters of the electronic systems of small satellites a
 \label[chap:existingOBCmodules]
 \secc Existing OBC modules
 
-\cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]
+\quad \"Despite growing interest from industry in CubeSats as means of technology demonstration, such platforms are still primarily considered as an educational tool." \cite[pap:fromDesignToOperation] Various universities and research institutions around the globe are developing and launching their own CubeSats. The failure rate of these university-build spacecrafts was estimated slightly below 50\% in the first six months of their operation, as stated by two surveys from 2013 \cite[pap:failRate2012] and 2016 \cite[pap:failRate2014]. Since the \glref{OBC} is a critical module and has caused 20\% of these failures \cite[pap:failRate2014], it might be counterproductive to consider these designs as reference ones. Some of these CubeSats were although highly successful, and their \glref{OBC} modules are worth mentioning. For example, the Atmel's \glref{ARM} based \glref{OBC} of StudSat \cite[obc:studsat], or the 16-bit MSP430 microprocessor based \glref{OBC}s of Libertad-1 \cite[obc:libertad] and RAX-2 \cite[obc:rax2].
+
+A popular option for research institutions is to buy a professionally designed and already flight-proven CubeSat. Multiple space companies have therefore developed their own designs, including PC/104 \glref{OBC} modules. Some of the recently available \glref{OBC}s on the global market are: a rugged DP-OBC-0402 by Data Patterns \cite[obc:dataPatterns], a high-performance iOBC by ISIS \cite[obc:isis] (figure \ref[img:existing_obcs]), state of the art IMT CubeSat \glref{OBC} by IMT \cite[obc:imt], a lightweight and cost-saving CubeSat \glref{OBC} by German Orbital Systems \cite[obc:gos], a motherboard for harsh environment CubeSat Kit Motherboard by Pumpkin \cite[obc:pumpkin], a general-purpose ABACUS by Gauss \cite[obc:gauss], an \'always-on' operation KRYTEN-M3 by AAC Clyde Space \cite[obc:aac], an telemetry, tracking \& command and data processing unit Antelope \glref{OBC} by Antelope \cite[obc:anteleope], a space-qualified processor unit NANOSATPRO by STM \cite[obc:nanosatpro], an \glref{OBC} for mission-critical space application NanoMind A712D by GomSpace \cite[obc:gom] and a highly integrated main bus unit SatBus 3C2 by NanoAvionics \cite[obc:satbus] (figure \ref[img:existing_obcs]). Regarding numerous successful flights and continuous development in a highly competitive industry, we can consider these \glref{OBC}s as state-of-the-art designs. Multiple references to these modules could be found through the thesis.
+
+%\cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro, obc:gom]
+
+\midinsert
+    \clabel[img:existing_obcs]{Existing OBCs and Flatsat}
+    \picw=0.95\hsize \cinspic figures/illustrations/obcs.pdf
+    \caption/f Photos of existing professionally developed OBCs. iOBC by ISIS (left) and SatBus 3C2 by NanoAvionics (right). Sources: ISIS, NanoAvionics.
+\endinsert
 
 
 
@@ -65,38 +97,112 @@ The three main design parameters of the electronic systems of small satellites a
 
 \sec Project motivation
 
-Despite growing interest from industry in CubeSats as proper means of technology demonstration, such platforms are still primarily considered as an educational tool. \cite[pap:fromDesignToOperation]
+\quad \"Increasing the amount of science and housekeeping data increases a mission's value, but this comes with extended costs and challenges, especially for CubeSat missions. The \glref{VST} focuses on telemetry data compression, mainly the \glref{CCSDS} standard \'Robust compression of fixed-length housekeeping data' (POCKET+) to tackle this problem. The algorithm performance was verified, and the \glref{VST} developed a concept supporting multiple frame sizes." \cite[abs:cubesatIndustryDays] This includes the very first implementation of the POCKET+ in a hardware description language and synthesis for a radiation-hardened \glref{FPGA}.
 
-It is possible to start programming the satellite at the beginning of the project. However, some software developing practices, such as Test-driven Development (TDD), recommend testing the software while it is being developed. Therefore, in practice, software should be directly programmed on the target computer. \cite[pap:fromDesignToOperation]
+To enable the use and future development of this concept on CubeSats, the VST104 project was established by the company. The project's main goal was set to develop a series of onboard computer (\glref{OBC}) CubeSat modules serving as a software-defined platform. These boards should host a single or redundant \glref{OBC} paired with an \glref{FPGA} for hardware acceleration. It is essential to state that the VST104 project is still ongoing. Our contribution (thus the content of this thesis) was limited to developing early versions of the \glref{OBC} modules and their auxiliaries. The motivation and expectation behind every one of them, together with the project's open-source principles and contribution to CubeSat communities, are explained in the rest of this section.
 
-\secc Board Sierra
 
-\secc Board Delta
 
-\secc Element Foxtrot
+%%%% VST104 BOARDS FAMILY
 
-%%%%% OPEN SOURCE
+\secc VST104 boards family
+
+\quad The family of boards developed under the VST104 project has four members at the time of writing this thesis. All of them were designed by ourselves as our contribution to this project. The role of each board in the project and its potential use cases are listed below. A detailed description of the boards is provided in the remaining chapters.
+
+\begitems
+    * {\sbf Board Zero:} A prototyping module in the PC/104 format. This board accommodates an array of THT pads with multiple $3.3\rm{[V]}$, $5\rm{[V]}$ and \glref{GND} power rails, and four universal SO-24 footprints. The Board Zero should provide an efficient tool for rapid-prototyping temporary circuits with \glref{THT} or \glref{SMD} technology. Since the design of this board is very basic, no specific description is provided in this thesis. Nevertheless, the same design was implemented to a payload sector of the Board Sierra and is described in section \ref[chap:sierra_payloadSector]. A 3D render of the Board Zero is shown in figure 100.
+    * {\sbf Board Sierra:} A single onboard compute (\glref{OBC}) module in the PC/104 format. This board is the most important part of our contribution. The goal was to design a universal \glref{OBC} while fulfilling most of the space industry requirements and keeping the manufacturing cost down \cite[abs:openSourceWorkshop]. This module should serve as a template for future VST140 \glref{OBC} variants. Its significant payload sector is designed to be replaced with additional circuitry, particularly with an FPGA. The \glref{VST} proposed a development of this board to obtain a CubeSat computer module for future development and testing of various algorithms. Chapters \ref[chap:BoardSierra] and \ref[chap:BoardSierraSubsystems] are fully devoted to this board.
+    * {\sbf Board Delta:} A double redundant PC/104 \glref{OBC} module. \"This board implements the Board Sierra in a double redundant configuration. The potential of this board is in user scenarios where reliability is essential. In case of system fraud, a supreme logic should simply switch between the identical \glref{OBC}s sharing (almost) the same software and electrical characteristics." \cite[abs:openSourceWorkshop] More details are provided in chapter \ref[chap:BoardDelta].
+    * {\sbf Element Foxtrot:} A FlatSat test bench with an inbuilt power supply. This auxiliary board should serve as a development and show-off test bench, capable of hosting and powering up multiple PC/104 modules.  \"Element Foxtrot is an ideal tool for testing and developing different CubeSat modules, temporary replacement for power distribution unit (\glref{PDU}), and a nice way to present already developed modules." \cite[abs:openSourceWorkshop] Features and design of this FlatSat are fully described in chapter \ref[chap:ElementFoxtrot].
+\enditems
+
+Future expansion of the VST104 board family is planned, and the \glref{VST} team is currently working on new boards. The previously mentioned extension of the Board Sierra with an \glref{FPGA} and its supporting circuitry should be the first one of them \cite[abs:cubesatIndustryDays].
+
+
+
+%%%%% COMMUNITY AND OPEN SOURCE
 
 \label[chap:openSource]
-\secc Open source
+\secc Community \& open-source
+
+\quad Concerning the previously explained motivation behind this project, there is no interest by the \glref{VST} in developing their own CubeSat. However, some future software tests may require additional CubeSat systems. It should also be possible to easily integrate the VST104 modules into a third-party CubeSat during a flight opportunity. Therefore cooperation with existing organizations developing CubeSats is essential.
+
+At the beginning of the project, some of the VST employees were already members of the LibreCube initiative. This organization aims to develop ready-for-use CubeSat elements for space and earth exploration missions. The VST supervisors decided to follow the LibreCube PC/104 template and their header pins assignment (as described in sections \ref[chap:PC104standard] and \ref[chap:mainHeaderPinout]).  This opened the possibility of combining the VST104 boards with any LibreCube element while contributing to such an exciting initiative.
+
+Another organization that the \glref{VST} supervisors chose to cooperate with is named TUDSaT. It is a research group formed by students at the local technical university of Darmstadt. These students are interested in space exploration, and one of their projects is developing a 1U CubeSat. Throughout our contribution to the VST104 family, we were in touch with their project leaders. We discussed some issues, and we both slightly tweaked our project for better compatibility. At the end of our internship, the TUDSaT received a fully assembled Board Sierra module together with an Element Foxtrot.
+
+The \glref{VST} supervisors intended the project to be fully open-source from its beginning. This decision was determined by multiple reasons. As the simultaneously developed \glref{VST} software stack is free and open-source \cite[abs:cubesatIndustryDays], proprietary hardware would make no sense. Being open-source is also required to be able to support and contribute to the two previously mentioned organizations. Both the LibreCube and TUDSaT share strong open-source philosophies. Lastly, the open-source concept goes hand in hand with CubeSats' educational and research principles. The entire VST104 project is licensed under the \'Strongly Reciprocal CERN Open Hardware Licence Version 2' (CERN-OHL-S) \cite[lic:cern] and is publicly accessible on a company GitHub repository.
+
 
 
 %%%%% PROJECT WORKFLOW
 
 \sec Project workflow
 
+\quad The VST104 project turned out to be quite complex, and we had to undergo multiple design steps. Many of them were related to a specific VST104 board, but some were more general. In this section, we address the design steps common for the entire project. We discuss the KiCad environment, the \glref{VST} libraries, the project's GitHub repositories, the PC/104 pin assignment, and the assembly of the VST104 boards.
+
+
+
+%%%%% KICAD AND ITS PLUGINS
+
+\label[chap:kicadPlugins]
+\secc KiCad and its plugins
+
+\quad Since the VST104 project is mainly about designing electronics hardware, proper PCB design software had to be selected. There are multiple professional software packages available, such as Altium Designer or CadSoft EAGLE. Although these design tools come with powerful features, they do not fit with the open-source policy of the project (section \ref[chap:openSource]). The VST supervisors chose the KiCad EDA instead. This tool is probably the most popular one in the open hardware and makers community. On top of that, both LibreCube and TUDSaT use KiCad for their projects.
+
+As the KiCad is an open-source project itself, various extensions were created by the community. These action plugins are not included in the official KiCad distribution but are generally well-behaved and helpful. We have also used some of them during the development of the VST104 boards to compensate for missing features. Particularly:
+
+\begitems
+    * {\sbf Interactive HTML BOM}\urlnote{https://github.com/openscopeproject/InteractiveHtmlBom} for more convenient \glref{PCB} assembly.
+    * {\sbf Teardrops}\urlnote{https://github.com/NilujePerchut/kicad_scripts/tree/master/teardrops} to generate teardrops patterns for traces and pads.
+    * {\sbf Replicate layout}\urlnote{https://github.com/MitjaNemec/Kicad_action_plugins/tree/master/replicate_layout} to copy and paste chunks of traced circuitry.
+    * {\sbf RF-Tools for KiCAD}\urlnote{https://github.com/easyw/RF-tools-KiCAD} to measure and tune differential pairs.
+\enditems
+
+
+
+%%%%% VST104 KICAD LIBRARIES
+
+\label[chap:vst104Libraries]
+\secc VST104 KiCad libraries
+
+\quad Although the KiCad official symbol libraries are pretty large, they do not include some of the electronic components used in the VST104 boards. The majority of these missing symbols correspond to specialized integrated circuits (\glref{IC}s). To resolve this problem, we created a project-related symbol library containing all of the missing symbols. We designed these symbols accordingly to components’ datasheets and the KiCad library conventions \cite[app:kiCadLib].  If a symbol was available in the official library, we have used it.
+
+Every electronic component needs to be properly attached to the \glref{PCB}'s surface. An arrangement of pads required to solder the component on the \glref{PCB} is called a footprint. Components with different standardized packages require corresponding footprints. These footprints are usually available for download on various websites or are included in the KiCad official libraries. Although it is comfortable to use these premade footprints, this approach brings inconsistency and dependency to the \glref{PCB} design. Therefore we decided to create each of the used footprints by ourselves, following reference designs in components' datasheets and the KiCad library conventions \cite[app:kiCadLib]. 
+
+It is a common feature in modern PCB design software such as KiCad to support a 3D visualization. Besides pads, copper traces, or drill holes, the 3D render can visualize particular electronic components. We consider this tool crucial for creating documentation or presenting the VST104 project. However, to enable this feature, WRL or STEP files containing the components' 3D models are required. Thus, while creating an individual component's footprint, we also searched the web for its 3D model files. The WRL provides support for material properties, allowing superior 3D rendering. Unfortunately, it is not so common for component manufacturers to offer this type of model. In such a case, a fake WRL was created from the available STEP file.
+
+The {\tt VST104-Libraries} are structured into three separate folders: {\tt VST140_symbols}, {\tt VST104_footprints}, and {\tt VST104_logos}. At the time of writing this thesis, the {\tt VST104_sybols} contain 16 symbols. The total number of 84 individual footprints and their associated WRL and STEP 3D models are included in the {\tt VST_footprints}. The {\tt VST104_logos} was not described in this section by now. This folder contains 14 silkscreen graphics of various logos in different sizes (\glref{VST}, open-source Hardware, and LibreCube logo). These logos are used through all of the VST104 boards. 
+
+
+
+%%%%% GITHUB REPOSITOT
+
+\secc GitHub repository
+
+\quad The entire VST104 project is available on the company's GitHub. The main repository is called {\tt VST104}\urlnote{https://github.com/visionspacetec/VST104} and acts as a project crossroad. It lists connections to other repositories and provides a brief description of the project itself. Each of the VST104 boards has its own repository. This GitHub structure was suggested by the LibreCube community. Its main benefit is the possibility to push and review changes to the different boards separately. The \glref{VST} libraries also have their separate GitHub repository linked as a submodule to each of the boards. With this approach, only one shared library exists instead of multiple board-limited libraries with duplicity content.
+
+
+
+%%%% MAIN HEADER PINOUT
+
+\label[chap:mainHeaderPinout]
 \secc Main header pinout
 
-In addition, the allocation and distribution topology for power are not taken over, nor standardized for CubeSats, leading to compatibility issues [6]. Therefore, when PC/104 is mentioned as standard in relation to CubeSats, this refers to a fixed physical wiring harness and the mechanical layout and not the data bus or pin allocation \cite[pap:reliability].
+\quad Despite the international effort to achieve modularity of the CubeSats, the pinout of the main PC/104 header changes between different manufacturers and missions. \"The allocation and distribution topology for power are not taken over, nor standardized for CubeSats, leading to compatibility issues. Therefore, when PC/104 is mentioned as standard in relation to CubeSats, this refers to a fixed physical wiring harness and the mechanical layout, and not the data bus or pin allocation." \cite[pap:reliability] Therefore, as our first contribution to the VST104 project, we had to come with a reasonable pin assignment.
 
-%%%%% COMPONENTS FOOTPRINTS
+After researching publicly available pinouts of different CubeSat manufacturers and related organizations (NanoAvionics, ISIS, Gomspace, Endurosta, TUDSaT, LibreCubeSat, etc.) we proposed and implemented PC/104 pin assignment as shown in figure \ref[app_vst:vst104_pinout]. Some of the signals with not so self-explaining names are explained in table \ref[tab:vst104_pinout]. This so-called \glref{VTS} pinout is present in all of the VST104 boards. Our main goal during its creation was to provide the highest compatibility with other CubeSats as possible while accommodating various data buses and system maintenance signals.
 
-\secc Components footprints
+It is essential to state that the currently presented \glref{VTS} pinout is a subject of change in the nearest future. Our presentation of the VST104 project at the Open Source CubeSat Workshop 2020 \cite[abs:openSourceWorkshop] started a discussion about the PC/104 header pin assignment. As a follow-up to this workshop, multiple online meetings regarding the pinout hold place. Organizations developing open-source CubeSats modules, such as \glref{VTS}, LibreCube, AcubeSAT, or SatNOGS, are currently consolidating their pin assignments in order to become more compatible and possibly even uniformed.
 
-\quad Every electronic component needs to be properly attached to the \glref{PCB}'s surface. An arrangement of pads required to solder the component on the \glref{PCB} is called a footprint. Components with different standardized packages require corresponding footprints. These footprints are usually available for download on various websites or are included in the KiCad official libraries. Although it is comfortable to use these premade footprints, this approach brings inconsistency and dependency to the \glref{PCB} design. Therefore we decided to create each of the used footprints by ourselves, following reference designs in components' datasheets and KiCad library conventions \cite[app:kiCadLib].
 
-It is a common feature in modern PCB design software such as KiCad to support a 3D visualization. Besides pads, copper traces or
 
-\secc Bills of materials
+%%%%% PCB ASSEMBLY
 
 \secc PCB assembly
+
+\quad A manual assembly of an electronics board is a time-consuming and, therefore, costly operation. This applies especially to double-sided boards with as many fine-pitch components as the Board Sierra and Delta have. To address this problem, we designed all VST104 boards accordingly to \glref{PCB} industry requirements so that the boards can be populated with electronics components by an assembly machine. The required design properties were, for example, respecting the minimal fabrication clearance of a component or strictly following the suggested solder paste distribution areas. We also addressed these requirements during the previously mentioned creation of \glref{VST} footprints (described in section \ref[chap:vst104Libraries]) while creating the documentation, courtyard, and paste layers (named as {\tt .Fab}, {\tt .CrtYd}, {\tt .Paste} in the KiCad jargon).
+
+Exported Gerber files containing all of the fabrication and documentation layers are available for the VST104 boards in their GitHub repositories. Multiple versions of the bill of materials (\glref{BOM}) files are also available for each board. This includes files generated with i) a standard KiCad BOM export, ii) the Interactive HTML BOM plugin (described in section \ref[chap:kicadPlugins]), and iii) a project list on Mouser Electronics.
+
+Despite the mentioned possibility of an automated assembly, we have manually populated a couple of the boards by ourselves. As the service of machine assembly is worthy only for higher quantities, it was not suitable for our development and testing purposes. By the end of the internship, we assembled four Board Sierra modules, together with four Element Foxtrot flatsats. Our approach can be summarized in the following steps: i) spread a solder paste to one side of the PCB using a stencil sheet, ii) place all of the electronics components to the \glref{PCB} with the help of an optical microscope and precise tweezers, iii) preheat the \glref{PCB} and sequentially solder the components with a hot air soldering station, iv) repeat the process with the other side of the board (if any). This method, especially step number ii, was tricky due to a small size of the components (most of the Board Sierra resistors footprints are 0201). However, all of the assembled boards turned out good and passed a visual and electrical inspection. Photographs of the assembled VST104 boards are listed in figures 100, 200, and 300.

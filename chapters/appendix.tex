@@ -9,19 +9,46 @@
     \caption/f Assignment of this bachelor's thesis.
 \endinsert
 
+
+
+%%%%% VST104 PINOUT
+
+\app VST104 pinout
+
+\midinsert
+    \clabel[app_vst:vst104_pinout]{VST104 pinout}
+    \picw=0.95\hsize \cinspic figures/diagrams/vst104_pinout.pdf
+    \caption/f VST104 pinout: assignment of PC/104 header pins used in the VST104 project. Legend: red - mandatory, orange - optional, green - user defined, blue - legacy pins.
+\endinsert
+
+\midinsert \clabel[tab:vst104_pinout]{VST104 pinout}
+    \ctable{cl}{
+        Signal name &   Signal purpouse \crl
+        {\tt UART_RCS_}   & UART used explicitly for the RCS$^*$\cr
+        {\tt GLO_SYNC}      & clock signal of global synchronization \cr
+        {\tt GLO_FAULT}     & signal setting a global fault flag \cr
+        {\tt GLO_KS_}     & standard kill switch signal (active high) \cr
+        {\tt CPU_WD_}     & watchdog signal for each of the OBCs (CPUs) \cr
+        {\tt CPU_MODE}      & OBC selection signal used in Board Delta \cr
+    }
+    \caption/t A brief explanation of selected signals from the VST104 pinout. A more specific definition will be proved ed by the VST in the future. $*$ Radio Communication Subsystem
+\endinsert
+
+
+
 %%%%% BOARD SIERRA
 
 \app Board Sierra
 
 \midinsert
     \clabel[app_vis:sierraTop]{Board Sierra 3D top}
-    \picw=0.80\hsize \cinspic figures/model/top.pdf
+    \picw=0.80\hsize \cinspic figures/model/sierra_top.pdf
     \caption/f Visualization of the Board Sierra captured from its top side.
 \endinsert
 
 \midinsert
     \clabel[app_vis:sierraBottom]{Board Sierra 3D bottom}
-    \picw=0.80\hsize \cinspic figures/model/bottom.pdf
+    \picw=0.80\hsize \cinspic figures/model/sierra_bottom.pdf
     \caption/f Visualization of the Board Sierra captured from its bottom side.
 \endinsert
 

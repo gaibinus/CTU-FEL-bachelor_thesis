@@ -1,10 +1,16 @@
 
 %%%%% BOARD SIERRA
 
+\label[chap:BoardSierra]
 \chap Board Sierra
 
-\quad In this chapter, we are addressing the design process and overall characteristics of the Board Sierra. Design challenges, development decisions, and final features are explained in detail. Particular attention is given to the onboard computer, from now referred to as the \glref{OBC}. A detailed description of its subsystems is listed in chapter \ref[chap:BoardSierraSubmodules].
+\quad In this chapter, we are addressing the design process and overall characteristics of the Board Sierra. Design challenges, development decisions, and final features are explained in detail. Particular attention is given to the onboard computer, from now referred to as the \glref{OBC}. A detailed description of its subsystems is listed in chapter \ref[chap:boardSierraSubsystems].
 
+\midinsert
+    \clabel[img:sierra_miniature]{Board Sierra 3D render}
+    \picw=0.95\hsize \cinspic figures/model/sierra_miniature.pdf
+    \caption/f TODO.
+\endinsert
 
 
 
@@ -41,11 +47,25 @@ Considering the size and budget requirements of our \glref{OBC}, we chose to imp
     * {\sbf External clock sources:} The \glref{MCU} is equipped with two external clock sources for improved and more reliable clock generation and timing. Low-speed external $32.768\rm{[kHz]}$ oscillator and high-speed external $26\rm{[MHz]}$ oscillator. This oscillator can be temporarily disabled by the \glref{MCU} to achieve better power consumption.
     * {\sbf Robust power management:} Two separate power lines with $3.3\rm{[V]}$ and $5\rm{[V]}$ ratings supply the \glref{OBC}. A robust power management circuitry is present separately on these lines, providing tunable over and under-voltage protection, over-current protection, amplified current monitoring output, kill switching, and simultaneous power down.
     * {\sbf Isolation of the peripherals:} The \glref{OBC} can communicate with other CubeSat modules using a 2x \glref{CAN} bus, 3x \glref{$\rm{I^2C}$}, 4x \glref{UART}, 2x \glref{SPI}, 22 \glref{GPIO} pins, and 5 maintenance signals. All the peripherals are $5\rm{[V]}$ tolerant and connected to the PC104 main header thru separate analog switches. These isolators are independently controlled by the \glref{MCU} and provide a complete or selected disconnection from the rest of the CubeSat.
-    * {\sbf Redundant external memory:} Two subsystems of triple redundant external memories are available for \glref{MCU}'s additional data storage. This triple redundancy ensures data validity in the radiation-rich environment, although the single-mode is also supported. The first memory subsystem is a 3x $32\rm{[MB]}$ Flash connected via the Quad-\glref{SPI} interface, while the second one is a 3x $2\rm{[Mb]}$ F-ram using the \glref{SPI}.
+    * {\sbf Redundant external memory:} Two subsystems of triple redundant external memories are available for \glref{MCU}'s additional data storage. This triple redundancy ensures data validity in the radiation-rich environment, although the single-mode is also supported. The first memory subsystem is a 3x $32\rm{[MB]}$ FLASH connected via the Quad-\glref{SPI} interface, while the second one is a 3x $2\rm{[Mb]}$ F-ram using the \glref{SPI}.
     * {\sbf CAN bus peripherals:} Two \glref{CAN} transceivers provide the \glref{OBC}'s support of a high-speed \glref{CAN} bus.  These transceivers ensure a voltage level conversion ($3.3\rm{[V]}$ for the \glref{MCU}, $5\rm{[V]}$ for the CubeSat) and support communication speeds up to $250\rm{[kB\,s^{-1}]}$.
     * {\sbf Temperature monitoring:} Seven \glref{$\rm{I^2C}$} temperature sensors are spread over the entire \glref{OBC}. These sensors monitor the temperature of essential submodules, 2x \glref{MCU}, 2x power management, 2x \glref{CAN} bus drivers, and 1x external memories. The \glref{MCU} can power on or off these sensors to save some power or resolve a latch-up even.
     * {\sbf Maximal payload sector:} The PCB surface occupied by the \glref{OBC} circuitry is shrink to the minimal size possible. The remaining area is considered as a payload sector that can accommodate any user-defined modules. In our case, we decided to place a universal soldering array with exposed power lines all over this sector.
 \enditems
+
+
+
+%%%%% HARDWARE ARCHITECTURE
+
+\secc Hardware architecture
+
+\quad In the rest of this thesis, we address each of the previously mentioned features as a separate \glref{OBC} subsystem. A diagram of the \glref{OBC} hardware architecture is shown in figure \ref[dia:hwArchitecture]. This diagram shows relations and used communication busses between all of the subsystems. For their detailed description, refer to the following chapter \ref[chap:boardSierraSubsystems].
+
+\midinsert
+    \clabel[dia:hwArchitecture]{Sierra HW architecture}
+    \picw=0.75\hsize \cinspic figures/diagrams/hwArchitecture.pdf
+    \caption/f Diagram of the Board Sierra's OBC hardware architecture.
+\endinsert
 
 
 
@@ -95,7 +115,7 @@ The summary of power consumption of the specific electronics components is liste
         Processing unit     & -     & -     & -     & -     & -     & -    \cr
         Power management    & -     & -     & -     & -     & -     & -   \cr
         Header isolation    & -     & -     & -     & -     & -     & -    \cr
-        Flash memories      & -     & -     & -     & -     & -     & -     \cr
+        FLASH memories      & -     & -     & -     & -     & -     & -     \cr
         F-ram memories      & -     & -     & -     & -     & -     & -     \cr
         Dual CAN bus        & -     & -     & -     & -     & -     & -     \cr
         Temp. monitoring    & -     & -     & -     & -     & -     & -
@@ -113,11 +133,11 @@ The summary of power consumption of the specific electronics components is liste
 \quad A selection of particular electronic components is a vital part of designing circuitry. Usually, various electronic components share the same functionality and are available from different manufacturers. After filtering the available components by specific functionality (with respect to \ref[chap:componentsCertification] and \ref[chap:powerConsumption]), it was common to find various suitable candidates. Therefore, additional criteriums had to be set to resolve the selection:
 
 \begitems
-    * {\sbf Price:} As this \glref{OBC} is not primarily designed for an actual space flight (as explained in \ref[chap:introduction]), an individual component's price is not negligible. With a lower overall cost of the \glref{OBC}, a broader project expansion in the LibreCube community can be achieved. Thus components with sufficient attributes but lower price were favored.
+    * {\sbf Price:} As this \glref{OBC} is not primarily designed for an actual space flight (as explained in \ref[chap:intro]), an individual component's price is not negligible. With a lower overall cost of the \glref{OBC}, a broader project expansion in the LibreCube community can be achieved. Thus components with sufficient attributes but lower price were favored.
     
     * {\sbf Footprint:} As a result of maximizing the PC104 payload sector, the actual \glref{OBC} area was significantly decreased. Therefore components of smaller dimensions available in fine-pitch packages (e.g. \glref{SSOP} or \glref{QFN}) were preferred. The same logic applies to passive components such as resistors and capacitors, resulting in a 0201 package (0603 in metric) being the most widely used in this design. After researching the technical capabilities and related costs of \glref{PCB} manufacturers, we decided not to use the \glref{BGA}-packaged components. Their significantly smaller footprints would require more precise fanout, resulting in increased manufacturing difficulty and price.
     
-    * {\sbf Distributor:} We considered it important to use only typically stocked components available from the global distributors. In our case, Mouser electronic\fnote{http://www.mouser.com/}.This rule should repeal any future problems in components sourcing or logistics. Therefore, the availability of a specific component in this distributor was a selection factor.
+    * {\sbf Distributor:} We considered it important to use only typically stocked components available from the global distributors. In our case, Mouser electronic\urlnote{http://www.mouser.com/}.This rule should repeal any future problems in components sourcing or logistics. Therefore, the availability of a specific component in this distributor was a selection factor.
 \enditems
 
 
@@ -155,7 +175,7 @@ Although, following the proper design rules and standards created for automotive
 
 \quad The\glref{PCB}'s dimensions, geometry, and layout of the main connector and mounting holes are fully specified by the PC104 standard, as described in chapter \ref[chap:PC104standard]. The only modification added to this template are $1.9$ x $20.3\rm{[mm]}$ cutouts on the module's four edges. These cutouts were introduced in the LibreCube board specification and are designed to accommodate CubeSat's auxiliary power and data cables \cite[sta:libreBoard].
 
-Regarding the manufacturing price and complexity, the\glref{PCB} would ideally be a four-layer one. This means two copper layers for signal traces, a power distribution layer, and a ground plane. Unfortunately, the two signal layers would not be enough to accommodate complex\glref{OBC}'s circuitry. Therefore, we had to choose a six-layer\glref{PCB} with the following setup: i) signal layers: top, second inner, bottom; ii) ground plane layers: first inner, fourth inner; iii) power distribution layers: third inner. \"An additional benefit of the added layers is improved thermal dissipation, as adding a layer of copper to the circuit board can significantly decrease the resulting temperatures" \cite[pap:tempModeling].
+Regarding the manufacturing price and complexity, the\glref{PCB} would ideally be a four-layer one. This means two copper layers for signal traces, a power distribution layer, and a ground plane. Unfortunately, the two signal layers would not be enough to accommodate complex \glref{OBC}'s circuitry. Therefore, we had to choose a six-layer\glref{PCB} with the following setup: i) signal layers: top, second inner, bottom; ii) ground plane layers: first inner, fourth inner; iii) power distribution layers: third inner. \"An additional benefit of the added layers is improved thermal dissipation, as adding a layer of copper to the circuit board can significantly decrease the resulting temperatures" \cite[pap:tempModeling].
 
 Additional parameters of the \glref{PCB} manufacturing such as material, isolation and copper thickness, surface finish and solder mask types are not specified in this thesis nor the VST104 project. It is the responsibility of the potential user to customize these parameters accordingly to the requirements of the specific application. In such a case, we encourage the user to follow relevant sections of the \glref{ECCS} standard \cite[sta:ECSS-12C].
 
@@ -171,4 +191,4 @@ The first and fourth inner layers are ground plane layers. Their purpose is to c
 
 A copper plane with a solid fill is also located in the third inside layer. This plane is attached to a $3.3\rm{[V]}$ power source, and its task is to connect all required components to this power bus. This layer also accommodates a $5\rm{[V]}$ power distribution routing. Its traces are $0.45\rm{[mm]}$ wide with multiple vias to minimize the potential voltage drop.
 
-The final \glref{PCB} routing highlighted by the particular \glref{OBC}'s subsystems is shown throughout multiple figures in chapter \ref[chap:BoardSierraSubmodules]. General principles of good routing were implemented throughout the \glref{PCB} design. These include steep turns avoiding, differential pairs matching, or sliver and peelable prevention \cite[sta:ECSS-60C]. If available, fanout and routing suggestions included in electronic components datasheets were followed. As suggested by the \glref{ECSS} \cite[sta:ECSS-12C], a teardrop finish was applied to all of the pads using the KiCad Teardrops extension listed in chapter \ref[chap:openSource]. It is important to mention that the current KiCad v5 does not support advanced design settings common for professional software such as Altium Designer or CadSoft EAGLE. Our approach to handling this problem was adding extra margins to the few parameters listed in KiCad, which increased the overall tolerance. The final \glref{PCB} design passed a design rule check (\glref{DRC}) with various parameters set according to manufacturers' standards and \glref{ECSS} suggestions \cite[sta:ECSS-60C].
+The final \glref{PCB} routing highlighted by the particular \glref{OBC}'s subsystems is shown throughout multiple figures in chapter \ref[chap:boardSierraSubsystems]. General principles of good routing were implemented throughout the \glref{PCB} design. These include steep turns avoiding, differential pairs matching, or sliver and peelable prevention \cite[sta:ECSS-60C]. If available, fanout and routing suggestions included in electronic components datasheets were followed. As suggested by the \glref{ECSS} \cite[sta:ECSS-12C], a teardrop finish was applied to all of the pads using the KiCad Teardrops extension listed in chapter \ref[chap:openSource]. It is important to mention that the current KiCad v5 does not support advanced design settings common for professional software such as Altium Designer or CadSoft EAGLE. Our approach to handling this problem was adding extra margins to the few parameters listed in KiCad, which increased the overall tolerance. The final \glref{PCB} design passed a design rule check (\glref{DRC}) with various parameters set according to manufacturers' standards and \glref{ECSS} suggestions \cite[sta:ECSS-60C].

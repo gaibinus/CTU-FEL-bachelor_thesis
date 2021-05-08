@@ -1,10 +1,18 @@
 
 %%%%% BOARD SIERRA - SUBMODULES
 
-\label[chap:BoardSierraSubmodules]
-\chap Board Sierra - submodules
+\label[chap:boardSierraSubsystems]
+\chap Board Sierra - subsystems
 
-\quad In this chapter, we are addressing each of the \glref{OBC}'s submodules as listed in chapter \ref[chap:capabilitesAndFeatures]. The motivation, requirements, development decisions, functionality, schematic design, and \glref{PCB} design of each submodule are explained in detail. These descriptions are illustrated by functional diagrams, schematic diagrams, and \glref{PCB} fanouts.
+\quad In this chapter, we provide all details about the individual \glref{OBC} subsystems. We address one of them in each section. Firstly, we explain the importance of the subsystem in theory, and then we describe our approach and the design decisions we made. We also present and comment on each subsystem's electronics scheme design together with the design of its layout and tracing on the Board Sierra \glref{PCB}. For a better image of the overall location and layout of these OBC subsystems, refer to figure \ref[img:sierra_subsystems]. 
+
+\circleparams={\ratio=1 \fcolor=\White \lcolor=\Black \hhkern=0.9pt \vvkern=0.9pt}
+
+\midinsert
+    \clabel[img:sierra_subsystems]{Sierra subsystems summary}
+    \picw=1\hsize \cinspic figures/model/sierra_subsystems.pdf
+    \caption/f Location and layout of the Board Sierra \glref{OBC} subsystems. The top side of the \glref{OBC} is displayed on the left, whereas the bottom side is on the right. Legend: {\typosize[8/]\incircle{⟨1⟩}} microcontroller, {\typosize[8/]\incircle{⟨2⟩}} external clock sources, {\typosize[8/]\incircle{⟨3⟩}} power management, {\typosize[8/]\incircle{⟨4⟩}} peripheral isolators, {\typosize[8/]\incircle{⟨5⟩}} triple-redundant FLASH memory, {\typosize[8/]\incircle{⟨6⟩}} triple-redundant F-ram memory, {\typosize[8/]\incircle{⟨7⟩}} \glref{CAN} bus transceivers, {\typosize[8/]\incircle{⟨8⟩}} onboard temperature sensors, and {\typosize[8/]\incircle{⟨9⟩}} \glref{SWD} connector and  circuitry.
+\endinsert
 
 
 
@@ -12,7 +20,7 @@
 
 \sec Microcontroller
 
-\quad The processing unit is the most important part of the \glref{OBC}. Professional designs use \quad{MCU}s with a wide variety of different instruction set architectures \cite[obc:dataPatterns, obc:imt, obc:pumpkin, obc:gauss, obc:nanosatpro]. However, the \glref{ARM} architecture seems to be the most popular \cite[obc:isis, obc:gos, obc:aac, obc:anteleope]. This architecture is known for its good multiprocessing support, low power consumption, affordable pricing, and existing applications in various fields. Considering these benefits and influenced by the LibreCube initiative, existing TUDSaT's \glos{OBC} project, and most importantly the \glref{VST} supervisors, we decided to pick an STM32 microprocessor.
+\quad The processing unit is the most important part of the \glref{OBC}. Professional designs use \quad{MCU}s with a wide variety of instruction set architectures \cite[obc:dataPatterns, obc:imt, obc:pumpkin, obc:gauss, obc:nanosatpro]. However, the \glref{ARM} architecture seems to be the most popular \cite[obc:isis, obc:gos, obc:aac, obc:anteleope, obc:gom, obc:satbus]. This architecture is known for its good multiprocessing support, low power consumption, affordable pricing, and existing applications in various fields. Considering these benefits and influenced by the LibreCube initiative, existing TUDSaT's \glos{OBC} project, and most importantly the \glref{VST} supervisors, we decided to pick an STM32 microprocessor.
 
 Our task was to choose a particular model of this 32-bit, Arm and Cortex-M based \glref{MCU}. Aiming rather for a low-power than high-performance characteristics, we decided to select an L series. Particularly the L4 series as it combines the largest flash memory size with the highest number of general-purpose input/output pins (\glref{GPIO}s) \cite[dat:mcuSeries]. Although, only one device from the L4 series is equipped with two CAN bus channels. As the presence of a second bus is crucial for our double-redundant approach, the STM32L496xx option was selected. This family comes in six different packages. Avoiding all of the \glref{BGA}-like ones (as described in section \ref[chap:additionalParams]) narrows the selection to Zx, Vx, and Rx variants. The Zx is the most capable one in terms of flash size and \glref{GPIO} count. Therefore the STM32L496ZG (where G stands for extended operating temperature range) was our final choice \cite[dat:mcu]. From now on, we will refer to this particular device as the \glref{MCU}. Some of its key characteristics are listed in table \ref[tab:microcontroller].
 
@@ -89,7 +97,7 @@ where $C_L$ is the crystal load capacitance, $f$ is the crystal oscillation freq
 
 \sec Power management
 
-\quad The electric power subsystem (\glref{EPS}) is known to be the most vital subsystem of a spacecraft. Its reliability and error handling should be ensured by the power control and distribution unit (\glref{PDCU}). However, it is a good practice by professional manufacturers to include an additional power monitoring and control to their \glref{OBC} module designs \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]. We have to implement circuitry that can sense a power bus malfunction and, as a response, power down the \glref{OBC}. This feature is also important for some of the \glref{OBC} on-earth user cases. During a hardware development or a system presentation, the user might misconnect the power line or use an unsupported power source by a mistake.
+\quad The electric power subsystem (\glref{EPS}) is known to be the most vital subsystem of a spacecraft \cite[pap:failRate2012, pap:failRate2014]. Its reliability and error handling should be ensured by the power control and distribution unit (\glref{PDCU}). However, it is a good practice by professional manufacturers to include an additional power monitoring and control to their \glref{OBC} design \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro, obc:gom, obc:satbus]. We have to implement circuitry that can sense a power bus malfunction and, as a response, power down the \glref{OBC}. This feature is also beneficial for some of the \glref{OBC} on-earth user cases. During a hardware development or a presentation, the user might misconnect the power line or use an unsupported power source by a mistake.
 
 \midinsert
     \clabel[dia:powerManagement]{Power management diagram}
@@ -174,7 +182,7 @@ After a brief survey, we decided to implement the design using robust analog swi
 
 \sec External memory
 
-\quad One of the \glref{OBC}'s important tasks is collecting and processing data from other submodules present in the spacecraft. As this payload and housekeeping communication might generate a wide data flow, external memory storage is usually dedicated to the \glref{MCU} \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro]. This secondary memory should be writable, preferably fast, and non-volatile (can retain the stored information after power off) to support quick buffering and permanent data storage. Commonly used semiconductor memory technologies matching the criteria are EPROM, EEPROM, FLASH, and various NVRAMs. 
+\quad One of the \glref{OBC}'s important tasks is collecting and processing data from other submodules present in the spacecraft. As this payload and housekeeping communication might generate a wide data flow, external memory storage is usually dedicated to the \glref{MCU} \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gos, obc:pumpkin, obc:gauss, obc:aac, obc:anteleope, obc:nanosatpro, obc:gom, obc:satbus]. This secondary memory should be writable, preferably fast, and non-volatile (can retain the stored information after power off) to support quick buffering and permanent data storage. Commonly used semiconductor memory technologies matching the criteria are EPROM, EEPROM, FLASH, and various NVRAMs. 
 
 A great threat to memory storage is space radiation, as presented in chapter \cite[chap:radiationAndRedundancy]. In a single event upset (SEU), the storage node charge in memory is upset due to particle strike and change its logic level \cite[pap:radiationSurvey]. This effect results in random bit-flips throughout the memory address space, corrupting the stored information. Approaches handling this damage are based on i) more durable or even rad-hard memory \glref{IC}s, ii) triple modular redundancy, and iii) error detecting and correcting codes. As the last approach is a software implementation, only the first two could be used in our design.
 
@@ -247,7 +255,7 @@ A well-designed \glref{CAN} network usually contains a terminating resistor, fil
 
 \sec Temperature monitoring
 
-\quad Temperature is a critical parameter in the space environment, and all electronic components are sensitive to its variation. Any increase in temperature may reduce their lifespan and even result in irreversible damage. Such a temperature increase can be evoked by an ambient temperature or by the component's activity. Most electronic components are designed to dissipate heat into the ambient air. This is problematic in the space due to its lack of an atmosphere. Instead, a component transfers heat into the \glref{PCB}'s thermal capacity.\fnote{And then dissipated into the spacecraft environment by the thermal radiation \cite[pap:tempModeling].} This conduction can produce temperature gradients throughout the \glref{PCB} and influence other components. Furthermore, a change in a component's temperature can indicate its malfunction. Sudden temperature increase is a common sign of a latch-up event \cite[app:badBoys]. Accordingly, the \glref{OBC} temperature is a valuable part of a spacecraft telemetry and worthy of monitoring. Professional \glref{OBC} manufacturers have also included temperature sensors into their designs \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gauss].
+\quad Temperature is a critical parameter in the space environment, and all electronic components are sensitive to its variation. Any increase in temperature may reduce their lifespan and even result in irreversible damage. Such a temperature increase can be evoked by an ambient temperature or by the component's activity. Most electronic components are designed to dissipate heat into the ambient air. This is problematic in the space due to its lack of an atmosphere. Instead, a component transfers heat into the \glref{PCB}'s thermal capacity.\fnote{And then dissipated into the spacecraft environment by the thermal radiation \cite[pap:tempModeling].} This conduction can produce temperature gradients throughout the \glref{PCB} and influence other components. Furthermore, a change in a component's temperature can indicate its malfunction. Sudden temperature increase is a common sign of a latch-up event \cite[app:badBoys]. Accordingly, the \glref{OBC} temperature is a valuable part of a spacecraft telemetry and worthy of monitoring. Professional manufacturers have also included temperature sensors into their \glref{OBC} \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gauss, obc:gom, obc:satbus].
 
 Standard temperature sensor technologies include integrated circuit (\glref{IC}) sensors, thermistors, resistance temperature detectors (\glref{RTD}s), and thermocouples. Their key features are compared in the guide to temperature sensing \cite[boo:temperature]. The \glref{IC} sensors appeared to be the best choice for our design challenge. These sensors are typical for their good accuracy, small footprint, easy complexity, and excellent linearity. A processing unit can usually communicate with the \glref{IC} sensors using one shared data bus and receive ready-to-use temperature data. In contrast, the implementation of the other sensor technologies requires extra analog components and circuitry. For example, amplifiers and \glref{ADC}s for thermistors and thermocouples or precise current sources and \glref{ADC}s for \glref{RTD}s. These non-\glref{IC} technologies would also use multiple \glref{MCU} pins and require additional calibration and shielding. As our goal was to design a compact PCB and a simple system, we decided to implement the \glref{IC} sensors approach.
 
@@ -341,6 +349,7 @@ The implemented \glref{SWD} connector includes not only the two mandatory SWDIO 
 
 %%%%% PAYLOAD SECTOR
 
+\label[chap:sierra_payloadSector]
 \sec Payload sector
 
 \quad As mentioned in section \ref[chap:payloadSector], only one-fourth of the entire PCB surface is occupied by the OBC circuitry. The remaining space is meant to be used as a user-defined payload sector. After discussing with the VST supervisors, we utilized this sector as a universal prototyping board. We implemented this feature to illustrate the purpose of this sector - to accommodate any user-specific circuitry. We expect that a future user of the Board Sierra would replace the universal board with his mission-specific circuitry.

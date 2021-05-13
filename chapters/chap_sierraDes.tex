@@ -9,7 +9,7 @@
 \midinsert
     \clabel[img:sierra_miniature]{Board Sierra 3D render}
     \picw=0.95\hsize \cinspic figures/model/sierra_miniature.pdf
-    \caption/f 3D render of the Board Sierra from the top (left) and the bottom (right) side. A detailed version of this visualization is available in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom]. 
+    \caption/f 3D render of the Board Sierra from the top (left) and the bottom (right) side. A real scaled version of this visualization is available in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom]. 
 \endinsert
 
 
@@ -74,7 +74,7 @@ Considering the size and budget requirements of our \glref{OBC}, we chose to imp
 \label[chap:componentsSelection]
 \sec Electronic components
 
-\quad Electronic components are the building stones of each electronic hardware. Big commercial, military, or research spacecrafts use specialized components designed, modified, or particularly selected for space applications. CubeSats, on the other hand, use in most cases commercial off-the-shelf (\glref{COTS}) components that are not specifically designed for application within the space environment \cite[pap:tempModeling]. \"The use of \glref{COTS} components is certainly an attractive option for the development team of small satellite projects. Lead times are short, and recent developments in personal computing equipment and consumer electronic allow for high performance." \cite[pap:thermal] Furthermore, these components have proven their low risk to mission success \cite[pap:approachToSpace]. In the VST104 project, we have also decided to follow this trend and to use \glref{COTS} components. In this section, we describe various requirements applied to these components and the criteria of their selection.
+\quad Electronic components are the building stones of each electronic hardware. Big commercial, military, or research spacecrafts use specialized components designed, modified, or particularly selected for space applications. CubeSats, on the other hand, use in most cases commercial off-the-shelf (\glref{COTS}) components that are not specifically designed for application within the space environment \cite[pap:tempModeling]. \"The use of \glref{COTS} components is certainly an attractive option for the development team of small satellite projects. Lead times are short, and recent developments in personal computing equipment and consumer electronic allow for high performance." \cite[boo:cubesatTemp] Furthermore, these components have proven their low risk to mission success \cite[pap:approachToSpace]. In the VST104 project, we have also decided to follow this trend and to use \glref{COTS} components. In this section, we describe various requirements applied to these components and the criteria of their selection.
 
 
 
@@ -109,18 +109,17 @@ Not only a component's power consumption but also its efficiency is an important
 The summary of power consumption of the specific electronics components is listed in table \ref[tab:componentsConsumption]. Overall power consumption of specific \glref{OBC}'s submodules is listed in table \ref[tab:subsystemConsumption]. It sums power consumptions of all \glref{IC}s and losses on pull-down/pull-up resistors in the particular subsystem. For the computation, two assumptions were made: i) full functionality of the subsystem, ii) input voltage range as described in table \ref[tab:powerManagement].
 
 \midinsert \clabel[tab:subsystemConsumption]{Subsystems consumption}
-    \ctable{ccccccc}{
-        \vspan2{Subsystem}  & \mspan3[c]{$3.3\rm{[V]}$ current $\rm{[mA]}$} & \mspan3[c]{$5\rm{[V]}$ current $\rm{[mA]}$} \cr
-                            & Min.  & Typ.  & Max.  & Min.  & Typ.  & Max. \crl
-        Processing unit     & -     & -     & -     & -     & -     & -    \cr
-        Power management    & -     & -     & -     & -     & -     & -   \cr
-        Header isolation    & -     & -     & -     & -     & -     & -    \cr
-        FLASH memories      & -     & -     & -     & -     & -     & -     \cr
-        F-ram memories      & -     & -     & -     & -     & -     & -     \cr
-        Dual CAN bus        & -     & -     & -     & -     & -     & -     \cr
-        Temp. monitoring    & -     & -     & -     & -     & -     & -
+    \ctable{lcl}{
+        Subsystem           & Typ. current $\rm{[mA]}$  & Note \crl
+        Processing unit     & \phantom{0}20 @ 3.3[V] & at $80\rm{[MHz]}$ clock \cr
+        Power management    & 0.3 @ \phantom{3.}-[V] & for each $3.3\rm{[V]}$ and $5\rm{[V]}$ bus \cr 
+        Header isolation    & 0.6 @ 3.3[V] & every isolator is opened \cr
+        FLASH memories      & \phantom{.}30 @ 3.3[V] & with one active memory \cr
+        F-ram memories      & \phantom{3.}5 @ 3.3[V] & with one active memory \cr
+        Dual \glref{CAN} bus & \phantom{.}40 @ \phantom{3.}5[V]  & for each active \glref{CAN} bus \cr
+        Temp. monitoring    & 1.6 @ 3.3[V] & as a whole group \cr 
     }
-    \caption/t A rough estimation of particular subsystems' power consumption. Legend: min. - subsystem in standby mode, typ. - subsystem in typical operation, max. - subsystem peak performance. This table should be used for orientation purposes only. A potential user is encouraged to conduct a proper measurement for each Board Sierra application.
+    \caption/t A rough estimation of subsystems power consumption during a normal operation at room temperature. This table should be used for orientation purposes only. A potential user is encouraged to conduct a proper measurement for each \glref{OBC} application.
 \endinsert
 
 

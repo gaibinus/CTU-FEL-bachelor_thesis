@@ -36,56 +36,65 @@
 
 
 
-%%%%% BOARD SIERRA
+%%%%% OVERSIZED RENDERS AND SCHEMES
 
-\app Board Sierra
+\app Over-sized renders and schemes
 
 \midinsert
-    \clabel[app_vis:sierraTop]{Board Sierra 3D top}
-    \picw=0.80\hsize \cinspic figures/model/sierra_top.pdf
-    \caption/f Visualization of the Board Sierra captured from its top side.
+    \clabel[app_vis:zeroTop]{Board Zero render top}
+    \picw=90.17mm \cinspic figures/model/zero_top.pdf
+    \caption/f Visualization of the Board Zero captured from its top side. The dimensions of this 3D render match the actual size of the board 1:1.
 \endinsert
 
 \midinsert
-    \clabel[app_vis:sierraBottom]{Board Sierra 3D bottom}
-    \picw=0.80\hsize \cinspic figures/model/sierra_bottom.pdf
-    \caption/f Visualization of the Board Sierra captured from its bottom side.
+    \clabel[app_vis:sierraTop]{Board Sierra render top}
+    \picw=90.17mm \cinspic figures/model/sierra_top.pdf
+    \caption/f Visualization of the Board Sierra captured from its top side. The dimensions of this 3D render match the actual size of the board 1:1.
+\endinsert
+
+\midinsert
+    \clabel[app_vis:sierraBottom]{Board Sierra render bottom}
+    \picw=90.17mm \cinspic figures/model/sierra_bottom.pdf
+    \caption/f Visualization of the Board Sierra captured from its bottom side. The dimensions of this 3D render match the actual size of the board 1:1.
+\endinsert
+
+\midinsert
+    \clabel[app_vis:foxtrotTop]{Element Foxtrot render top}
+    \picw=14.64cm \cinspic figures/model/foxtrot_top.pdf
+    \caption/f Visualization of the Element Foxtrot captured from its top side. The dimensions of this 3D render match the actual size of the board 1:1.38.
 \endinsert
 
 \midinsert
     \clabel[app_sch:microcontroller]{Microcontroller schematic}
-    \picw=0.92\hsize \cinspic figures/schemes/microcontroller.pdf
-    \caption/f Schematic diagram of microcontroller and its auxiliaries.
+    \picw=0.9\hsize \cinspic figures/schemes/microcontroller.pdf
+    \caption/f Schematic diagram of the microcontroller and its auxiliaries.
 \endinsert
 
 
-%%%%% additional materials
+
+%%%%% ADDITIONAL MATERIALS
 
 \app Additional materials
 
 \midinsert \clabel[tab:componentsConsumption]{Components consumption}
-    \ctable{ccccccc}{
-        \vspan2{Designator} & \mspan3[c]{$3.3\rm{[V]}$ current $\rm{[mA]}$} & \mspan3[c]{$5\rm{[V]}$ current $\rm{[mA]}$} \cr
-                    & Min.  & Typ.  & Max.  & Min.  & Typ.  & Max.  \crl
-        AS[1-15]    & -     & 0.024 & 0.060 &&& \cr %DGQ2788A  
-        EF[1,2]     & 0.140 & 0.210 & 0.300 &&& \cr %TPS25940-Q1
-        %ESD1        & -     & -     & -     &&& \cr %SP3012-06
-        LG1         & -     & 0.100 & 4     &&& \cr %74LVC1G11-Q100
-        M[1-3]      & 10    & -     & 40    &&& \cr %S25FL256L
-        M[4-6]      & -     & -     & 5     &&& \cr %CY15B102Q
-        %Q[1-3]      & -     & -     & -     &&& \cr %TPS22965W-Q1
-        TS[1-7]     & -     & 0.200 & 0.400 &&& \cr %MCP9804
-        U1          & -     & -     & -     &&& \cr %STM32L496ZG
-        U[2,3]      & -     & 40    & 70    &&& \cr %TCAN1051V-Q1
-        Y1          & -     & -     & -     &&& \cr %ABS07AIG
-        Y2          & -     & 4.0   & 4.8   &&&     %SiT8924B
+    \ctable{ccccc}{
+        \vspan2{Designator} & \vspan2{Power bus  $\rm{[V]}$} & \mspan3[c]{Current consumption $\rm{[mA]}$} \cr
+                    &       & Min.  & Typ.  & Max. \crl
+        AS[1-15]    & 5     & -     & 0.02  & 0.06 \cr %DGQ2788A  
+        EF[1,2]     & 3.3, 5 & 0.14 & 0.21  & 0.30 \cr %TPS25940-Q1
+        LG1         & 3.3   & -     & 0.1   & 4    \cr %74LVC1G11-Q100
+        M[1-3]      & 3.3   & 10    & 25    & 40   \cr %S25FL256L
+        M[4-6]      & 3.3   & -     & 5     & 5    \cr %CY15B102Q
+        TS[1-7]     & 3.3   & -     & 0.20  & 0.40 \cr %MCP9804
+        U[2,3]      & 5     & -     & 40    & 70   \cr %TCAN1051V-Q1
+        Y2          & 3.3   & -     & 4.0   & 4.8      %SiT8924B
     }
-    \caption/t List of components power consumption.
+    \caption/t Listing of electronic components power consumption. The values were obtained from the datasheets, and correspond to the normal operation at room temperature.
 \endinsert
 
 \midinsert \clabel[tab:uncertifiedParts]{Uncertified parts variants}
     \ctable{clll}{
-        Designator      & Certified part no.      & Uncertified part no.  & Difference \crll
+        Designator      & Certified part no.      & Uncertified part no.  & Difference \crl
         LG1             & 74LVC1G11GW-Q100        & 74LVC1G11GW           & auto. \crl
         \vspan2{M[1-3]} & \vspan2{S25FL256LAGNFN} & S25FL256LAGNFI        & temp. \cr
                         &                         & S25FL256LDPNFI        & temp., speed \crl
@@ -93,5 +102,5 @@
         \vspan2{Q[1-3]} & \vspan2{TPS22965W-Q1 }  & TPS22965-Q1           & temp. \cr
                         &                         & TPS22975              & temp., auto.\cr
     }
-    \caption/t List of available uncertified variants to some of the OBCs electronics components. Legend: auto. - missing \glref{AEC} certification, temp. - shrink operational temperature range, speed - decreased frequency, accuracy - decreased accuracy of measurements.
+    \caption/t List of available uncertified variants to some of the OBCs electronic components. Legend: auto. - missing \glref{AEC} certification, temp. - shrink operational temperature range, speed - decreased frequency, accuracy - decreased accuracy of measurements.
 \endinsert

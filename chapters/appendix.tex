@@ -11,6 +11,13 @@
 
 
 
+%%%%% GLOSSARY
+
+\app Glossary
+\makeglos
+
+
+
 %%%%% VST104 PINOUT
 
 \app VST104 pinout
@@ -24,21 +31,21 @@
 \midinsert \clabel[tab:vst104_pinout]{VST104 pinout}
     \ctable{cl}{
         Signal name &   Signal purpouse \crl
-        {\tt UART_RCS_}   & UART used explicitly for the RCS$^*$\cr
-        {\tt GLO_SYNC}      & clock signal of global synchronization \cr
-        {\tt GLO_FAULT}     & signal setting a global fault flag \cr
-        {\tt GLO_KS_}     & standard kill switch signal (active high) \cr
-        {\tt CPU_WD_}     & watchdog signal for each of the OBCs (CPUs) \cr
-        {\tt CPU_MODE}      & OBC selection signal used in Board Delta \cr
+        {\tt UART_RCS_} & \glref{UART} used explicitly for the \glref{RCS}$^*$\cr
+        {\tt GLO_SYNC}  & clock signal of global synchronization \cr
+        {\tt GLO_FAULT} & signal setting a global fault flag \cr
+        {\tt GLO_KS_}   & standard kill switch signal (active high) \cr
+        {\tt CPU_WD_}   & watchdog signal for each of the \glref{OBC}s (\glref{CPU}s) \cr
+        {\tt CPU_MODE}  & \glref{OBC} selection signal used in Board Delta \cr
     }
-    \caption/t A brief explanation of selected signals from the VST104 pinout. A more specific definition will be proved ed by the VST in the future. $*$ Radio Communication Subsystem
+    \caption/t A brief explanation of selected signals from the VST104 pinout. A more specific definition will be proved ed by the \glref{VST} in the future. $*$radio communication subsystem
 \endinsert
 
 
 
-%%%%% OVERSIZED RENDERS AND SCHEMES
+%%%%% OVERSIZED FIGURES
 
-\app Over-sized renders and schemes
+\app Over-sized figures
 
 \midinsert
     \clabel[app_vis:zeroTop]{Board Zero render top}
@@ -59,15 +66,21 @@
 \endinsert
 
 \midinsert
-    \clabel[app_vis:foxtrotTop]{Element Foxtrot render top}
-    \picw=14.64cm \cinspic figures/model/foxtrot_top.pdf
-    \caption/f Visualization of the Element Foxtrot captured from its top side. The dimensions of this 3D render match the actual size of the board 1:1.38.
+    \clabel[app_sch:microcontroller]{Microcontroller schematic}
+    \picw=0.88\hsize \cinspic figures/schemes/microcontroller.pdf
+    \caption/f Schematic diagram of the microcontroller and its auxiliaries.
 \endinsert
 
 \midinsert
-    \clabel[app_sch:microcontroller]{Microcontroller schematic}
-    \picw=0.9\hsize \cinspic figures/schemes/microcontroller.pdf
-    \caption/f Schematic diagram of the microcontroller and its auxiliaries.
+    \clabel[app_vis:foxtrotTop]{Element Foxtrot render}
+    \picw=14.5cm \cinspic figures/model/foxtrot_top.pdf
+    \caption/f Visualization of the Element Foxtrot captured from its top side. The dimensions of this 3D render match the actual size of the board 1:1.4.
+\endinsert
+
+\midinsert
+    \clabel[app_vis:foxtrotKicad]{Element Foxtrot KiCad}
+    \picw=14.5cm \cinspic figures/pcbs/foxtrot_kicad.pdf
+    \caption/f PCB design of the Element Foxtrot captured directly in the KiCad environment. The dimensions of this render match the actual size of the board 1:1.4.
 \endinsert
 
 

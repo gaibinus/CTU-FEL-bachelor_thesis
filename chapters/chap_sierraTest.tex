@@ -1,5 +1,34 @@
 
+%%%%% BOARD SIERRA TESTING
+
 \chap Board Sierra - testing
+
+%%%%% TESTING SOFTWARE
+
 \sec Testing software
+
+
+
+
+%%%%% RADIATION TESTING
+
 \sec Radiation testing
-\sec Environmental testing
+
+
+
+
+%%%%% EXPERIMENT SETUP
+
+\secc Experiment setup
+
+\quad For the purpose of the radiation testing, the Board Sierra was extended with a couple of electronic sensors: i) an always-on 3D accelerometer and 3D gyroscope LSM6DS3, ii) a high-performance 3-axis magnetic sensors MMC5983MA (two devices), and iii) an integrated 6-axis motion processor with gyroscope and accelerometer MPU6050. All of these sensors were connected to the \glref{OBC} using an \glref{$\rm{I^2C}$} connection.  Each sensor was powered on through a separate NPN transistor controlled by the \glref{MCU}. A proper power reset of each sensor could have been achieved by turning off this transistor and isolating the corresponding \glref{$\rm{I^2C}$} peripheral isolator. For detailed information about the experiment wiring, please refer to the hardware architecture diagram in figure 100.
+
+
+%%%%% EXPERIMENT RESULTS
+
+\secc Experiment results
+
+Approximately at 5.20[hour] after the beginning of the experiment, the OBC started to malfunction. Until this point, it performed normally without a single error. The total radiation dose at this point sums up to 24.96[krad]. Then, the OBC entered a continuous restart loop of about 100[Hz], managing to send only one UART log per restart. It booted successfully again at 5.27[hod], after 4.2[min] from the first malfunction. After some initial errors and a couple of reboots, it operated well without a single problem until its last log at 5.30[hour]. After that, the UART received dozen of broken characters, and the OBC stopped responding at 25.44[krad].
+
+The first and only sensor that stopped performing normally was the LSM6DS3. After 4.02[hour] from the experiment start, the sensor stopped answering measurement requests. This corresponds roughly to a 19.29[krad] total radiation dose. However, after multiple power resets and few faulty readings, the sensor started to behave well again at 5.30[hour] of the experiment.
+

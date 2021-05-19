@@ -4,7 +4,7 @@
 \label[chap:boardSierraSubsystems]
 \chap Board Sierra - subsystems
 
-\quad In this chapter, we provide all details about the individual \glref{OBC} subsystems. We address one of them in each section. Firstly, we explain the importance of the subsystem in theory, and then we describe our approach and the design decisions we made. We also present and comment on each subsystem's electronics scheme design together with the design of its layout and tracing on the Board Sierra \glref{PCB}. For a better image of the overall location and layout of these OBC subsystems, refer to figure \ref[img:sierra_subsystems]. 
+\quad In this chapter, we provide all details about the individual \glref{OBC} subsystems. We address one of them in each section. Firstly, we explain the importance of the subsystem in theory, and then we describe our approach and the design decisions we made. We also present and comment on each subsystem's electronics scheme design together with the design of its layout and routing on the Board Sierra \glref{PCB}. For a better image of the overall location and layout of these OBC subsystems, refer to figure \ref[img:sierra_subsystems]. 
 
 \circleparams={\ratio=1 \fcolor=\White \lcolor=\Black \hhkern=0.9pt \vvkern=0.9pt}
 
@@ -131,7 +131,7 @@ A functional diagram of the implemented power management is shown in figure \ref
 
 \secc PCB design
 
-\quad Location and fanout of the power management circuitry are shown in figure \ref[pcb:powerManagement].  All of the power management components are placed on the top side of the \glref{PCB}. Similarly, all of the power tracks are on the top copper layer. Only a few signal traces are running within the second or the bottom layer. Both the $3.3\rm{[V]}$ and $5\rm{[V]}$ control circuitry share the same layout and tracing regarding recommendations presented in the \glref{eFuse} and load switch datasheets \cite[dat:efuse, dat:switch]. The $3.3\rm{[V]}$ part is situated closer to the main PC104 header, while the $5\rm{[V]}$ part is right below it. Both \glref{eFuse}s are connected to the main PC104 header power pins through strengthened $0.77\rm{[mm]}$ traces in the third copper layer. Considering a standard copper thickness of $35\rm{[\mu m]}$, each of the input traces is rated to deliver up to $2\rm{[A]}$ of current. The logic gate with associated pull-down resistors is located above all of the remaining circuitry, closest to the main PC104 header.
+\quad Location and fanout of the power management circuitry are shown in figure \ref[pcb:powerManagement].  All of the power management components are placed on the top side of the \glref{PCB}. Similarly, all of the power tracks are on the top copper layer. Only a few signal traces are running within the second or the bottom layer. Both the $3.3\rm{[V]}$ and $5\rm{[V]}$ control circuitry share the same layout and routing regarding recommendations presented in the \glref{eFuse} and load switch datasheets \cite[dat:efuse, dat:switch]. The $3.3\rm{[V]}$ part is situated closer to the main PC104 header, while the $5\rm{[V]}$ part is right below it. Both \glref{eFuse}s are connected to the main PC104 header power pins through strengthened $0.77\rm{[mm]}$ traces in the third copper layer. Considering a standard copper thickness of $35\rm{[\mu m]}$, each of the input traces is rated to deliver up to $2\rm{[A]}$ of current. The logic gate with associated pull-down resistors is located above all of the remaining circuitry, closest to the main PC104 header.
 
 \midinsert
     \clabel[pcb:powerManagement]{Power management circuitry}
@@ -301,7 +301,7 @@ To ensure correct temperature measurement, we have to create a sufficient therma
     \caption/f Illustration of a thermal bridge between the temperature sensor and WSON package (left) or LQFP package (right). Legend: {\typosize[8/]\incircle{⟨1⟩}} 6-layer \glref{PCB}, {\typosize[8/]\incircle{⟨2⟩}} targeted device, {\typosize[8/]\incircle{⟨3⟩}} \glref{IC} temperature sensor, {\typosize[8/]\incircle{⟨4⟩}} measurement die, {\typosize[8/]\incircle{⟨5⟩}} via, {\typosize[8/]\incircle{⟨6⟩}} thermal pad, {\typosize[8/]\incircle{⟨7⟩}} epoxy resin.
 \endinsert
 
-Location and fanout of the temperature monitoring circuitry are shown in figure \ref[pcb:temperatureMonitoring]. All \glref{IC} sensors are placed at the bottom side of the \glref{PCB}, directly under their targeted devices. The load switch is located at the \glref{PCB}'s west-central part. The switch itself and most of its auxiliary components are placed on the top side of the \glref{PCB}. The $\rm{I^2C}$ bus signal traces and separate power bus runs between all of the sensors.
+Location and fanout of the temperature monitoring circuitry are shown in figure \ref[pcb:temperatureMonitoring]. All \glref{IC} sensors are placed at the bottom side of the \glref{PCB}, directly under their targeted devices. The load switch is located at the \glref{PCB}'s west-central part. The switch itself and most of its auxiliary components are placed on the top side of the \glref{PCB}. The \glref{$\rm{I^2C}$} bus signal traces and separate power bus runs between all of the sensors.
 
 \midinsert
     \clabel[pcb:temperatureMonitoring]{Temp. monitoring circuitry}

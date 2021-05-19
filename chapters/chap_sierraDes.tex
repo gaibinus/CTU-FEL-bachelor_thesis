@@ -9,7 +9,7 @@
 \midinsert
     \clabel[img:sierra_miniature]{Board Sierra 3D render}
     \picw=0.95\hsize \cinspic figures/model/sierra_miniature.pdf
-    \caption/f 3D render of the Board Sierra from the top (left) and the bottom (right) side. A real scaled version of this visualization is available in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom]. 
+    \caption/f 3D render of the Board Sierra from the top (left) and the bottom side (right). A real scaled version of this visualization is available in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom]. 
 \endinsert
 
 
@@ -46,11 +46,11 @@ Considering the size and budget requirements of our \glref{OBC}, we chose to imp
     * {\sbf Microcontroller:} An ultra-low-power STM32L496 ARM Cortex-M4 core microcontroller drives the \glref{OBC}. This \glref{MCU} can run up to $78\rm{[MHz]}$, is equipped with a $1\rm{[MB]}$ flash memory and $320\rm{[kB]}$ \glref{RAM}, and provides a wide external connectivity. A user can program and debug this \glref{MCU} using a separate \glref{SWI} or \glref{UART} connection.
     * {\sbf External clock sources:} The \glref{MCU} is equipped with two external clock sources for improved and more reliable clock generation and timing. Low-speed external $32.768\rm{[kHz]}$ oscillator and high-speed external $26\rm{[MHz]}$ oscillator. This oscillator can be temporarily disabled by the \glref{MCU} to achieve better power consumption.
     * {\sbf Robust power management:} Two separate power lines with $3.3\rm{[V]}$ and $5\rm{[V]}$ ratings supply the \glref{OBC}. A robust power management circuitry is present separately on these lines, providing tunable over and under-voltage protection, over-current protection, amplified current monitoring output, kill switching, and simultaneous power down.
-    * {\sbf Isolation of the peripherals:} The \glref{OBC} can communicate with other CubeSat modules using a 2x \glref{CAN} bus, 3x \glref{$\rm{I^2C}$}, 4x \glref{UART}, 2x \glref{SPI}, 22 \glref{GPIO} pins, and 5 maintenance signals. All the peripherals are $5\rm{[V]}$ tolerant and connected to the PC104 main header thru separate analog switches. These isolators are independently controlled by the \glref{MCU} and provide a complete or selected disconnection from the rest of the CubeSat.
+    * {\sbf Isolation of the peripherals:} The \glref{OBC} can communicate with other CubeSat modules using a 2x \glref{CAN} bus, 3x \glref{$\rm{I^2C}$}, 4x \glref{UART}, 2x \glref{SPI}, 22 \glref{GPIO} pins, and 5 maintenance signals. All the peripherals are $5\rm{[V]}$ tolerant and connected to the PC/104 header thru separate analog switches. These isolators are independently controlled by the \glref{MCU} and provide a complete or selected disconnection from the rest of the CubeSat.
     * {\sbf Redundant external memory:} Two subsystems of triple redundant external memories are available for \glref{MCU}'s additional data storage. This triple redundancy ensures data validity in the radiation-rich environment, although the single-mode is also supported. The first memory subsystem is a 3x $32\rm{[MB]}$ FLASH connected via the Quad-\glref{SPI} interface, while the second one is a 3x $2\rm{[Mb]}$ F-ram using the \glref{SPI}.
     * {\sbf CAN bus peripherals:} Two \glref{CAN} transceivers provide the \glref{OBC}'s support of a high-speed \glref{CAN} bus.  These transceivers ensure a voltage level conversion ($3.3\rm{[V]}$ for the \glref{MCU}, $5\rm{[V]}$ for the CubeSat) and support communication speeds up to $250\rm{[kB\,s^{-1}]}$.
     * {\sbf Temperature monitoring:} Seven \glref{$\rm{I^2C}$} temperature sensors are spread over the entire \glref{OBC}. These sensors monitor the temperature of essential submodules, 2x \glref{MCU}, 2x power management, 2x \glref{CAN} bus drivers, and 1x external memories. The \glref{MCU} can power on or off these sensors to save some power or resolve a latch-up even.
-    * {\sbf Maximal payload sector:} The PCB surface occupied by the \glref{OBC} circuitry is shrink to the minimal size possible. The remaining area is considered as a payload sector that can accommodate any user-defined modules. In our case, we decided to place a universal soldering array with exposed power lines all over this sector.
+    * {\sbf Maximal payload sector:} The PCB surface occupied by the \glref{OBC} circuitry is shrank to the minimal size possible. The remaining area is considered as a payload sector that can accommodate any user-defined modules. In our case, we decided to place a universal soldering array with exposed power lines all over this sector.
 \enditems
 
 
@@ -91,7 +91,7 @@ Considering the size and budget requirements of our \glref{OBC}, we chose to imp
 
 To sum it up, all of the electronic components used in the Sierra Board i) are rated for the automotive temperature range of $-40$ to $+125\rm{[^\circ C]}$, and ii) obtained the \glref{AEC}-Q100 or \glref{AEC}-Q200 qualification. The only exception is the \glref{MCU} with no \glref{AEC} qualification.
 
-Some of the \glref{OBC}'s potential applications may not require temperature and automotive certification of the electronics components. In such a case, some components may be replaced by their uncertified variants to save a bit of the financial budget. All of the electronics components with an official uncertified version are listed in table \ref[tab:uncertifiedParts]. Furthermore, the potential user is encouraged to replace all passive components (resistors, capacitors, ferrite beads, inductors) with unqualified parts of the same parameters. A replacement of oscillators Y[1,2] is possible, although this change is non-negligible.
+Some of the \glref{OBC}'s potential applications may not require temperature and automotive certification of the electronics components. In such a case, some components may be replaced by their uncertified variants to save a bit of the financial budget. All of the electronics components with an official uncertified version are listed in table \ref[tab:uncertifiedParts]. Furthermore, the potential user is encouraged to replace all passive components (resistors, capacitors, ferrite beads, inductors) with unqualified parts with the same parameters. A replacement of oscillators Y[1,2] is possible, although this change is non-negligible.
 
 
 
@@ -110,9 +110,9 @@ The summary of power consumption of the specific electronics components is liste
 
 \midinsert \clabel[tab:subsystemConsumption]{Subsystems consumption}
     \ctable{lcl}{
-        Subsystem           & Typ. current $\rm{[mA]}$  & Note \crl
-        Processing unit     & \phantom{0}20 @ 3.3[V] & at $80\rm{[MHz]}$ clock \cr
-        Power management    & 0.3 @ \phantom{3.}-[V] & for each $3.3\rm{[V]}$ and $5\rm{[V]}$ bus \cr 
+        \glref{OBC} subsystem & Typ. current $\rm{[mA]}$ & Note \crl
+        Processing unit     & \phantom{.}20 @ 3.3[V] & at $80\rm{[MHz]}$ clock \cr
+        Power management    & 0.3 @ \phantom{3}-\phantom{3}[V] & for each $3.3\rm{[V]}$ and $5\rm{[V]}$ bus \cr 
         Header isolation    & 0.6 @ 3.3[V] & every isolator is opened \cr
         FLASH memories      & \phantom{.}30 @ 3.3[V] & with one active memory \cr
         F-ram memories      & \phantom{3.}5 @ 3.3[V] & with one active memory \cr
@@ -134,7 +134,7 @@ The summary of power consumption of the specific electronics components is liste
 \begitems
     * {\sbf Price:} As this \glref{OBC} is not primarily designed for an actual space flight (as explained in \ref[chap:intro]), an individual component's price is not negligible. With a lower overall cost of the \glref{OBC}, a broader project expansion in the LibreCube community can be achieved. Thus components with sufficient attributes but lower price were favored.
     
-    * {\sbf Footprint:} As a result of maximizing the PC104 payload sector, the actual \glref{OBC} area was significantly decreased. Therefore components of smaller dimensions available in fine-pitch packages (e.g. \glref{SSOP} or \glref{QFN}) were preferred. The same logic applies to passive components such as resistors and capacitors, resulting in a 0201 package (0603 in metric) being the most widely used in this design. After researching the technical capabilities and related costs of \glref{PCB} manufacturers, we decided not to use the \glref{BGA}-packaged components. Their significantly smaller footprints would require more precise fanout, resulting in increased manufacturing difficulty and price.
+    * {\sbf Footprint:} As a result of maximizing the PC/104 payload sector, the actual \glref{OBC} area was significantly decreased. Therefore components of smaller dimensions available in fine-pitch packages (e.g. \glref{SSOP} or \glref{QFN}) were preferred. The same logic applies to passive components such as resistors and capacitors, resulting in a 0201 package (0603 in metric) being the most widely used in this design. After researching the technical capabilities and related costs of \glref{PCB} manufacturers, we decided not to use the \glref{BGA}-packaged components. Their significantly smaller footprints would require more precise fanout, resulting in increased manufacturing difficulty and price.
     
     * {\sbf Distributor:} We considered it important to use only typically stocked components available from the global distributors. In our case, Mouser electronic\urlnote{http://www.mouser.com/}.This rule should repeal any future problems in components sourcing or logistics. Therefore, the availability of a specific component in this distributor was a selection factor.
 \enditems
@@ -145,7 +145,7 @@ The summary of power consumption of the specific electronics components is liste
 
 \sec PCB features and design
 
-\quad Designing the Board Sierra's \glref{PCB} was probably the most demanding part of the VST104 project. Restricted surface available for the complex \glref{OBC}'s circuitry, compact footprint of the PC104 main header with a not ideal location, and limited capabilities of the considered \glref{PCB}s manufacturers made the routing and fanout challenging. Visualization of the designed module rendered in KiCad is shown in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom].
+\quad Designing the Board Sierra's \glref{PCB} was probably the most demanding part of the VST104 project. Restricted surface available for the complex \glref{OBC}'s circuitry, compact footprint of the PC/104 main header with a not ideal location, and limited capabilities of the considered \glref{PCB}s manufacturers made the routing and fanout challenging. Visualization of the designed module rendered in KiCad is shown in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom].
 
 
 
@@ -164,7 +164,7 @@ Although, following the proper design rules and standards created for automotive
 \label[chap:payloadSector]
 \secc OBC and payload sector
 
-\quad As mentioned in chapter \ref[chap:capabilitesAndFeatures], a high ratio between the payload sector area and OBC area was set as one of the Board Sierra's key features. This requirement substantially affected the \glref{OBC}'s circuitry layout and fanout. After multiple iterations of components' placements and alignments, we have significantly reduced the required \glref{OBC} area. The payload sector covers roughly three-fourths of the available PC104 module surface, leaving only one-fourth to accommodate the OBC. Visual perception can be obtained from the Board Sierra 3D renders in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom]. The \glref{OBC} sector is situated at the northwest quartal of the PC104 module, surrounded by the payload sector.
+\quad As mentioned in chapter \ref[chap:capabilitesAndFeatures], a high ratio between the payload sector area and OBC area was set as one of the Board Sierra's key features. This requirement substantially affected the \glref{OBC}'s circuitry layout and fanout. After multiple iterations of components' placements and alignments, we have significantly reduced the required \glref{OBC} area. The payload sector covers roughly three-fourths of the available PC/104 module surface, leaving only one-fourth to accommodate the OBC. Visual perception can be obtained from the Board Sierra 3D renders in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom]. The \glref{OBC} sector is situated at the northwest quartal of the PC/104 module, surrounded by the payload sector.
 
 
 
@@ -173,7 +173,7 @@ Although, following the proper design rules and standards created for automotive
 \label[chap:pcbCharacteristics]
 \secc PCB characteristics
 
-\quad The\glref{PCB}'s dimensions, geometry, and layout of the main connector and mounting holes are fully specified by the PC104 standard, as described in chapter \ref[chap:PC104standard]. The only modification added to this template are $1.9$ x $20.3\rm{[mm]}$ cutouts on the module's four edges. These cutouts were introduced in the LibreCube board specification and are designed to accommodate CubeSat's auxiliary power and data cables \cite[sta:libreBoard].
+\quad The\glref{PCB}'s dimensions, geometry, and layout of the main connector and mounting holes are fully specified by the PC/104 standard, as described in chapter \ref[chap:PC104standard]. The only modification added to this template are $1.9$ x $20.3\rm{[mm]}$ cutouts on the module's four edges. These cutouts were introduced in the LibreCube board specification and are designed to accommodate CubeSat's auxiliary power and data cables \cite[sta:libreBoard].
 
 Regarding the manufacturing price and complexity, the\glref{PCB} would ideally be a four-layer one. This means two copper layers for signal traces, a power distribution layer, and a ground plane. Unfortunately, the two signal layers would not be enough to accommodate complex \glref{OBC}'s circuitry. Therefore, we had to choose a six-layer\glref{PCB} with the following setup: i) signal layers: top, second inner, bottom; ii) ground plane layers: first inner, fourth inner; iii) power distribution layers: third inner. \"An additional benefit of the added layers is improved thermal dissipation, as adding a layer of copper to the circuit board can significantly decrease the resulting temperatures" \cite[pap:tempModeling].
 
@@ -185,7 +185,7 @@ Additional parameters of the \glref{PCB} manufacturing such as material, isolati
 
 \secc Traces, vias and routing
 
-\quad Electronic components are placed on both sides of the \glref{PCB} due to the restricted OBC area. Corresponding top and bottom copper layers cover as much routing as possible. The second inside layer accommodates traces that do not fit into the two surface layers. The general width of a signal trace is $0.2\rm{[mm]}$, respectively $0.173\rm{[mm]}$ for traces near the main PC104 header. Clearance between traces themselves and other copper planes is set to $0.127\rm{[mm]}$. All of these parameters satisfy the minimal specifications in the \glref{ECSS} standard \cite[sta:ECSS-12C]. No blind, buried or micro vias are used in the design. The diameter of general via is $0.45\rm{[mm]}$ with a $0.24\rm{[mm]}$ drill. This parameters result in a $6.7$ aspect ratio for a standard $1.6\rm{[mm]}$ thick \glref{PCB}, which recognizes the \glref{ECSS} $\leq7$ rule \cite[sta:ECSS-12C].
+\quad Electronic components are placed on both sides of the \glref{PCB} due to the restricted OBC area. Corresponding top and bottom copper layers cover as much routing as possible. The second inside layer accommodates traces that do not fit into the two surface layers. The general width of a signal trace is $0.2\rm{[mm]}$, respectively $0.173\rm{[mm]}$ for traces near the PC/104 header. Clearance between traces themselves and other copper planes is set to $0.127\rm{[mm]}$. All of these parameters satisfy the minimal specifications in the \glref{ECSS} standard \cite[sta:ECSS-12C]. No blind, buried or micro vias are used in the design. The diameter of general via is $0.45\rm{[mm]}$ with a $0.24\rm{[mm]}$ drill. This parameters result in a $6.7$ aspect ratio for a standard $1.6\rm{[mm]}$ thick \glref{PCB}, which recognizes the \glref{ECSS} $\leq7$ rule \cite[sta:ECSS-12C].
 
 The first and fourth inner layers are ground plane layers. Their purpose is to connect all of the component's \glref{GND} pins, provide shielding against the \glref{EMI} and act as heatsink dissipating components heat. Despite the \glref{ECSS} suggestion, both the ground planes have a solid fill instead of additional openings in a grid format \cite[sta:ECSS-12C]. The reason is, the current fifth version of KiCad does not support this option. This design flaw will be improved shortly as the checked fill option is included in the upcoming KiCad v6.
 

@@ -3,10 +3,28 @@
 
 \chap Board Sierra - testing
 
+\quad Functionality testing should be a part of every hardware development project. In this chapter, we briefly describe the testing tool we have developed for the Board Sierra together with the process and results of the already executed radiation testing.
+
+
 %%%%% TESTING SOFTWARE
 
+\label[chap:testingSoftware]
 \sec Testing software
 
+\quad After assembling the first Board Sierra module, we had to ensure ourselves about its desired behavior. A simple testing software had to be developed to loop through the separate subsystems while testing their proper functionality. To accomplish this, we decided to implement a small testing toolbox named {\tt VST104-Testing}. This software package is written in a C language and developed in the integrated development environment STM32CubeIDE. Its current version includes the following tests:
+
+\begitems
+    * Enabling the \glref{HSE} circuitry as a source for the \glref{MCU} main clock.
+    * Reading the current consumption analog outputs of both \glref{eFuse}s.
+    * Switching on and off particular peripheral isolators.
+    * Enabling, configuring, and reading the inbuilt temperature sensors.
+    * Configuring, and reading manufacturer data from the FLASH \glref{IC}s.
+    * Configuring, and reading manufacturer data from the F-RAM \glref{IC}s.
+    * Writing to and reading from the FLASH memories using the \glref{QSPI}.
+    * Setting up and maintain a simple \glref{CAN} communication.
+\enditems
+
+Outputs of these tests are in a form of logs sent throughout the \glref{SSW} or the \glref{UART}. The logs are divided into three groups: system information, error report, and data.
 
 
 
@@ -14,6 +32,9 @@
 
 \sec Radiation testing
 
+\quad As described in section \ref[chap:radiationAndRedundancy], space radiation is a well-known hazard for CubeSats and electronic systems in general. Thus, we were particularly interested in how well the Board Sierra performs in a radiation-rich environment and what total dose it can overcome. Motivated by another project, we were also interested in similar characteristics of some \glref{COTS} acceleration, angular velocity, and magnetic flux density sensors.
+
+Thanks to the nuclear research institute ÚJV Řež a.s, we encountered a possibility to execute such an experiment. This section presents our testing approach and results obtained during exposure to a cobalt-60 gamma radiation source. After the experiment, the carried nominal radiation dose was determined as $49\rm{[Gy/hour]}$.
 
 
 
@@ -21,14 +42,34 @@
 
 \secc Experiment setup
 
-\quad For the purpose of the radiation testing, the Board Sierra was extended with a couple of electronic sensors: i) an always-on 3D accelerometer and 3D gyroscope LSM6DS3, ii) a high-performance 3-axis magnetic sensors MMC5983MA (two devices), and iii) an integrated 6-axis motion processor with gyroscope and accelerometer MPU6050. All of these sensors were connected with the \glref{OBC} using an \glref{$\rm{I^2C}$} data bus. Each sensor was powered through a separate high-base current PNP transistor controlled by the \glref{MCU}. A proper power reset of each sensor could have been achieved by turning off this transistor and isolating the corresponding \glref{$\rm{I^2C}$} peripheral isolator. This feature was implemented in order to resolve a potential \glref{$\rm{I^2C}$} bus lockup or the sensor's latch-up.
+\quad For the purpose of the radiation testing, the Board Sierra was extended with four electronic sensors: i) an always-on 3D accelerometer and 3D gyroscope LSM6DS3, ii) 2x a high-performance 3-axis magnetic sensors MMC5983MA, and iii) an integrated 6-axis motion processor with gyroscope and accelerometer MPU6050. All of these sensors were connected with the \glref{OBC} throughout two \glref{$\rm{I^2C}$} data buses. Each sensor was powered with a separate transistor controlled by the \glref{OBC}. A proper power reset of each sensor could have been achieved by turning off this transistor and isolating the corresponding \glref{$\rm{I^2C}$} peripheral isolator. This feature was implemented in order to resolve a potential bus lockup or the sensor's latch-up. A PNP transistor with a lower amplification factor and a saturated base current was selected to minimize the failure of this system.
 
+During the entire experiment, two independent \glref{UART} channels with separate FTDI TTL-232R converters were used for recording the \glref{OBC}'s logs. On top of that, we decided to measure the current consumption of the \glref{OBC}'s $3.3\rm{[V]}$ and $5\rm{[V]}$ power inputs together with the $3.3\rm{[V]}$ input of the sensor board. For this purpose, three current monitoring resistors (shunt resistors) were attached as close to these power inputs as possible. The measurement of these currents in a $60\rm{[Hz]}$ frequency was achieved with a data acquisition module PXIe-4303 DAQ installed in a PXIe-1082 frame.
+
+A universal PC/104 module introduced in section \ref[chap:vst104Family] as a Board Zero was used to act as a test-bed for the sensors and their power switching circuitry. This sensor board was then mounted on a laminate sheet right next to the tested Board Sierra. An electric connection was established between the boards through ribbon cables. A labeled photograph of this setup is shown in figure \ref[pho:rez_setup]. To accommodate the shunt resistors and distribute the power into the \glref{OBC}, a small universal PCB was attached directly to the Board Sierra's PC/104 header. Each of the shunt resistors was assembled from seven high-precision \glref{SMD} resistors connected in parallel, resulting in a total resistance of $1\rm{[Ohm]}$. This hardware setup was then inserted into the radiation chamber.
+
+\circleparams={\ratio=1 \fcolor=\White \lcolor=\Black \hhkern=0.9pt \vvkern=0.9pt}
 
 \midinsert
-    \clabel[pho:rez_setup]{}
-    \picw=0.85\hsize \cinspic figures/photos/rez_setup.pdf
-    \caption/f 
+    \clabel[pho:rez_setup]{Radiation: hardware setup}
+    \picw=0.85\hsize \cinspic figures/photos/measurement_setup.pdf
+    \caption/f A hardware setup tested during the experiment. Legend: {\typosize[8/]\incircle{⟨1⟩}} Board Sierra module. {\typosize[8/]\incircle{⟨2⟩}} sensor board, {\typosize[8/]\incircle{⟨3⟩}} first MMC5983 sensor {\typosize[8/]\incircle{⟨4⟩}} with its power switching, {\typosize[8/]\incircle{⟨5⟩}} second MMC5983 sensor {\typosize[8/]\incircle{⟨6⟩}} with its power switching, {\typosize[8/]\incircle{⟨7⟩}}, LSM6DS3 sensor {\typosize[8/]\incircle{⟨8⟩}} with its power stitching, {\typosize[8/]\incircle{⟨9⟩}} MPU6050 sensor \circleparams={\ratio=1 \fcolor=\White \lcolor=\Black \hhkern=-0.2pt \vvkern=-0.2pt} {\typosize[7/]\incircle{⟨10⟩}} with its power switching, {\typosize[7/]\incircle{⟨11⟩}} ribbon cables providing connection between the boards, {\typosize[7/]\incircle{⟨12⟩}} watchdog signal wire, {\typosize[7/]\incircle{⟨13⟩}} \glref{UART} TX wires, {\typosize[7/]\incircle{⟨14⟩}} universal \glref{PCB} with the shunt resistors, {\typosize[7/]\incircle{⟨15⟩}} data and power cables reaching to a control room.
 \endinsert
+
+The testing software described in section \ref[chap:testingSoftware] was used as a template for this experiment. In order to support all of the intended features, we had to extend its \glref{$\rm{I^2C}$} drivers and modify its data-logging mechanism. All of the libraries needed to enable communication with the attached sensors were written by ourselves. By referring to the sensors' datasheets, we were able to create lightweight and robust minimal drivers. The benefit of this approach was the full control and customization of these essential functions. The logging templates were extended with new error identifiers, support of data triplets, and various system messages. The particular measurements and testing were conducted in one continuous loop, executed with a $2\rm{[Hz]}$ frequency. Logs of system information, measured data, or potential errors were sent continuously. If a sensor reading encounters an error, the software forced the sensor hardware power to reset in the following loop. To decrease the risk of accumulating an electric charge, a prevention power reset of all sensors and isolators was conducted every ten minutes.
+
+%An example of some logs is shown below:
+%\begtt
+%INF -i starting_maintenance -d -1
+%DAT -i mmc5983 -d 0 -t mag -f 107 2449 3353
+%ERR -i mpu6050_configure -d 0 -f 0 -e HAL_BUSY
+%INF -i lsm6ds3_powerReset -d -1
+%DAT -i mcp9884 -d 3 -t tem -f 49543
+%ERR -i lsm6ds3_readAccData -d 0 -f 0 -e I2C_MEASURE
+%\endtt
+
+To enable a hard reboot from a possible system crash, a watchdog module was implemented as the last mean of the \glref{OBC} recovery. In its active state, the \glref{OBC} was permanently toggling a logic signal to indicate its well-being. The duration between the last two logic changes was continuously monitored and compared against the set threshold. If this threshold had been reached, a watchdog module disconnected both $5\rm{[V]}$ and $3.3\rm{[V]}$ power lines from a power supply for a couple of seconds. A photograph of the actual watchdog module is presented in figure 100. The design of this module was based on an STM32 Blue Pill board driving two electromagnetic relays.
+
 
 
 %%%%% EXPERIMENT RESULTS
@@ -39,7 +80,7 @@
 
 \midinsert
     \clabel[plt:reboot]{Radiation: OBC decay}
-    \picw=0.95\hsize \cinspic figures/plots/reboot.pdf
+    \picw=1\hsize \cinspic figures/plots/reboots.pdf
     \caption/f Timestamps of logs received from the \glref{OBC} during its last moments of activity.
 \endinsert
 
@@ -47,7 +88,7 @@ The \glref{OBC}'s and the sensors' current consumptions, measured through the ex
 
 \midinsert
     \clabel[plt:currents]{Radiation: current consump.}
-    \picw=0.95\hsize \cinspic figures/plots/currents.pdf
+    \picw=1\hsize \cinspic figures/plots/currents.pdf
     \caption/f Current consumption measured throughout the experiment.
 \endinsert
 
@@ -55,28 +96,32 @@ Temperature readings obtained from the \glref{OBC}'s inbuilt temperature sensors
 
 \midinsert
     \clabel[plt:mcp9884]{Radiation: OBC temperature}
-    \picw=0.95\hsize \cinspic figures/plots/mcp9884.pdf
+    \picw=1\hsize \cinspic figures/plots/mcp9884.pdf
     \caption/f Readings of the OBC's inbuilt temperature sensors. The location and purpose of each sensor were described in section \ref[chap:temperatureMonitoring].
 \endinsert
 
 The LSM6DS3 was the only sensor that has experienced a total failure (actually seven of them). After being requested by the OBC, no response was obtained from the sensor, and the \glref{$\rm{I^2C}$} connection timeout was reached. The first failure occurred after exposure to a radiation dose of $196.90\rm{[Gy]}$. Timestamps of these failures, together with the obtained angular velocity, are shown in figure \ref[plt:lsm6ds3g_gyr]. A continuous malfunction/degradation of the sensor is visible from these data, as the Y and Z-axis readings are decreasing over time. A real motion could not have caused these trends due to the sensor's stationary mount. Interestingly, the acceleration data acquired from this sensor are perfectly reasonable.
 
 \midinsert
-    \clabel[plt:lsm6ds3g_gyr]{Radiation: LSM6DS3G}
-    \picw=0.95\hsize \cinspic figures/plots/lsm6ds3g_gyr.pdf
+    \clabel[plt:lsm6ds3g_gyr]{Radiation: LSM6DS3 data}
+    \picw=1\hsize \cinspic figures/plots/lsm6ds3.pdf
     \caption/f Angular velocity readings and occurred malfunctions of the LSM6DS3 sensor.
 \endinsert
 
-
-
-\midinsert
-    \clabel[plt:mmc5983]{Radiation: MMC5983}
-    \picw=0.95\hsize \cinspic figures/plots/mmc5983.pdf
-    \caption/f 
-\endinsert
+Similar progressive degradation of measured data has also occurred in the case of both MMC5983 sensors. Their magnetic flux density readings are shown in figure \ref[plt:mmc5983]. Regarding the data, it seems that the slight drifts started to affect the Y and Z-axis simultaneously. This first sensor encountered this problem at $2.5\rm{[hour]}$, followed by the second sensor at $3.0\rm{[hour]}$. Similarly to the previous LSM6DS3 sensor, any variations in the data could not have been caused by a change in the sensors' position or orientation.
 
 \midinsert
-    \clabel[plt:mpu6050_acc]{Radiation: MPU6050}
-    \picw=0.95\hsize \cinspic figures/plots/mpu6050_acc.pdf
-    \caption/f 
+    \clabel[plt:mmc5983]{Radiation: MMC5983 data}
+    \picw=1\hsize \cinspic figures/plots/mmc5983.pdf
+    \caption/f Magnetic flux density readings of both MMC5983 sensors.
 \endinsert
+
+Even the last tested sensor was not spared from the unpleasant consequences of the radiation. Although the MPU6050 has not suffered from the progressive degradation, its malfunction is visible from the acquired sensor's data shown in figure \ref[plt:mpu6050_acc]. The Y and Z-axis readings have jumped to the sensor's full-scale limits of $\pm2\rm{[g]}$ at about $4.10\rm{[hour]}$. The X-axis reading has also encountered a faulty period later at $4.55\rm{[hour]}$, measuring an acceleration close to $0\rm{[g]}$. After one of the following prevention power reset, the sensor has recovered and started to return reasonable data at $4.73\rm{[hour]}$. Reading of the MPU6050's gyroscope seems to have not been affected in any way.
+
+\midinsert
+    \clabel[plt:mpu6050_acc]{Radiation: MPU6050 data}
+    \picw=1\hsize \cinspic figures/plots/mpu6050.pdf
+    \caption/f Acceleration readings of the MPU6050 sensor.
+\endinsert
+
+Despite our best effort to record an occurrence of a memory bit-flip inside the Flash memory subsystem, no such event was observed. All three memory \glref{IC}s were performing normally throughout the entire experiment. Not a single error or malfunction was logged by the \glref{OBC}. As already stated, a slightly increased temperature was measured by their associated temperature sensor as a sign of their activity (TS1 in figure \ref[plt:mcp9884]). 

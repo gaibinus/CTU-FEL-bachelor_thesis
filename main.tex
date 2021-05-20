@@ -23,12 +23,12 @@
 \subtitle   {}
 
 \author     {Filip  Geib}
-\date       {February 2021}
+\date       {May 2021}
 \supervisor {Ing. Vojtěch Petrucha, Ph.D.}
 \studyinfo  {Cybernetics and Robotics}
 \workname   {}
 
-\workinfo   {\url{https://github.com/visionspacetec/VST104}}
+\workinfo   {} %\url{https://github.com/visionspacetec/VST104}
 \titleSK    {Palubný počítač pre CubeSaty formátu PC104}
 \subtitleSK {}
 
@@ -64,7 +64,7 @@
 
 %%%%% MACROS
 
-\draft     % Uncomment this if the version of your document is working only.
+%\draft     % Uncomment this if the version of your document is working only.
 %\linespacing=1.7  % uncomment this if you need more spaces between lines
                    % Warning: this works only when \draft is activated!
 %\savetoner        % Turns off the lightBlue backround of tables and
@@ -79,15 +79,15 @@
 \makefront
 
 % introduction chapter
-%\input{chapters/chap_intro} % skontrolovane
+\input{chapters/chap_intro} % skontrolovane
 
 % main body
-%\input{chapters/chap_project} % skontrolovane
-%\input{chapters/chap_sierraDes} % skontrolovane
-%\input{chapters/chap_sierraSub}
+\input{chapters/chap_project} % skontrolovane
+\input{chapters/chap_sierraDes} % skontrolovane
+\input{chapters/chap_sierraSub}
+\input{chapters/chap_delta}
+\input{chapters/chap_foxtrot}
 \input{chapters/chap_sierraTest}
-%\input{chapters/chap_delta}
-%\input{chapters/chap_foxtrot}
 
 % conclusion chapters
 \chap Conclusion

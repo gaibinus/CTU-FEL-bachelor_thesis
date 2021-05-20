@@ -253,6 +253,7 @@ A well-designed \glref{CAN} network usually contains a terminating resistor, fil
 
 %%%%% TEMPERATURE MONITORING
 
+\label[chap:temperatureMonitoring]
 \sec Temperature monitoring
 
 \quad Temperature is a critical parameter in the space environment, and all electronic components are sensitive to its variation. Any increase in temperature may reduce their lifespan and even result in irreversible damage. Such a temperature increase can be evoked by an ambient temperature or by the component's activity. Most electronic components are designed to dissipate heat into the ambient air. This is problematic in the space due to its lack of an atmosphere. Instead, a component transfers heat into the \glref{PCB}'s thermal capacity.\fnote{And then dissipated into the spacecraft environment by the thermal radiation \cite[pap:tempModeling].} This conduction can produce temperature gradients throughout the \glref{PCB} and influence other components. Furthermore, a change in a component's temperature can indicate its malfunction. Sudden temperature increase is a common sign of a latch-up event \cite[app:badBoys]. Accordingly, the \glref{OBC} temperature is a valuable part of a spacecraft telemetry and worthy of monitoring. Professional manufacturers have also included temperature sensors into their \glref{OBC} \cite[obc:dataPatterns, obc:isis, obc:imt, obc:gauss, obc:gom, obc:satbus].

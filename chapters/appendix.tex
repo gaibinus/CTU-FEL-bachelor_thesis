@@ -3,11 +3,9 @@
 
 \app Thesis assignment
 
-\midinsert
-    \clabel[app:thesisAssignment]{Thesis assignment}
-    \picw=0.9\hsize \cinspic database/thesisAssignment.pdf
-    \caption/f Assignment of this bachelor's thesis.
-\endinsert
+\picw=0.98\hsize
+\cinspic database/thesisAssignment.pdf
+\nextoddpage
 
 
 
@@ -122,7 +120,7 @@
 \midinsert
     \clabel[app_vis:foxtrotKicad]{Element Foxtrot KiCad}
     \picw=14.5cm \cinspic figures/pcbs/foxtrot_kicad.pdf
-    \caption/f PCB design of the Element Foxtrot captured directly in the KiCad environment. The dimensions of this render match the actual size of the board 1:1.4.
+    \caption/f \glref{PCB} design of the Element Foxtrot captured directly in the KiCad environment. The dimensions of this render match the actual size of the board 1:1.4.
 \endinsert
 
 
@@ -157,5 +155,11 @@
         \vspan2{Q[1-3]} & \vspan2{TPS22965W-Q1 }  & TPS22965-Q1           & temp. \cr
                         &                         & TPS22975              & temp., auto.\cr
     }
-    \caption/t List of available uncertified variants to some of the OBCs electronic components. Legend: auto. - missing \glref{AEC} certification, temp. - shrink operational temperature range, speed - decreased frequency, accuracy - decreased accuracy of measurements.
+    \caption/t List of available uncertified variants to some of the \glref{OBC}s electronic components. Legend: auto. - missing \glref{AEC} certification, temp. - shrink operational temperature range, speed - decreased frequency, accuracy - decreased accuracy of measurements.
 \endinsert
+
+
+
+%%%%% SCHEMES
+
+\app Schematic sheets

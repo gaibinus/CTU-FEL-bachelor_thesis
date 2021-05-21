@@ -18,7 +18,7 @@
 
 \sec OBC characteristics
 
-\quad An OBC of a CubeSat is a complex subsystem combining various features. Reviewing technical documentation of already existing \glref{OBC}s (section \ref[chap:existingOBCmodules]) showed that some features are shared among most \glref{OBC}s, whereas some are unique. In this section, we list all of the features we decided to implement, both typical and VST104 related.
+\quad An \glref{OBC} of a CubeSat is a complex subsystem combining various features. Reviewing technical documentation of already existing \glref{OBC}s (section \ref[chap:existingOBCmodules]) showed that some features are shared among most \glref{OBC}s, whereas some are unique. In this section, we list all of the features we decided to implement, both typical and VST104 related.
 
 
 
@@ -48,9 +48,9 @@ Considering the size and budget requirements of our \glref{OBC}, we chose to imp
     * {\sbf Robust power management:} Two separate power lines with $3.3$ V and $5$ V ratings supply the \glref{OBC}. A robust power management circuitry is present separately on these lines, providing tunable over and under-voltage protection, over-current protection, amplified current monitoring output, kill switching, and simultaneous power down.
     * {\sbf Isolation of the peripherals:} The \glref{OBC} can communicate with other CubeSat modules using a 2x \glref{CAN} bus, 3x \glref{$\rm{I^2C}$}, 4x \glref{UART}, 2x \glref{SPI}, 22 \glref{GPIO} pins, and 5 maintenance signals. All the peripherals are $5$ V tolerant and connected to the PC/104 header through separate analog switches. These isolators are independently controlled by the \glref{MCU} and provide a complete or selected disconnection from the rest of the CubeSat.
     * {\sbf Redundant external memory:} Two subsystems of triple redundant external memories are available for \glref{MCU}'s additional data storage. This triple redundancy ensures data validity in the radiation-rich environment, although the single-mode is also supported. The first memory subsystem is a 3x $32$ MB FLASH connected via the Quad-\glref{SPI} interface, while the second one is a 3x $2$ Mb F-RAM using the \glref{SPI}.
-    * {\sbf CAN bus peripherals:} Two \glref{CAN} transceivers provide the \glref{OBC}'s support of a high-speed \glref{CAN} bus.  These transceivers ensure a voltage level conversion ($3.3$ V for the \glref{MCU}, $5$ V for the CubeSat) and support communication speeds up to $250$ $\rm{kB\,s^{-1}}$.
-    * {\sbf Temperature monitoring:} Seven \glref{$\rm{I^2C}$} temperature sensors are spread over the entire \glref{OBC}. These sensors monitor the temperature of essential submodules, 2x \glref{MCU}, 2x power management, 2x \glref{CAN} bus drivers, and 1x external memories. The \glref{MCU} can power on or off these sensors to save some power or resolve a latch-up event.
-    * {\sbf Maximal payload sector:} The PCB surface occupied by the \glref{OBC} circuitry is shrank to the minimal size possible. The remaining area is considered as a payload sector that can accommodate any user-defined modules. In our case, we decided to place a universal soldering array with exposed power lines all over this sector.
+    * {\sbf \glref{CAN} bus peripherals:} Two \glref{CAN} transceivers provide the \glref{OBC}'s support of a high-speed \glref{CAN} bus.  These transceivers ensure a voltage level conversion ($3.3$ V for the \glref{MCU}, $5$ V for the CubeSat) and support communication speeds up to $250$ $\rm{kB\,s^{-1}}$.
+    * {\sbf Temperature monitoring:} Seven \glref{$\rm{I^2C}$} temperature sensors are spread over the entire \glref{OBC}. These sensors monitor the temperature of essential submodules, 2x \glref{MCU}, 2x power management, 2x \glref{CAN} bus transceivers, and 1x external memories. The \glref{MCU} can power on or off these sensors to save some power or resolve a latch-up event.
+    * {\sbf Maximal payload sector:} The \glref{PCB} surface occupied by the \glref{OBC} circuitry is shrank to the minimal size possible. The remaining area is considered as a payload sector that can accommodate any user-defined modules. In our case, we decided to place a universal soldering array with exposed power lines all over this sector.
 \enditems
 
 
@@ -64,7 +64,7 @@ Considering the size and budget requirements of our \glref{OBC}, we chose to imp
 \midinsert
     \clabel[dia:hwArchitecture]{Sierra HW architecture}
     \picw=0.75\hsize \cinspic figures/diagrams/hwArchitecture.pdf
-    \caption/f Diagram of the Board Sierra's OBC hardware architecture.
+    \caption/f Diagram of the Board Sierra's \glref{OBC} hardware architecture.
 \endinsert
 
 
@@ -164,7 +164,7 @@ Although, following the proper design rules and standards created for automotive
 \label[chap:payloadSector]
 \secc OBC and payload sector
 
-\quad As mentioned in section \ref[chap:capabilitesAndFeatures], a high ratio between the payload sector area and OBC area was set as one of the Board Sierra's key features. This requirement substantially affected the \glref{OBC}'s circuitry layout and fanout. After multiple iterations of components' placements and alignments, we have significantly reduced the required \glref{OBC} area. The payload sector covers roughly three-fourths of the available PC/104 module surface, leaving only one-fourth to accommodate the OBC. Visual perception can be obtained from the Board Sierra 3D renders in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom]. The \glref{OBC} sector is situated at the northwest quartal of the PC/104 module, surrounded by the payload sector.
+\quad As mentioned in section \ref[chap:capabilitesAndFeatures], a high ratio between the payload sector area and \glref{OBC} area was set as one of the Board Sierra's key features. This requirement substantially affected the \glref{OBC}'s circuitry layout and fanout. After multiple iterations of components' placements and alignments, we have significantly reduced the required \glref{OBC} area. The payload sector covers roughly three-fourths of the available PC/104 module surface, leaving only one-fourth to accommodate the \glref{OBC}. Visual perception can be obtained from the Board Sierra 3D renders in figures \ref[app_vis:sierraTop] and \ref[app_vis:sierraBottom]. The \glref{OBC} sector is situated at the northwest quartal of the PC/104 module, surrounded by the payload sector.
 
 
 
@@ -185,7 +185,7 @@ Additional parameters of the \glref{PCB} manufacturing such as material, isolati
 
 \secc Traces, vias and routing
 
-\quad Electronic components are placed on both sides of the \glref{PCB} due to the restricted OBC area. Corresponding top and bottom copper layers cover as much routing as possible. The second inside layer accommodates traces that do not fit into the two surface layers. The general width of a signal trace is $0.2$ mm, respectively $0.173$ mm for traces near the PC/104 header. Clearance between traces themselves and other copper planes is set to $0.127$ mm. All of these parameters satisfy the minimal specifications in the \glref{ECSS} standard \cite[sta:ECSS-12C]. No blind, buried or micro vias are used in the design. The diameter of general via is $0.45$ mm with a $0.24$ mm drill. This parameters result in a $6.7$ aspect ratio for a standard $1.6$ mm thick \glref{PCB}, which recognizes the \glref{ECSS} $\leq7$ rule \cite[sta:ECSS-12C].
+\quad Electronic components are placed on both sides of the \glref{PCB} due to the restricted \glref{OBC} area. Corresponding top and bottom copper layers cover as much routing as possible. The second inside layer accommodates traces that do not fit into the two surface layers. The general width of a signal trace is $0.2$ mm, respectively $0.173$ mm for traces near the PC/104 header. Clearance between traces themselves and other copper planes is set to $0.127$ mm. All of these parameters satisfy the minimal specifications in the \glref{ECSS} standard \cite[sta:ECSS-12C]. No blind, buried or micro vias are used in the design. The diameter of general via is $0.45$ mm with a $0.24$ mm drill. This parameters result in a $6.7$ aspect ratio for a standard $1.6$ mm thick \glref{PCB}, which recognizes the \glref{ECSS} $\leq7$ rule \cite[sta:ECSS-12C].
 
 The first and fourth inner layers are ground plane layers. Their purpose is to connect all of the component's \glref{GND} pins, provide shielding against the \glref{EMI} and act as heatsink dissipating components heat. Despite the \glref{ECSS} suggestion, both the ground planes have a solid fill instead of additional openings in a grid format \cite[sta:ECSS-12C]. The reason is, the current fifth version of KiCad does not support this option. This design flaw will be improved shortly as the checked fill option is included in the upcoming KiCad v6.
 

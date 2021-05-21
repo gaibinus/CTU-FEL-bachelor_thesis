@@ -11,7 +11,7 @@
 \label[chap:testingSoftware]
 \sec Testing software
 
-\quad After assembling the first Board Sierra module, we had to ensure ourselves about its desired behavior. A simple testing software had to be developed to loop through the separate subsystems while testing their proper functionality. To accomplish this, we decided to implement a small testing toolbox named {\tt VST104-Testing}. This software package is written in a C language and developed in the integrated development environment STM32CubeIDE. Its current version includes the following tests:
+\quad After assembling the first Board Sierra module, we had to ensure that it behaves as desired. A simple testing software had to be developed to loop through the separate subsystems while testing their proper functionality. To accomplish this, we decided to implement a small testing toolbox named {\tt VST104-Testing}. This software package is written in a C language and developed in the integrated development environment STM32CubeIDE. Its current version includes the following tests:
 
 \begitems
     * Enabling the \glref{HSE} circuitry as a source for the \glref{MCU} main clock.
@@ -20,7 +20,7 @@
     * Enabling, configuring, and reading the inbuilt temperature sensors.
     * Configuring, and reading manufacturer data from the FLASH \glref{IC}s.
     * Configuring, and reading manufacturer data from the F-RAM \glref{IC}s.
-    * Writing to and reading from the FLASH memories using the \glref{QSPI}.
+    * Writing to and reading from the FLASH memories using a \glref{QSPI}.
     * Setting up and maintain a simple \glref{CAN} communication.
 \enditems
 
@@ -34,7 +34,7 @@ Outputs of these tests are in a form of logs sent throughout the \glref{SSW} or 
 
 \quad As described in section \ref[chap:radiationAndRedundancy], space radiation is a well-known hazard for CubeSats and electronic systems in general. Thus, we were particularly interested in how well the Board Sierra performs in a radiation-rich environment and what total dose it can overcome. Motivated by another project, we were also interested in similar characteristics of some \glref{COTS} acceleration, angular velocity, and magnetic flux density sensors.
 
-Thanks to the nuclear research institute ÚJV Řež a.s, we encountered a possibility to execute such an experiment. This section presents our testing approach and results obtained during exposure to a cobalt-60 gamma radiation source. After the experiment, the carried nominal radiation dose was determined as $49\rm{[Gy/hour]}$.
+Thanks to the nuclear research institute ÚJV Řež a.s, we were given an opportunity to execute such an experiment. This section presents our testing approach and results obtained during exposure to a cobalt-60 gamma radiation source. After the experiment, the carried nominal radiation dose was determined as $49\rm{[Gy/hour]}$.
 
 
 
@@ -68,7 +68,7 @@ The testing software described in section \ref[chap:testingSoftware] was used as
 %ERR -i lsm6ds3_readAccData -d 0 -f 0 -e I2C_MEASURE
 %\endtt
 
-To enable a hard reboot from a possible system crash, a watchdog module was implemented as the last mean of the \glref{OBC} recovery. In its active state, the \glref{OBC} was permanently toggling a logic signal to indicate its well-being. The duration between the last two logic changes was continuously monitored and compared against the set threshold. If this threshold had been reached, a watchdog module disconnected both $5\rm{[V]}$ and $3.3\rm{[V]}$ power lines from a power supply for a couple of seconds. A photograph of the actual watchdog module is presented in figure 100. The design of this module was based on an STM32 Blue Pill board driving two electromagnetic relays.
+To enable a hard reboot from a possible system crash, a watchdog module was implemented as the last mean of the \glref{OBC} recovery. In its active state, the \glref{OBC} was permanently toggling a logic signal to indicate its well-being. The duration between the last two logic changes was continuously monitored and compared against a set threshold. If this threshold had been reached, a watchdog module disconnected both $5\rm{[V]}$ and $3.3\rm{[V]}$ power lines from a power supply for a couple of seconds. A photograph of the actual watchdog module is presented in figure 100. The design of this module was based on an STM32 Blue Pill board driving two electromagnetic relays.
 
 
 

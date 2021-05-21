@@ -34,7 +34,7 @@ Outputs of these tests are in a form of logs sent throughout the \glref{SSW} or 
 
 \quad As described in section \ref[chap:radiationAndRedundancy], space radiation is a well-known hazard for CubeSats and electronic systems in general. Thus, we were particularly interested in how well the Board Sierra performs in a radiation-rich environment and what total dose it can overcome. Motivated by another project, we were also interested in similar characteristics of some \glref{COTS} acceleration, angular velocity, and magnetic flux density sensors.
 
-Thanks to the nuclear research institute ÚJV Řež a.s, we were given an opportunity to execute such an experiment. This section presents our testing approach and results obtained during exposure to a cobalt-60 gamma radiation source. After the experiment, the carried nominal radiation dose was determined as $49\rm{[Gy/hour]}$.
+Thanks to the nuclear research institute ÚJV Řež a.s, we were given an opportunity to execute such an experiment. This section presents our testing approach and results obtained during exposure to a cobalt-60 gamma radiation source. After the experiment, the carried nominal ionizing radiation dose was determined as $49.0\rm{[Gy/hour]}$.
 
 
 
@@ -125,3 +125,13 @@ Even the last tested sensor was not spared from the unpleasant consequences of t
 \endinsert
 
 Despite our best effort to record an occurrence of a memory bit-flip inside the Flash memory subsystem, no such event was observed. All three memory \glref{IC}s were performing normally throughout the entire experiment. Not a single error or malfunction was logged by the \glref{OBC}. As already stated, a slightly increased temperature was measured by their associated temperature sensor as a sign of their activity (TS1 in figure \ref[plt:mcp9884]). 
+
+
+
+%%%%% EXPERIMENT SUMMARY
+
+\secc Experiment summary
+
+\quad Unfortunately, we cannot compare the observed performance with the ECSS-Q-ST-60-15C hardness assurance standard \cite[sta:ECSS-15C]. The nominal ionizing radiation dose rate of our experiment has exceeded the upper limit of the required test rate approximately $13.6$ times. In other words, the standard requires the test to be conducted at a dose rate of $0.36$ - $3.6\rm{[Gy/hour]}$, whereas our experiment was carried at $49.0\rm{[Gy/hour]}$.
+
+The total ionizing radiation dose sustained by the \glref{OBC} has exceeded our expectations. The reached total dose of $254.32\rm{[Gy]}$ without a single malfunction is comparable to $200$ - $300\rm{[Gy]}$ certifications of professional \glref{OBC} manufacturers \cite[obc:aac, obc:nanosatpro, obc:satbus]. However, this radiation testing can serve just as a proof-of-concept. A series of tests aimed at specific subsystems, measuring a variety of voltages and currents, had to be performed to create an accurate image of the \glref{OBC}'s robustness.

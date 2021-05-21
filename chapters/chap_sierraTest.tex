@@ -17,7 +17,7 @@
     * Enabling the \glref{HSE} circuitry as a source for the \glref{MCU} main clock.
     * Reading the current consumption analog outputs of both \glref{eFuse}s.
     * Switching on and off particular peripheral isolators.
-    * Enabling, configuring, and reading the inbuilt temperature sensors.
+    * Enabling, configuring, and reading the built-in temperature sensors.
     * Configuring, and reading manufacturer data from the FLASH \glref{IC}s.
     * Configuring, and reading manufacturer data from the F-RAM \glref{IC}s.
     * Writing to and reading from the FLASH memories using a \glref{QSPI}.
@@ -34,7 +34,7 @@ Outputs of these tests are in a form of logs sent throughout the \glref{SSW} or 
 
 \quad As described in section \ref[chap:radiationAndRedundancy], space radiation is a well-known hazard for CubeSats and electronic systems in general. Thus, we were particularly interested in how well the Board Sierra performs in a radiation-rich environment and what total dose it can overcome. Motivated by another project, we were also interested in similar characteristics of some \glref{COTS} acceleration, angular velocity, and magnetic flux density sensors.
 
-Thanks to the nuclear research institute ÚJV Řež a.s, we were given an opportunity to execute such an experiment. This section presents our testing approach and results obtained during exposure to a cobalt-60 gamma radiation source. After the experiment, the carried nominal ionizing radiation dose was determined as $49.0\rm{[Gy/hour]}$.
+Thanks to the nuclear research institute ÚJV Řež a.s, we were given an opportunity to execute such an experiment. We acknowledge namely Vít Plaček Ph.D. and Martin Cabalka Ph.D. for providing support. This section presents our testing approach and results obtained during exposure to a cobalt-60 gamma radiation source. After the experiment, the carried nominal ionizing radiation dose was determined as $49.0\rm{[Gy/hour]}$. 
 
 
 
@@ -68,7 +68,7 @@ The testing software described in section \ref[chap:testingSoftware] was used as
 %ERR -i lsm6ds3_readAccData -d 0 -f 0 -e I2C_MEASURE
 %\endtt
 
-To enable a hard reboot from a possible system crash, a watchdog module was implemented as the last mean of the \glref{OBC} recovery. In its active state, the \glref{OBC} was permanently toggling a logic signal to indicate its well-being. The duration between the last two logic changes was continuously monitored and compared against a set threshold. If this threshold had been reached, a watchdog module disconnected both $5\rm{[V]}$ and $3.3\rm{[V]}$ power lines from a power supply for a couple of seconds. A photograph of the actual watchdog module is presented in figure 100. The design of this module was based on an STM32 Blue Pill board driving two electromagnetic relays.
+To enable a hard reboot from a possible system crash, a watchdog module was implemented as the last mean of the \glref{OBC} recovery. In its active state, the \glref{OBC} was permanently toggling a logic signal to indicate its well-being. The duration between the last two logic changes was continuously monitored and compared against a set threshold. If this threshold had been reached, a watchdog module disconnected both $5\rm{[V]}$ and $3.3\rm{[V]}$ power lines from a power supply for a couple of seconds. A photograph of the actual watchdog module is presented in figure \ref[app_photo:watchdog]. The design of this module was based on an STM32 Blue Pill board driving two electromagnetic relays.
 
 
 
@@ -92,12 +92,12 @@ The \glref{OBC}'s and the sensors' current consumptions, measured through the ex
     \caption/f Current consumption measured throughout the experiment.
 \endinsert
 
-Temperature readings obtained from the \glref{OBC}'s inbuilt temperature sensors are shown in figure \ref[plt:mcp9884]. No errors or failures of these sensors were recorded throughout the experiment. The acquired data also doesn't show any abnormality in the \glref{OBC}'s temperature or heat distribution. The slightly increased readings of the sensor T1 could be explained by its assignment to the Flash memory subsystem. Its continuous activity might have easily resulted in an increase of its temperature by roughly a $0.75\rm{[°C]}$.
+Temperature readings obtained from the \glref{OBC}'s built-in temperature sensors are shown in figure \ref[plt:mcp9884]. No errors or failures of these sensors were recorded throughout the experiment. The acquired data also doesn't show any abnormality in the \glref{OBC}'s temperature or heat distribution. The slightly increased readings of the sensor T1 could be explained by its assignment to the FLASH memory subsystem. Its continuous activity might have easily resulted in an increase of its temperature by roughly a $0.75\rm{[°C]}$.
 
 \midinsert
     \clabel[plt:mcp9884]{Radiation: OBC temperature}
     \picw=1\hsize \cinspic figures/plots/mcp9884.pdf
-    \caption/f Readings of the OBC's inbuilt temperature sensors. The location and purpose of each sensor were described in section \ref[chap:temperatureMonitoring].
+    \caption/f Readings of the OBC's built-in temperature sensors. The location and purpose of each sensor were described in section \ref[chap:temperatureMonitoring].
 \endinsert
 
 The LSM6DS3 was the only sensor that has experienced a total failure (actually seven of them). After being requested by the OBC, no response was obtained from the sensor, and the \glref{$\rm{I^2C}$} connection timeout was reached. The first failure occurred after exposure to a radiation dose of $196.90\rm{[Gy]}$. Timestamps of these failures, together with the obtained angular velocity, are shown in figure \ref[plt:lsm6ds3g_gyr]. A continuous malfunction/degradation of the sensor is visible from these data, as the Y and Z-axis readings are decreasing over time. A real motion could not have caused these trends due to the sensor's stationary mount. Interestingly, the acceleration data acquired from this sensor are perfectly reasonable.
@@ -124,7 +124,7 @@ Even the last tested sensor was not spared from the unpleasant consequences of t
     \caption/f Acceleration readings of the MPU6050 sensor.
 \endinsert
 
-Despite our best effort to record an occurrence of a memory bit-flip inside the Flash memory subsystem, no such event was observed. All three memory \glref{IC}s were performing normally throughout the entire experiment. Not a single error or malfunction was logged by the \glref{OBC}. As already stated, a slightly increased temperature was measured by their associated temperature sensor as a sign of their activity (TS1 in figure \ref[plt:mcp9884]). 
+Despite our best effort to record an occurrence of a memory bit-flip inside the FLASH memory subsystem, no such event was observed. All three memory \glref{IC}s were performing normally throughout the entire experiment. Not a single error or malfunction was logged by the \glref{OBC}. As already stated, a slightly increased temperature was measured by their associated temperature sensor as a sign of their activity (TS1 in figure \ref[plt:mcp9884]). 
 
 
 
